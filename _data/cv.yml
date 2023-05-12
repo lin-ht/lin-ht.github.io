@@ -3,6 +3,10 @@
   contents:
     - name: Full Name
       value: Haiting Lin
+    - name: Location
+      value: San Jose, CA
+    - name: Contact
+      value: halin(at)adobe.com
     - name: Languages
       value: English, Chinese
 
@@ -10,100 +14,88 @@
   type: time_table
   contents:
     - title: PhD
-      institution: University of Singapore
+      institution: National University of Singapore
       year: 2013
       description:
-        - (TODO) Research topic description
-        - (TODO) GPA
+        - "Dissertation: A new in-camera color imaging model for computer vision"
+        - <u>Advisor:</u> Prof. <a href="https://www.eecs.yorku.ca/~mbrown/"> Michael S. Brown </a>
+        - "Area of study: Radiometric calibration and color processing"
+        - "GPA: 4.38/5.0"
 
     - title: Computer Science Diploma
-      institution: Renmin University of China
+      institution: Computer and information science, Renmin University of China
       year: 2008
       description:
-        - (TODO) Research topic description
-        - (TODO) GPA
-
-- title: Awards
-  type: time_table
-  contents:
-    - title: PhD
-      institution: University of Singapore
-      year: 2013
-      description:
-        - (TODO) Research topic description
-        - (TODO) GPA
-
-    - title: Computer Science Diploma
-      institution: Renmin University of China
-      year: 2008
-      description:
-        - (TODO) Research topic description
-        - (TODO) GPA
-
-- title: Experience
-  type: time_table
-  contents:
-    - title: Professor of Theoretical Physics
-      institution: Institute for Advanced Study, Princeton University
-      year: 1933 - 1955
-      description:
-        - Description 1.
-        - Description 2.
-        - title: Description 3.
-          contents:
-            - Sub-description 1.
-            - Sub-description 2.
-    - title: Visiting Professor
-      institution: California Institute of Technology, Pasadena, California, US
-      year: 1933
-      description:
-        - Description 1.
-        - Description 2.
-
-    - title: Director
-      institution: Kaiser Wilhelm Institute for Physics, Berlin, Germany.
-      year: 1917-1933
-
-    - title: Professor of Theoretical Physics
-      institution: Karl-Ferdinand University, Prague, Czechoslovakia
-      year: 1911 - 1917
-      description:
-
-    - title: Associate Professor of Theoretical Physics
-      institution: University of Zurich, Zurich, Switzerland
-      year: 1909 - 1911
-
-- title: Open Source Projects
-  type: time_table
-  contents:
-    - title: <a href="https://github.com/alshedivat/al-folio">al-folio</a>
-      year: 2015-now
-      description: A beautiful, simple, clean, and responsive Jekyll theme for academics.
-
-- title: Honors and Awards
-  type: time_table
-  contents:
-    - year: 1921
-      items: 
-        - Nobel Prize in Physics 
-        - Matteucci Medal
-    - year: 2029
-      items: 
-        - Max Planck Medal
+        - "Research topic: image to image searching"
+        - "GPA: 3.79/4.0"
 
 - title: Academic Interests
   type: nested_list
   contents:
-    - title: Topic 1.
+    - title: High performance computation
       items: 
-        - Description 1.
-        - Description 2.
-    - title: Topic 2.
+        - Computation optimization with limited computation and memory resources.
+        - GPU and parallel computing.
+    - title: Problem modeling and machine learning
       items:
-        - Description 1.
-        - Description 2.
+        - leverage mathematical modeling of the problem to gain efficient, high quality, and theoretically sound learning solutions.
 
-- title: Other Interests
-  type: list
+- title: Experience
+  type: time_table
   contents:
-    - <u>Hobbies:</u> Hobby 1, Hobby 2, etc.
+    - title: Compter Scientist
+      institution: Adobe - Photoshop, San Jose, CA
+      year: 2017 - now
+      description: Advanced solution exploration and integration.
+
+    - title: Principal Scientist
+      institution: JJK holdings, LLC, CA
+      year: 2016 - 2017
+      description:
+        - Multi-view 3D reconstruction and virtual reality solutions.
+
+    - title: Postdoctoral Scholor
+      institution: Computer & Information Sciences, College of Engineering, University of Delaware.
+      year: 2013 - 2016
+      description:
+        - Light field ray geometry.
+
+    - title: Project Officer
+      institution: School of Computer Engineering, Nanyang Technological University, Singapore
+      year: 2013
+      description:
+        - Computer tool user action tracking and analysis for education.
+
+    - title: Research Assistant
+      institution: School of Computing, National University of Singapore
+      year: 2012
+
+- title: Skills
+  type: nested_list
+  contents:
+    - title: Professional areas
+      items: 
+        - Computer vision (3D reconstruction), computational photography, image processing and information theory, graphics and rendering
+    - title: Programming
+      items:
+        - High performance c/c++, parellel programming (Halide etc.)
+        - GPU programming, shading language (Metal, openGL, Vulkan, Cuda)
+        - Cross-platform programming (c/c++, Halide, python)
+        - Development on iOS, Android, desktop applications.
+
+- title: Honors and Awards
+  type: time_table
+  contents:
+    - year: 2016
+      items: 
+        - Best student paper, Electronic Imaging Symposium
+    - year: 2008 - 2012
+      items: 
+        - Research scholarship, National University of Singapore
+    - year: 2004 - 2008
+      items: 
+        - Excellent student scholarship, Renmin University of China
+    - year: 2006
+      items: 
+        - Bronze medal, The ACM Asia Programming Contest
+

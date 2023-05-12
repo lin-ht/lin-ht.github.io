@@ -2,7 +2,7 @@
 layout: about
 title: about
 permalink: /
-subtitle: <a href='https://www.adobe.com/'>Adobe</a> Senior Computer Scientist
+subtitle: <a href='https://www.adobe.com/'>Adobe</a> Photoshop Senior Computer Scientist
 
 profile:
   align: right
