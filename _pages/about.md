@@ -2,16 +2,16 @@
 layout: about
 title: about
 permalink: /
-subtitle: <a href='#'>Affiliations</a>. Address. Contacts. Moto. Etc.
+subtitle: <a href='https://www.adobe.com/'>Adobe</a> Senior Computer Scientist
 
 profile:
   align: right
   image: prof_pic.jpg
   image_circular: false # crops the image to make it circular
   address: >
-    <p>555 your office number</p>
-    <p>123 your address street</p>
-    <p>Your City, State 12345</p>
+    <p>W09-530 West Tower</p>
+    <p>345 Park Ave, San Jose, CA 95110</p>
+    <p>halin(at)adobe.com</p>
 
 news: true  # includes a list of news items
 latest_posts: true  # includes a list of the newest posts
@@ -19,8 +19,8 @@ selected_papers: true # includes a list of papers marked as "selected={true}"
 social: true  # includes social icons at the bottom of the page
 ---
 
-Write your biography here. Tell the world about yourself. Link to your favorite [subreddit](http://reddit.com). You can put a picture in, too. The code is already in, just name your picture `prof_pic.jpg` and put it in the `img/` folder.
+Hi, dear visitor, nice to meet you! Let me briefly introduce myself. I love solving real world computation photography, computer vision, and graphic problems. Currently, I focus on tech transfer in Adobe's Emerging Product Group (EPG), integrating the most advanced solutions into Adobe's products. I not only optimize implementations under computation or memory constraints, but also improve the algorithms to achieve the ultimate quality. 
 
-Put your address / P.O. box / other info right below your picture. You can also disable any of these elements by editing `profile` property of the YAML header of your `_pages/about.md`. Edit `_bibliography/papers.bib` and Jekyll will render your [publications page](/al-folio/publications/) automatically.
+I graduated from Computer Science department in [Renmin University of China](https://www.ruc.edu.cn/en) in 2008. I got a Phd degree from [NUS](https://nus.edu.sg/) in 2013 under the supervise of Prof. [Michael S. Brown](https://www.eecs.yorku.ca/~mbrown/). My [dissertation](https://nus.edu.sg/) topic was camera pipeline modeling. After that, I joined [Graphics & Imaging Lab](https://www.eecis.udel.edu/wiki/graphics/index.php/Main/Homepage) in [University of Delaware](https://www.udel.edu/) as a post doc under Prof. [Jingyi yu](http://www.yu-jingyi.com/) working on the ray geometry of light field and multi-view 3D reconstruction.
 
-Link to your social media connections, too. This theme is set up to use [Font Awesome icons](http://fortawesome.github.io/Font-Awesome/) and [Academicons](https://jpswalsh.github.io/academicons/), like the ones below. Add your Facebook, Twitter, LinkedIn, Google Scholar, or just disable all of them.
+My research interests include computational photography, computer vision, and machine learning.
