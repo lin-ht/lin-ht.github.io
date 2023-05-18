@@ -1,8 +1,8 @@
 ---
 layout: post
-title:  Transformer notes
+title:  Transformer
 date:   2023-05-15 14:28:00
-description: transformer explained
+description: Transformer explained
 tags: notes math
 categories: note-posts
 ---
@@ -19,4 +19,8 @@ Check out the great illustration of  <a href="https://jalammar.github.io/illustr
 <hr>
 
 #### Transformer practice
-Pytorch version <a href="http://nlp.seas.harvard.edu/2018/04/03/attention.html">The Annotated Transformer</a>.
+Pytorch version <a href="http://nlp.seas.harvard.edu/annotated-transformer/">The Annotated Transformer</a>.
+
+Open <a href="https://colab.research.google.com/github/lin-ht/annotated-transformer/blob/master/AnnotatedTransformer.ipynb"> my forked playground in colab.</a>
+
+Github of <a href="https://github.com/lucidrains/x-transformers"> x-transformers </a> by <a href="https://github.com/lucidrains?tab=repositories">lucidrains</a>.
