@@ -10,9 +10,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>a post with code | Haiting  Lin</title>
+    <title>Conda Environment configuration for Apple Silicon M1 Mac | Haiting  Lin</title>
     <meta name="author" content="Haiting  Lin">
-    <meta name="description" content="an example of a blog post with some code">
+    <meta name="description" content="Arm64 and x86 Python environments management">
     <meta name="keywords" content="haiting, Adobe">
 
 
@@ -38,7 +38,7 @@
     <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;">
     
     <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="canonical" href="http://localhost:4000/blog/2015/code/">
+    <link rel="canonical" href="http://localhost:4000/blog/2023/conda-m1/">
 
     <!-- Dark Mode -->
     
@@ -120,19 +120,17 @@
 <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">a post with code</h1>
-    <p class="post-meta">July 15, 2015</p>
+    <h1 class="post-title">Conda Environment configuration for Apple Silicon M1 Mac</h1>
+    <p class="post-meta">May 22, 2023</p>
     <p class="post-tags">
-      <a href="/blog/2015"> <i class="fas fa-calendar fa-sm"></i> 2015 </a>
+      <a href="/blog/2023"> <i class="fas fa-calendar fa-sm"></i> 2023 </a>
         ·  
-        <a href="/blog/tag/formatting">
-          <i class="fas fa-hashtag fa-sm"></i> formatting</a>  
-          <a href="/blog/tag/code">
-          <i class="fas fa-hashtag fa-sm"></i> code</a>  
+        <a href="/blog/tag/notes">
+          <i class="fas fa-hashtag fa-sm"></i> notes</a>  
           
         ·  
-        <a href="/blog/category/sample-posts">
-          <i class="fas fa-tag fa-sm"></i> sample-posts</a>  
+        <a href="/blog/category/note-posts">
+          <i class="fas fa-tag fa-sm"></i> note-posts</a>  
           
 
     </p>
@@ -141,83 +139,94 @@
   <article class="post-content">
 <!--      -->
     <div id="markdown-content">
-      <p>This theme implements a built-in Jekyll feature, the use of Rouge, for syntax highlighting.
-It supports more than 100 languages.
-This example is in C++.
-All you have to do is wrap your code in markdown code tags:</p>
+      <h4 id="python-version-management-tool--conda">Python version management tool – conda</h4>
 
-<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">```</span><span class="nl">c++
-</span><span class="n">code</span> <span class="n">code</span> <span class="n">code</span>
-<span class="p">```</span>
-</code></pre></div></div>
+<h5 id="1-installation">1. Installation</h5>
+<p><a href="https://github.com/conda-forge/miniforge" rel="external nofollow noopener" target="_blank">Miniforge</a> a minimal installer for Conda specific to conda-forge.</p>
 
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="k">const</span> <span class="err">\</span><span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
-<span class="p">{</span>
-    <span class="n">string</span> <span class="n">myString</span><span class="p">;</span>
+<p>Keep package imcompatibility in mind:
+some package developers haven’t support ARM64 yet.</p>
 
-    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"input a string: "</span><span class="p">;</span>
-    <span class="n">getline</span><span class="p">(</span><span class="n">cin</span><span class="p">,</span> <span class="n">myString</span><span class="p">);</span>
-    <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="n">myString</span><span class="p">.</span><span class="n">length</span><span class="p">();</span>
+<p>Short term workaround: create conda environments with x86 architecture on an Apple Silicon Mac.</p>
 
-    <span class="kt">char</span> <span class="n">charArray</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span> <span class="o">*</span> <span class="p">[</span><span class="n">length</span><span class="p">];</span>
+<h5 id="2-check-enviroment-list-may-skip">2. Check enviroment list (may skip)</h5>
 
-    <span class="n">charArray</span> <span class="o">=</span> <span class="n">myString</span><span class="p">;</span>
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
-        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">charArray</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span><span class="p">;</span>
-    <span class="p">}</span>
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">conda env list</span></code></pre></figure>
 
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
+<h5 id="3-create-an-enviroment-and-activate-it">3. Create an enviroment and activate it</h5>
+<p>Instead of directly creating an enviroment like the following:</p>
 
-<p>By default, it does not display line numbers. If you want to display line numbers for every code block, you can set <code class="language-plaintext highlighter-rouge">kramdown.syntax_highlighter_opts.block.line_numbers</code> to true in your <code class="language-plaintext highlighter-rouge">_config.yml</code> file.</p>
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">conda create -n myenv python=3.9
+conda activate myenv</span></code></pre></figure>
 
-<p>If you want to display line numbers for a specific code block, all you have to do is wrap your code in a liquid tag:</p>
+<p>Put those commands into shell function first (add this to ~/.zshrc or ~/.bashrc if you’re using Bash):</p>
 
-<p>{% highlight c++ linenos %}  <br> code code code <br> {% endhighlight %}</p>
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">create_x86_conda_environment () {
+</span><span class="gp">  #</span><span class="w"> </span>create a conda environment using x86 architecture
+<span class="gp">  #</span><span class="w"> </span>first argument is environment name, all subsequent arguments will be passed to <span class="sb">`</span>conda create<span class="sb">`</span>
+<span class="gp">  #</span><span class="w"> </span>example usage: create_x86_conda_environment myenv_x86 <span class="nv">python</span><span class="o">=</span>3.9
+<span class="gp">  CONDA_SUBDIR=osx-64 conda create -n $</span>@
+<span class="gp">  conda activate $</span>1
+<span class="go">  conda config --env --set subdir osx-64
+}
 
-<p>The keyword <code class="language-plaintext highlighter-rouge">linenos</code> triggers display of line numbers.
-Produces something like this:</p>
+create_arm_conda_environment () {
+</span><span class="gp">  #</span><span class="w"> </span>example usage: create_arm_conda_environment myenv_arm <span class="nv">python</span><span class="o">=</span>3.9
+<span class="gp">  CONDA_SUBDIR=osx-arm64 conda create -n $</span>@
+<span class="gp">  conda activate $</span>1
+<span class="go">  conda config --env --set subdir osx-arm64
+}</span></code></pre></figure>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><table class="rouge-table"><tbody><tr>
-<td class="gutter gl"><pre class="lineno">1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-</pre></td>
-<td class="code"><pre><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="k">const</span> <span class="err">\</span><span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
-<span class="p">{</span>
-    <span class="n">string</span> <span class="n">myString</span><span class="p">;</span>
+<p>Then create the desired enviroment as:</p>
 
-    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"input a string: "</span><span class="p">;</span>
-    <span class="n">getline</span><span class="p">(</span><span class="n">cin</span><span class="p">,</span> <span class="n">myString</span><span class="p">);</span>
-    <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="n">myString</span><span class="p">.</span><span class="n">length</span><span class="p">();</span>
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">create_x86_conda_environment myenv_x86 python=3.9</span></code></pre></figure>
 
-    <span class="kt">char</span> <span class="n">charArray</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span> <span class="o">*</span> <span class="p">[</span><span class="n">length</span><span class="p">];</span>
+<blockquote>
+One of the features of <a href="https://github.com/conda-forge/miniforge" rel="external nofollow noopener" target="_blank">Miniforge3</a> is the ability to define processor specific sub-directories for specific Python environments. For example, by setting CONDA_SUBDIR=osx-64, conda will be instructed to install packages from x86_64 (osx-64) specific sub-directories.
 
-    <span class="n">charArray</span> <span class="o">=</span> <span class="n">myString</span><span class="p">;</span>
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
-        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">charArray</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span><span class="p">;</span>
-    <span class="p">}</span>
+This will enable users to create an environment that installs arm64 or x86_64 (osx-64) Python packages depending on the value defined by CONDA_SUBDIR.
+</blockquote>
 
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</pre></td>
-</tr></tbody></table></code></pre></figure>
+<h5 id="4-package-management-in-an-enviroment">4. Package management in an enviroment</h5>
 
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">conda install xxx</span></code></pre></figure>
+
+<p>For packages that are not available through conda, you’ll need</p>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">pip install xxx</span></code></pre></figure>
+
+<div class="row mt-3">
+    <div class="col-sm mt-3 mt-md-0">
+        <figure>
+
+  <picture>
+    
+    <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/assets/img/posts/python-ldap-480.webp"></source>
+    <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/assets/img/posts/python-ldap-800.webp"></source>
+    <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/assets/img/posts/python-ldap-1400.webp"></source>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/posts/python-ldap.jpg" class="img-fluid rounded z-depth-1" width="auto" height="auto" data-zoomable="" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
+
+  </picture>
+
+</figure>
+
+    </div>
+</div>
+
+<div class="caption">
+    Figure. Example output of package installation from subdirectory osx-64.
+</div>
+
+<h4 id="references">References</h4>
+<ul>
+    <li>
+<a href="https://towardsdatascience.com/how-to-manage-conda-environments-on-an-apple-silicon-m1-mac-1e29cb3bad12" rel="external nofollow noopener" target="_blank">How to Manage Conda Environments on an Apple Silicon M1 Mac</a>.</li>
+    <li>
+<a href="https://towardsdatascience.com/python-conda-environments-for-both-arm64-and-x86-64-on-m1-apple-silicon-147b943ffa55" rel="external nofollow noopener" target="_blank">Python Conda Environments for Both arm64 and x86_64 on M1 Apple Silicon</a>.</li>
+</ul>
 
     </div>
   </article>
@@ -236,7 +245,7 @@ Produces something like this:</p>
   
 
   <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2015/code/">a post with code</a>
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2015/images/">a post with images</a>
   </li>
 
   
@@ -248,19 +257,19 @@ Produces something like this:</p>
   
 
   <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2021/diagrams/">a post with diagrams</a>
+  </li>
+
+  
+
+  <li class="my-2">
     <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/tables/">displaying beatiful tables with Bootstrap Tables</a>
   </li>
 
   
 
   <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2015/math/">a post with math</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2021/diagrams/">a post with diagrams</a>
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2015/code/">a post with code</a>
   </li>
 
 </div>
