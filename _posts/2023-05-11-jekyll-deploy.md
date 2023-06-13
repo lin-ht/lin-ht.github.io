@@ -26,3 +26,9 @@ git branch -a # List local and remote branches
 
 git checkout my-branch-name
 {% endhighlight %}
+
+
+#### References
+<ul>
+    <li><a href="https://docs.github.com/en/get-started/quickstart/fork-a-repo">Fork a repo.</a></li>
+</ul>

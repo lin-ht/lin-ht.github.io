@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-06-06T14:45:23-07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">blank</title><subtitle>A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-06-06T15:23:43-07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">blank</title><subtitle>A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
 </subtitle><entry><title type="html">Deep Learning Model Deployment</title><link href="http://localhost:4000/blog/2023/model-deployment/" rel="alternate" type="text/html" title="Deep Learning Model Deployment" /><published>2023-06-01T09:30:00-07:00</published><updated>2023-06-01T09:30:00-07:00</updated><id>http://localhost:4000/blog/2023/model-deployment</id><content type="html" xml:base="http://localhost:4000/blog/2023/model-deployment/"><![CDATA[<h4 id="frameworks-and-tools">Frameworks and tools</h4>
 <p>Note: the order doesn’t indicate its popularity.</p>
 <h5 id="1-ray">1. Ray</h5>
@@ -1015,7 +1015,12 @@ bundle exec jekyll serve --lsi</span></code></pre></figure>
 <span class="gp">git branch -r #</span><span class="w"> </span>List remote branches 
 <span class="gp">git branch -a #</span><span class="w"> </span>List <span class="nb">local </span>and remote branches
 <span class="go">
-git checkout my-branch-name</span></code></pre></figure>]]></content><author><name></name></author><category term="note-posts" /><category term="notes" /><category term="code" /><summary type="html"><![CDATA[Command cheatsheet]]></summary></entry><entry><title type="html">a post with table of contents on a sidebar</title><link href="http://localhost:4000/blog/2023/sidebar-table-of-contents/" rel="alternate" type="text/html" title="a post with table of contents on a sidebar" /><published>2023-04-25T07:14:00-07:00</published><updated>2023-04-25T07:14:00-07:00</updated><id>http://localhost:4000/blog/2023/sidebar-table-of-contents</id><content type="html" xml:base="http://localhost:4000/blog/2023/sidebar-table-of-contents/"><![CDATA[<p>This post shows how to add a table of contents as a sidebar.</p>
+git checkout my-branch-name</span></code></pre></figure>
+
+<h4 id="references">References</h4>
+<ul>
+    <li><a href="https://docs.github.com/en/get-started/quickstart/fork-a-repo">Fork a repo.</a></li>
+</ul>]]></content><author><name></name></author><category term="note-posts" /><category term="notes" /><category term="code" /><summary type="html"><![CDATA[Command cheatsheet]]></summary></entry><entry><title type="html">a post with table of contents on a sidebar</title><link href="http://localhost:4000/blog/2023/sidebar-table-of-contents/" rel="alternate" type="text/html" title="a post with table of contents on a sidebar" /><published>2023-04-25T07:14:00-07:00</published><updated>2023-04-25T07:14:00-07:00</updated><id>http://localhost:4000/blog/2023/sidebar-table-of-contents</id><content type="html" xml:base="http://localhost:4000/blog/2023/sidebar-table-of-contents/"><![CDATA[<p>This post shows how to add a table of contents as a sidebar.</p>
 
 <h2 id="adding-a-table-of-contents">Adding a Table of Contents</h2>
 
