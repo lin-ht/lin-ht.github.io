@@ -1,11 +1,11 @@
 ---
 layout: post
-title:  Linux Shell Scripting
-date:   2023-06-30 13:43:00
-description: Shell programming
+title:  Git Routine
+date:   2023-06-20 10:00:00
+description: Routine git commands
 tags: notes code
 categories: note-posts
 ---
 
-
-<a href="https://bash.cyberciti.biz/guide/Main_Page">Linux Bash Shell Scripting Tutorial</a>
+#### Submodules
+<a href="https://git-scm.com/book/en/v2/Git-Tools-Submodules">Git Tools - Submodules</a>
