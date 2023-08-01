@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  Linux Shell Scripting
-date:   2023-06-30 13:43:00
+date:   2023-06-20 13:43:00
 description: Shell programming
 tags: notes code
 categories: note-posts

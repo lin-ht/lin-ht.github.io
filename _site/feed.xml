@@ -1,19 +1,212 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-06-06T15:23:43-07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">blank</title><subtitle>A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
-</subtitle><entry><title type="html">Deep Learning Model Deployment</title><link href="http://localhost:4000/blog/2023/model-deployment/" rel="alternate" type="text/html" title="Deep Learning Model Deployment" /><published>2023-06-01T09:30:00-07:00</published><updated>2023-06-01T09:30:00-07:00</updated><id>http://localhost:4000/blog/2023/model-deployment</id><content type="html" xml:base="http://localhost:4000/blog/2023/model-deployment/"><![CDATA[<h4 id="frameworks-and-tools">Frameworks and tools</h4>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-07-31T20:21:26-07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">blank</title><subtitle>A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
+</subtitle><entry><title type="html">Conda Tutorial</title><link href="http://localhost:4000/blog/2023/conda-tutorial/" rel="alternate" type="text/html" title="Conda Tutorial" /><published>2023-07-31T05:00:00-07:00</published><updated>2023-07-31T05:00:00-07:00</updated><id>http://localhost:4000/blog/2023/conda-tutorial</id><content type="html" xml:base="http://localhost:4000/blog/2023/conda-tutorial/"><![CDATA[<h4 id="python-version-management-tool--conda">Python version management tool – conda</h4>
+
+<h4 id="references">References</h4>
+<ul>
+    <li><a href="https://sachinjose31.medium.com/creating-an-environment-in-anaconda-through-a-yml-file-7e5deeb7676d">Creating an environment in anaconda through a yml file</a>.</li>
+</ul>]]></content><author><name></name></author><category term="note-posts" /><category term="notes" /><summary type="html"><![CDATA[references]]></summary></entry><entry><title type="html">PyPI your python package</title><link href="http://localhost:4000/blog/2023/PyPI-your-python-package/" rel="alternate" type="text/html" title="PyPI your python package" /><published>2023-07-31T05:00:00-07:00</published><updated>2023-07-31T05:00:00-07:00</updated><id>http://localhost:4000/blog/2023/PyPI%20your%20python%20package</id><content type="html" xml:base="http://localhost:4000/blog/2023/PyPI-your-python-package/"><![CDATA[<h4 id="pypi-your-own-python-packages">PyPI your own python packages</h4>
+
+<p>Python Packaging Index (PyPI) is a repository containing several hundred thousand packages.</p>
+
+<h4 id="references">References</h4>
+<ul>
+    <li><a href="https://realpython.com/pypi-publish-python-package/#configuring-your-package">How to Publish an Open-Source Python Package to PyPI</a>.</li>
+    <li><a href="https://realpython.com/python-wheels/">What Are Python Wheels and Why Should You Care?</a></li>
+</ul>]]></content><author><name></name></author><category term="note-posts" /><category term="notes" /><summary type="html"><![CDATA[tutorial]]></summary></entry><entry><title type="html">Triton server tutorial</title><link href="http://localhost:4000/blog/2023/tritonserver/" rel="alternate" type="text/html" title="Triton server tutorial" /><published>2023-07-21T10:49:00-07:00</published><updated>2023-07-21T10:49:00-07:00</updated><id>http://localhost:4000/blog/2023/tritonserver</id><content type="html" xml:base="http://localhost:4000/blog/2023/tritonserver/"><![CDATA[<p><a href="https://www.run.ai/guides/machine-learning-engineering/triton-inference-server">Triton Inference Server: The Basics and a Quick Tutorial</a></p>
+
+<p>Github of <a href="https://github.com/triton-inference-server"> Triton inference server</a>.</p>
+
+<h4 id="introduction">Introduction</h4>
+
+<p>Specify triton model by providing model repository path:</p>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">tritonserver --model-repository=&lt;repository-path&gt;</span></code></pre></figure>
+
+<p>There can be multiple versions of each model, with each version stored in a numerically-named subdirectory. The subdirectory’s name must be the model’s version number and it should not be 0.</p>
+
+<p>For example, an ONNX model directory structure looks like this:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;repository-path&gt;/
+-&lt;model-name&gt;/
+--config.pbtxt
+--1/
+---model.onnx
+</code></pre></div></div>
+
+<p>How Triton Client communicate with Triton?
+Through GRPC or HTTP requests, to send inputs to Triton and receive outputs.
+Examples could be found <a href="https://github.com/triton-inference-server/server/tree/main/docs/examples/model_repository">here</a>.</p>
+
+<h4 id="install-and-run-triton">Install and Run Triton</h4>
+<h5 id="install-triton-docker-image">Install Triton Docker Image</h5>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">docker pull nvcr.io/nvidia/tritonserver:&lt;xx.yy&gt;</span><span class="nt">-py3</span> 
+<span class="gp">#</span>&lt;xx.yy&gt; represents the version of Triton</code></pre></figure>
+
+<h5 id="create-your-model-repository">Create Your Model Repository</h5>
+
+<h5 id="run-triton">Run Triton</h5>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">docker run --gpus=3 --rm -p8000:8000 -p8001:8001 -p8002:8002 -v/full/path/to/docs/examples/model_repository:/models nvcr.io/nvidia/tritonserver:&lt;xx.yy&gt;</span><span class="nt">-py3</span> tritonserver <span class="nt">--model-repository</span><span class="o">=</span>/models</code></pre></figure>]]></content><author><name></name></author><category term="note-posts" /><category term="notes" /><summary type="html"><![CDATA[Cheatsheet]]></summary></entry><entry><title type="html">What is Docker</title><link href="http://localhost:4000/blog/2023/docker/" rel="alternate" type="text/html" title="What is Docker" /><published>2023-07-21T03:21:00-07:00</published><updated>2023-07-21T03:21:00-07:00</updated><id>http://localhost:4000/blog/2023/docker</id><content type="html" xml:base="http://localhost:4000/blog/2023/docker/"><![CDATA[<p><a href="https://djangostars.com/blog/what-is-docker-and-how-to-use-it-with-python/">What is docker and how to use it</a></p>
+
+<p><a href="https://kubernetes.io/docs/tutorials/kubernetes-basics/">Kubernetes</a></p>
+
+<p>Data communication between dockers?</p>]]></content><author><name></name></author><category term="note-posts" /><category term="notes" /><summary type="html"><![CDATA[Docker tutorial]]></summary></entry><entry><title type="html">Linux Shell Scripting</title><link href="http://localhost:4000/blog/2023/shell-programming/" rel="alternate" type="text/html" title="Linux Shell Scripting" /><published>2023-06-20T06:43:00-07:00</published><updated>2023-06-20T06:43:00-07:00</updated><id>http://localhost:4000/blog/2023/shell-programming</id><content type="html" xml:base="http://localhost:4000/blog/2023/shell-programming/"><![CDATA[<p><a href="https://bash.cyberciti.biz/guide/Main_Page">Linux Bash Shell Scripting Tutorial</a></p>]]></content><author><name></name></author><category term="note-posts" /><category term="notes" /><category term="code" /><summary type="html"><![CDATA[Shell programming]]></summary></entry><entry><title type="html">Git Routine</title><link href="http://localhost:4000/blog/2023/git-routines/" rel="alternate" type="text/html" title="Git Routine" /><published>2023-06-20T03:00:00-07:00</published><updated>2023-06-20T03:00:00-07:00</updated><id>http://localhost:4000/blog/2023/git-routines</id><content type="html" xml:base="http://localhost:4000/blog/2023/git-routines/"><![CDATA[<h4 id="useful-git-commands">Useful git commands</h4>
+
+<h5 id="command-cheatsheet">Command cheatsheet</h5>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">git status
+git diff
+</span><span class="gp">git diff &lt;filename&gt;</span><span class="w">
+</span><span class="gp">git add --all #</span><span class="w"> </span>Stage all files
+<span class="gp">git add &lt;filename&gt;</span><span class="w">	</span><span class="c"># Stage a file, ready to commit</span>
+<span class="gp">git reset #</span><span class="w"> </span>Unstage all files
+<span class="gp">git reset &lt;filename&gt;</span><span class="w"> </span><span class="c"># Unstage one file</span>
+<span class="gp">git restore &lt;filename&gt;</span><span class="w"> </span><span class="c"># Discard changes of the file</span>
+<span class="go">
+git commit -m "Post update" 
+</span><span class="gp">git push -u origin &lt;your-branch&gt;</span><span class="w"> </span></code></pre></figure>
+
+<p><a href="#">Git Tools - Branch</a></p>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">git checkout -b &lt;your-branch&gt;</span><span class="w"> </span><span class="c"># new local branch</span>
+<span class="gp">git branch -d &lt;your-branch&gt;</span><span class="w">   </span><span class="c"># delete the branch</span></code></pre></figure>
+
+<p><a href="https://git-scm.com/book/en/v2/Git-Tools-Interactive-Staging">Git Tools - Interactive staging</a></p>
+
+<p>We can stage patches under interactive staging mode.</p>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">git add -i #</span><span class="w"> </span>Interactive Staging
+<span class="gp">git add -p #</span><span class="w"> </span>or <span class="nt">--patch</span> to start partial staging
+<span class="go">git reset -p</span></code></pre></figure>
+
+<p><a href="https://www.cloudbees.com/blog/git-undo-commit">Git Tools - Time Travel</a></p>
+
+<p>Better undoing mistakes before commit:</p>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">git stash
+</span><span class="gp">git checkout -- &lt;filename&gt;</span><span class="w"> </span><span class="c"># Discard file changes permanently</span>
+<span class="gp">git reset --hard #</span><span class="w"> </span>Discard all changes permanently</code></pre></figure>
+
+<p>Undo Committed changes:</p>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">git reflog #</span><span class="w"> </span>To check the commit id.
+<span class="gp">git reset --hard &lt;commit-id&gt;</span><span class="w"> </span><span class="c"># Discard all changes permanently</span>
+<span class="go">
+</span><span class="gp">git rm -rf --cached . #</span><span class="w"> </span>remove the cache
+<span class="gp">git reset --hard HEAD #</span><span class="w"> </span>reset to the latest commit of the current branch</code></pre></figure>
+
+<p>Undoing changes in a shared repo:</p>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">git revert &lt;commit-id&gt;</span><span class="w"> </span><span class="c"># A new commit that reverts the changes of commit-id.</span></code></pre></figure>
+
+<p><a href="https://git-scm.com/book/en/v2/Git-Tools-Submodules">Git Tools - Submodules</a></p>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">git clone --recurse-submodules -j8  target_git@github.com</span></code></pre></figure>
+
+<p>If we cloned the repo without recursively pull submodules, try the following:</p>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">cd &lt;repo-dir&gt;</span><span class="w">
+</span><span class="go">git submodule update --init --recursive</span></code></pre></figure>
+
+<p>To individually update a specific submodule:</p>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">cd &lt;submodule-dir&gt;</span><span class="w">
+</span><span class="go">git pull --recurse-submodules</span></code></pre></figure>
+
+<p><a href="https://linuxhint.com/pull-git-submodules-after-cloning-project-from-github/">Submodule can be added</a> to your current repo by:</p>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">cd &lt;repo-dir&gt;</span><span class="w">
+</span><span class="gp">git submodule add &lt;git_url_to_the_submodule&gt;</span><span class="w"> </span>&lt;submodule_folder_name&gt;</code></pre></figure>
+
+<p><a href="https://stackoverflow.com/questions/11168141/find-which-commit-is-currently-checked-out-in-git">Git Tools - commit information</a></p>
+
+<p>variations:</p>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">git show [--outline -s]
+git reflog 
+</span><span class="gp">git log -1 [--outline] #</span><span class="w"> </span>show the last commit info
+<span class="go">git status</span></code></pre></figure>
+
+<p>Launch gitk graphic display:</p>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">git bisect visualize
+</span><span class="gp">git bisect view  #</span><span class="w"> </span>shorter, means same thing</code></pre></figure>
+
+<p><a href="https://www.codeblocq.com/2016/02/Stash-your-changes-before-switching-branch/">Git Tools - Stash</a>:</p>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">git stash save "changes on the current-branch"
+</span><span class="gp">git stash pop #</span><span class="w"> </span>unstash the changes of the top stash
+<span class="gp">git stash list #</span><span class="w"> </span>list the stash stack
+<span class="gp">git stash pop "stash@{1}" #</span><span class="w"> </span>unstash a specific stash
+<span class="gp">git stash apply #</span><span class="w"> </span>apply the top stash
+<span class="gp">git stash drop #</span><span class="w"> </span>drop the top stash
+<span class="gp">git stash show #</span><span class="w"> </span>Show the files <span class="k">in </span>the most recent stash
+<span class="gp">git stash show -p #</span><span class="w"> </span>show the changes <span class="k">in </span>the most recent stash
+<span class="gp">git stash show -p stash@{1} #</span><span class="w"> </span>show the changes of the specified stash
+<span class="gp">git stash show -p 1 #</span><span class="w"> </span>simplified version of the above comment</code></pre></figure>
+
+<p><a href="https://docs.github.com/en/get-started/getting-started-with-git/configuring-git-to-handle-line-endings?platform=linux">Git Tools - Eol configuration</a></p>
+
+<p>Global settings for line endings:</p>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">git config --global core.autocrlf input
+</span><span class="gp">#</span><span class="w"> </span>Configure Git to ensure line endings <span class="k">in </span>files you checkout are correct <span class="k">for </span>Linux
+<span class="go">
+</span><span class="gp">git config --get core.autocrlf #</span><span class="w"> </span>Check the value</code></pre></figure>
+
+<p>Per-repository settings:</p>
+
+<p>You can configure a <code class="language-plaintext highlighter-rouge">.gitattributes</code> file to manage how Git reads line endings in a specific repository. The <code class="language-plaintext highlighter-rouge">.gitattributes</code> file must be created in the root of the repository and committed like any other file.</p>
+
+<p>An example of the <code class="language-plaintext highlighter-rouge">.gitattributes</code> file content:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Set the default behavior, in case people don't have core.autocrlf set.
+* text=auto
+
+# Explicitly declare text files you want to always be normalized and converted
+# to native line endings on checkout.
+*.c text
+*.h text
+
+# Declare files that will always have CRLF line endings on checkout.
+*.sln text eol=crlf
+
+# Denote all files that are truly binary and should not be modified.
+*.png binary
+*.jpg binary
+</code></pre></div></div>
+
+<p>Reference:
+<a href="https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration">Customizing your git configuration</a></p>]]></content><author><name></name></author><category term="note-posts" /><category term="notes" /><category term="code" /><summary type="html"><![CDATA[Routine git commands]]></summary></entry><entry><title type="html">Deep Learning Model Deployment</title><link href="http://localhost:4000/blog/2023/model-deployment/" rel="alternate" type="text/html" title="Deep Learning Model Deployment" /><published>2023-06-01T09:30:00-07:00</published><updated>2023-06-01T09:30:00-07:00</updated><id>http://localhost:4000/blog/2023/model-deployment</id><content type="html" xml:base="http://localhost:4000/blog/2023/model-deployment/"><![CDATA[<h4 id="deployment-server">Deployment server</h4>
 <p>Note: the order doesn’t indicate its popularity.</p>
 <h5 id="1-ray">1. Ray</h5>
 <p><a href="https://docs.ray.io/en/latest/ray-overview/index.html">Ray</a> is an open-source unified framework for scaling AI and Python applications like machine learning. It provides the compute layer for parallel processing so that you don’t need to be a distributed systems expert.</p>
 
-<h5 id="2-tensor-comprehensions">2. Tensor Comprehensions</h5>
+<h5 id="2-nvidia-triton">2. Nvidia Triton</h5>
+<p><a href="https://developer.nvidia.com/triton-inference-server">Nvidia Triton</a> an open-source inference serving software, standardizes AI model deployment and execution and delivers fast and scalable AI in production.</p>
+
+<h4 id="model-conversion-or-coding-languages">Model conversion or coding languages</h4>
+
+<h5 id="1-tensorrt">1. TensorRT</h5>
+<p><a href="https://developer.nvidia.com/tensorrt">
+ NVIDIA TensorRT </a> is an SDK for high-performance deep learning inference, includes a deep learning inference optimizer and runtime that delivers low latency and high throughput for inference applications.</p>
+
+<h5 id="2-aitemplate">2. AITemplate</h5>
+<p><a href="https://facebookincubator.github.io/AITemplate/index.html">AITemplate</a>(AIT) is a Python framework that transforms deep neural networks into CUDA (NVIDIA GPU) / HIP (AMD GPU) C++ code for lightning-fast inference serving.</p>
+
+<h5 id="3-tensor-comprehensions">3. Tensor Comprehensions</h5>
 <p><a href="https://facebookresearch.github.io/TensorComprehensions/">
  Tensor Comprehensions </a>(<a href="https://github.com/facebookresearch/TensorComprehensions/">TC</a>)
 is a notation based on generalized Einstein notation for computing on multi-dimensional arrays. TC greatly simplifies ML framework implementations by providing a concise and powerful syntax which can be efficiently translated to high-performance computation kernels, automatically.</p>
 
-<h5 id="3-apache-tvm">3. Apache TVM</h5>
+<h5 id="4-apache-tvm">4. Apache TVM</h5>
 <p><a href="https://tvm.apache.org/">Apache TVM</a> is an End to End Machine Learning Compiler Framework for CPUs, GPUs and accelerators. It aims to enable machine learning engineers to optimize and run computations efficiently on any hardware backend.</p>
 
-<h5 id="4-openai-triton">4. OpenAI Triton</h5>
-<p><a href="https://openai.com/research/triton">Triton</a> is an open-source Python-like programming language which enables researchers with no CUDA experience to write highly efficient GPU code—most of the time on par with what an expert would be able to produce.</p>]]></content><author><name></name></author><category term="note-posts" /><category term="notes" /><summary type="html"><![CDATA[frameworks and tools]]></summary></entry><entry><title type="html">Conda Environment configuration for Apple Silicon M1 Mac</title><link href="http://localhost:4000/blog/2023/conda-m1/" rel="alternate" type="text/html" title="Conda Environment configuration for Apple Silicon M1 Mac" /><published>2023-05-22T10:30:00-07:00</published><updated>2023-05-22T10:30:00-07:00</updated><id>http://localhost:4000/blog/2023/conda-m1</id><content type="html" xml:base="http://localhost:4000/blog/2023/conda-m1/"><![CDATA[<h4 id="python-version-management-tool--conda">Python version management tool – conda</h4>
+<h5 id="5-openai-triton">5. OpenAI Triton</h5>
+<p><a href="https://openai.com/research/triton">Triton</a> is an open-source Python-like programming language which enables researchers with no CUDA experience to write highly efficient GPU code—most of the time on par with what an expert would be able to produce.</p>
+
+<h4 id="profiling-tools">Profiling tools:</h4>
+<h5 id="1-nvidia-nsight-systems">1. NVIDIA NSight Systems</h5>
+<p><a href="https://developer.nvidia.com/nsight-systems">NVIDIA Nsight™ Systems</a> is a system-wide performance analysis tool designed to visualize an application’s algorithms, help you identify the largest opportunities to optimize, and tune to scale efficiently across any quantity or size of CPUs and GPUs, from large servers to our smallest system on a chip (SoC).</p>]]></content><author><name></name></author><category term="note-posts" /><category term="notes" /><summary type="html"><![CDATA[frameworks and tools]]></summary></entry><entry><title type="html">Conda Environment configuration for Apple Silicon M1 Mac</title><link href="http://localhost:4000/blog/2023/conda-m1/" rel="alternate" type="text/html" title="Conda Environment configuration for Apple Silicon M1 Mac" /><published>2023-05-22T10:30:00-07:00</published><updated>2023-05-22T10:30:00-07:00</updated><id>http://localhost:4000/blog/2023/conda-m1</id><content type="html" xml:base="http://localhost:4000/blog/2023/conda-m1/"><![CDATA[<h4 id="python-version-management-tool--conda">Python version management tool – conda</h4>
 
 <h5 id="1-installation">1. Installation</h5>
 <p><a href="https://github.com/conda-forge/miniforge">Miniforge</a> a minimal installer for Conda specific to conda-forge.</p>
@@ -161,988 +354,4 @@ Generative Modeling by Estimating Gradients of the Data Distribution</a>.</p>
 
 <p>Open <a href="https://colab.research.google.com/github/lin-ht/annotated-transformer/blob/master/AnnotatedTransformer.ipynb"> my forked playground in colab.</a></p>
 
-<p>Github of <a href="https://github.com/lucidrains/x-transformers"> x-transformers </a> by <a href="https://github.com/lucidrains?tab=repositories">lucidrains</a>.</p>]]></content><author><name></name></author><category term="note-posts" /><category term="notes" /><category term="math" /><summary type="html"><![CDATA[Transformer explained]]></summary></entry><entry><title type="html">Terminal</title><link href="http://localhost:4000/blog/2023/terminal/" rel="alternate" type="text/html" title="Terminal" /><published>2023-05-12T06:43:00-07:00</published><updated>2023-05-12T06:43:00-07:00</updated><id>http://localhost:4000/blog/2023/terminal</id><content type="html" xml:base="http://localhost:4000/blog/2023/terminal/"><![CDATA[<h4 id="command-cheatsheet">Command cheatsheet</h4>
-<h5 id="file-and-directory-management">File and Directory Management</h5>
-
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">touch &lt;file&gt;</span><span class="w"> </span><span class="c">#Create a new file without any extension</span></code></pre></figure>
-
-<h3 id="shortcuts">SHORTCUTS</h3>
-
-<table>
-  <thead>
-    <tr>
-      <th>Key/Command</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Ctrl + A</td>
-      <td>Go to the beginning of the line you are currently typing on.  This also works for most text input fields system wide.  Netbeans being one exception</td>
-    </tr>
-    <tr>
-      <td>Ctrl + E</td>
-      <td>Go to the end of the line you are currently typing on.  This also works for most text input fields system wide.  Netbeans being one exception</td>
-    </tr>
-    <tr>
-      <td>Ctrl + L</td>
-      <td>Clears the Screen</td>
-    </tr>
-    <tr>
-      <td>Cmd + K</td>
-      <td>Clears the Screen</td>
-    </tr>
-    <tr>
-      <td>Ctrl + U</td>
-      <td>Cut everything backwards to beginning of line</td>
-    </tr>
-    <tr>
-      <td>Ctrl + K</td>
-      <td>Cut everything forward to end of line</td>
-    </tr>
-    <tr>
-      <td>Ctrl + W</td>
-      <td>Cut one word backwards using white space as delimiter</td>
-    </tr>
-    <tr>
-      <td>Ctrl + Y</td>
-      <td>Paste whatever was cut by the last cut command</td>
-    </tr>
-    <tr>
-      <td>Ctrl + H</td>
-      <td>Same as backspace</td>
-    </tr>
-    <tr>
-      <td>Ctrl + C</td>
-      <td>Kill whatever you are running.  Also clears everything on current line</td>
-    </tr>
-    <tr>
-      <td>Ctrl + D</td>
-      <td>Exit the current shell when no process is running, or send EOF to a the running process</td>
-    </tr>
-    <tr>
-      <td>Ctrl + Z</td>
-      <td>Puts whatever you are running into a suspended background process. fg restores it</td>
-    </tr>
-    <tr>
-      <td>Ctrl + _</td>
-      <td>Undo the last command. (Underscore.  So it’s actually Ctrl + Shift + minus)</td>
-    </tr>
-    <tr>
-      <td>Ctrl + T</td>
-      <td>Swap the last two characters before the cursor</td>
-    </tr>
-    <tr>
-      <td>Ctrl + F</td>
-      <td>Move cursor one character forward</td>
-    </tr>
-    <tr>
-      <td>Ctrl + B</td>
-      <td>Move cursor one character backward</td>
-    </tr>
-    <tr>
-      <td>Option + →</td>
-      <td>Move cursor one word forward</td>
-    </tr>
-    <tr>
-      <td>Option + ←</td>
-      <td>Move cursor one word backward</td>
-    </tr>
-    <tr>
-      <td>Esc + T</td>
-      <td>Swap the last two words before the cursor</td>
-    </tr>
-    <tr>
-      <td>Esc + Backspace</td>
-      <td>Cut one word backwards using none alphabetic characters as delimiters</td>
-    </tr>
-    <tr>
-      <td>Tab</td>
-      <td>Auto-complete files and folder names</td>
-    </tr>
-  </tbody>
-</table>
-
-<h3 id="core-commands">CORE COMMANDS</h3>
-
-<table>
-  <thead>
-    <tr>
-      <th>Key/Command</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>cd [folder]</td>
-      <td>Change directory e.g. <code class="language-plaintext highlighter-rouge">cd Documents</code></td>
-    </tr>
-    <tr>
-      <td>cd</td>
-      <td>Home directory</td>
-    </tr>
-    <tr>
-      <td>cd ~</td>
-      <td>Home directory</td>
-    </tr>
-    <tr>
-      <td>cd /</td>
-      <td>Root of drive</td>
-    </tr>
-    <tr>
-      <td>cd -</td>
-      <td>Previous directory</td>
-    </tr>
-    <tr>
-      <td>ls</td>
-      <td>Short listing</td>
-    </tr>
-    <tr>
-      <td>ls -l</td>
-      <td>Long listing</td>
-    </tr>
-    <tr>
-      <td>ls -a</td>
-      <td>Listing incl. hidden files</td>
-    </tr>
-    <tr>
-      <td>ls -lh</td>
-      <td>Long listing with Human readable file sizes</td>
-    </tr>
-    <tr>
-      <td>ls -R</td>
-      <td>Entire content of folder recursively</td>
-    </tr>
-    <tr>
-      <td>sudo [command]</td>
-      <td>Run command with the security privileges of the superuser (Super User DO)</td>
-    </tr>
-    <tr>
-      <td>open [file]</td>
-      <td>Opens a file ( as if you double clicked it )</td>
-    </tr>
-    <tr>
-      <td>top</td>
-      <td>Displays active processes. Press q to quit</td>
-    </tr>
-    <tr>
-      <td>nano [file]</td>
-      <td>Opens the file using the nano editor</td>
-    </tr>
-    <tr>
-      <td>vim [file]</td>
-      <td>Opens the file using the vim editor</td>
-    </tr>
-    <tr>
-      <td>clear</td>
-      <td>Clears the screen</td>
-    </tr>
-    <tr>
-      <td>reset</td>
-      <td>Resets the terminal display</td>
-    </tr>
-  </tbody>
-</table>
-
-<h3 id="chaining-commands">CHAINING COMMANDS</h3>
-
-<table>
-  <thead>
-    <tr>
-      <th>Key/Command</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>[command-a]; [command-b]</td>
-      <td>Run command A and then B, regardless of success of A</td>
-    </tr>
-    <tr>
-      <td>[command-a] &amp;&amp; [command-b]</td>
-      <td>Run command B if A succeeded</td>
-    </tr>
-    <tr>
-      <td>[command-a] || [command-b]</td>
-      <td>Run command B if A failed</td>
-    </tr>
-    <tr>
-      <td>[command-a] &amp;</td>
-      <td>Run command A in background</td>
-    </tr>
-  </tbody>
-</table>
-
-<h3 id="piping-commands">PIPING COMMANDS</h3>
-
-<table>
-  <thead>
-    <tr>
-      <th>Key/Command</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>[command-a] | [command-b]</td>
-      <td>Run command A and then pass the result to command B e.g ps auxwww | grep google</td>
-    </tr>
-  </tbody>
-</table>
-
-<h3 id="command-history">COMMAND HISTORY</h3>
-
-<table>
-  <thead>
-    <tr>
-      <th>Key/Command</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>history n</td>
-      <td>Shows the stuff typed – add a number to limit the last n items</td>
-    </tr>
-    <tr>
-      <td>Ctrl + r</td>
-      <td>Interactively search through previously typed commands</td>
-    </tr>
-    <tr>
-      <td>![value]</td>
-      <td>Execute the last command typed that starts with ‘value’</td>
-    </tr>
-    <tr>
-      <td>![value]:p</td>
-      <td>Print to the console the last command typed that starts with ‘value’</td>
-    </tr>
-    <tr>
-      <td>!!</td>
-      <td>Execute the last command typed</td>
-    </tr>
-    <tr>
-      <td>!!:p</td>
-      <td>Print to the console the last command typed</td>
-    </tr>
-  </tbody>
-</table>
-
-<h3 id="file-management">FILE MANAGEMENT</h3>
-
-<table>
-  <thead>
-    <tr>
-      <th>Key/Command</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>touch [file]</td>
-      <td>Create a new file</td>
-    </tr>
-    <tr>
-      <td>pwd</td>
-      <td>Full path to working directory</td>
-    </tr>
-    <tr>
-      <td>.</td>
-      <td>Current folder, e.g. <code class="language-plaintext highlighter-rouge">ls .</code></td>
-    </tr>
-    <tr>
-      <td>..</td>
-      <td>Parent/enclosing directory, e.g. <code class="language-plaintext highlighter-rouge">ls ..</code></td>
-    </tr>
-    <tr>
-      <td>ls -l ..</td>
-      <td>Long listing of parent directory</td>
-    </tr>
-    <tr>
-      <td>cd ../../</td>
-      <td>Move 2 levels up</td>
-    </tr>
-    <tr>
-      <td>cat</td>
-      <td>Concatenate to screen</td>
-    </tr>
-    <tr>
-      <td>rm [file]</td>
-      <td>Remove a file, e.g. <code class="language-plaintext highlighter-rouge">rm data.tmp</code></td>
-    </tr>
-    <tr>
-      <td>rm -i [file]</td>
-      <td>Remove with confirmation</td>
-    </tr>
-    <tr>
-      <td>rm -r [dir]</td>
-      <td>Remove a directory and contents</td>
-    </tr>
-    <tr>
-      <td>rm -f [file]</td>
-      <td>Force removal without confirmation</td>
-    </tr>
-    <tr>
-      <td>cp [file] [newfile]</td>
-      <td>Copy file to file</td>
-    </tr>
-    <tr>
-      <td>cp [file] [dir]</td>
-      <td>Copy file to directory</td>
-    </tr>
-    <tr>
-      <td>mv [file] [new filename]</td>
-      <td>Move/Rename, e.g. <code class="language-plaintext highlighter-rouge">mv file1.ad /tmp</code></td>
-    </tr>
-    <tr>
-      <td>pbcopy &lt; [file]</td>
-      <td>Copies file contents to clipboard</td>
-    </tr>
-    <tr>
-      <td>pbpaste</td>
-      <td>Paste clipboard contents</td>
-    </tr>
-    <tr>
-      <td>pbpaste &gt; [file]</td>
-      <td>Paste clipboard contents into file, <code class="language-plaintext highlighter-rouge">pbpaste &gt; paste-test.txt</code></td>
-    </tr>
-  </tbody>
-</table>
-
-<h3 id="directory-management">DIRECTORY MANAGEMENT</h3>
-
-<table>
-  <thead>
-    <tr>
-      <th>Key/Command</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>mkdir [dir]</td>
-      <td>Create new directory</td>
-    </tr>
-    <tr>
-      <td>mkdir -p [dir]/[dir]</td>
-      <td>Create nested directories</td>
-    </tr>
-    <tr>
-      <td>rmdir [dir]</td>
-      <td>Remove directory ( only operates on empty directories )</td>
-    </tr>
-    <tr>
-      <td>rm -R [dir]</td>
-      <td>Remove directory and contents</td>
-    </tr>
-    <tr>
-      <td>less [file]</td>
-      <td>Output file content delivered in screensize chunks</td>
-    </tr>
-    <tr>
-      <td>[command] &gt; [file]</td>
-      <td>Push output to file, keep in mind it will get overwritten</td>
-    </tr>
-    <tr>
-      <td>[command] » [file]</td>
-      <td>Append output to existing file</td>
-    </tr>
-    <tr>
-      <td>[command] &lt; [file]</td>
-      <td>Tell command to read content from a file</td>
-    </tr>
-  </tbody>
-</table>
-
-<h3 id="search">SEARCH</h3>
-
-<table>
-  <thead>
-    <tr>
-      <th>Key/Command</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>find [dir] -name [search_pattern]</td>
-      <td>Search for files, e.g. <code class="language-plaintext highlighter-rouge">find /Users -name "file.txt"</code></td>
-    </tr>
-    <tr>
-      <td>grep [search_pattern] [file]</td>
-      <td>Search for all lines that contain the pattern, e.g. <code class="language-plaintext highlighter-rouge">grep "Tom" file.txt</code></td>
-    </tr>
-    <tr>
-      <td>grep -r [search_pattern] [dir]</td>
-      <td>Recursively search in all files in specified directory for all lines that contain the pattern</td>
-    </tr>
-    <tr>
-      <td>grep -v [search_pattern] [file]</td>
-      <td>Search for all lines that do NOT contain the pattern</td>
-    </tr>
-    <tr>
-      <td>grep -i [search_pattern] [file]</td>
-      <td>Search for all lines that contain the case-insensitive pattern</td>
-    </tr>
-    <tr>
-      <td>mdfind [search_pattern]</td>
-      <td>Spotlight search for files (names, content, other metadata), e.g. <code class="language-plaintext highlighter-rouge">mdfind skateboard</code></td>
-    </tr>
-    <tr>
-      <td>mdfind -onlyin [dir] -name [pattern]</td>
-      <td>Spotlight search for files named like pattern in the given directory</td>
-    </tr>
-  </tbody>
-</table>
-
-<h3 id="help">HELP</h3>
-
-<table>
-  <thead>
-    <tr>
-      <th>Key/Command</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>[command] -h</td>
-      <td>Offers help</td>
-    </tr>
-    <tr>
-      <td>[command] –help</td>
-      <td>Offers help</td>
-    </tr>
-    <tr>
-      <td>info [command]</td>
-      <td>Offers help</td>
-    </tr>
-    <tr>
-      <td>man [command]</td>
-      <td>Show the help manual for [command]</td>
-    </tr>
-    <tr>
-      <td>whatis [command]</td>
-      <td>Gives a one-line description of [command]</td>
-    </tr>
-    <tr>
-      <td>apropos [search-pattern]</td>
-      <td>Searches for command with keywords in description</td>
-    </tr>
-  </tbody>
-</table>
-
-<h3 id="git">GIT</h3>
-
-<p>For Git related commmands you can check my <a href="https://github.com/0nn0/git-basics-cheatsheet">git-basics-cheatsheet</a></p>]]></content><author><name></name></author><category term="note-posts" /><category term="notes" /><summary type="html"><![CDATA[Command cheatsheet]]></summary></entry><entry><title type="html">Python coding</title><link href="http://localhost:4000/blog/2023/python-coding/" rel="alternate" type="text/html" title="Python coding" /><published>2023-05-12T06:40:00-07:00</published><updated>2023-05-12T06:40:00-07:00</updated><id>http://localhost:4000/blog/2023/python-coding</id><content type="html" xml:base="http://localhost:4000/blog/2023/python-coding/"><![CDATA[<h4 id="python-decorator-usage">Python decorator usage</h4>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Example 1: logging.
-</span><span class="kn">import</span> <span class="n">datetime</span>
-
-<span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="s">"logs.txt"</span><span class="p">,</span> <span class="s">"a"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="n">f</span><span class="p">.</span><span class="nf">write</span><span class="p">(</span><span class="s">"Called func with "</span> <span class="o">+</span> <span class="s">" "</span><span class="p">.</span><span class="nf">join</span><span class="p">([</span><span class="nf">str</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">])</span> <span class="o">+</span> <span class="s">" at "</span> <span class="o">+</span> <span class="nf">str</span><span class="p">(</span><span class="n">datetime</span><span class="p">.</span><span class="n">datetime</span><span class="p">.</span><span class="nf">now</span><span class="p">())</span> <span class="o">+</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span>
-        <span class="n">val</span> <span class="o">=</span> <span class="nf">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">val</span>
-    <span class="k">return</span> <span class="n">wrapper</span>
-
-<span class="c1"># Same as writing run = log(run)
-</span><span class="nd">@log</span>
-<span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">9</span><span class="p">):</span>
-    <span class="nf">print</span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="n">c</span><span class="p">)</span>
-
-<span class="nf">run</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-
-</code></pre></div></div>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Example 2: class singleton instance.
-</span><span class="k">def</span> <span class="nf">singleton</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
-	<span class="n">instances</span> <span class="o">=</span> <span class="p">{}</span>
-	<span class="k">def</span> <span class="nf">getinstance</span><span class="p">():</span>
-		<span class="k">if</span> <span class="n">cls</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">instances</span><span class="p">:</span>
-            <span class="n">instances</span><span class="p">[</span><span class="n">cls</span><span class="p">]</span> <span class="o">=</span> <span class="nf">cls</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">instances</span><span class="p">[</span><span class="n">cls</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">getinstance</span>
-
-<span class="nd">@singleton</span>
-<span class="k">class</span> <span class="nc">MyClass</span><span class="p">:</span>
-    <span class="p">...</span>
-</code></pre></div></div>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Example 3: add attributes to a function.
-</span><span class="k">def</span> <span class="nf">attrs</span><span class="p">(</span><span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">decorate</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">kwds</span><span class="p">:</span>
-            <span class="nf">setattr</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">kwds</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
-        <span class="k">return</span> <span class="n">f</span>
-    <span class="k">return</span> <span class="n">decorate</span>
-
-<span class="nd">@attrs</span><span class="p">(</span><span class="n">versionadded</span><span class="o">=</span><span class="s">"2.2"</span><span class="p">,</span>
-       <span class="n">author</span><span class="o">=</span><span class="s">"Guido van Rossum"</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">mymethod</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-    <span class="p">...</span>
-</code></pre></div></div>
-<blockquote>
-<p style="font-size:16px">
-If the attribute is not found, setattr() creates a new attribute and assigns value to it. However, this is only possible if the object implements the __dict__() method.
-</p>
-</blockquote>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Example 4: enforce function argument and return types.
-</span><span class="k">def</span> <span class="nf">accepts</span><span class="p">(</span><span class="o">*</span><span class="n">types</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">check_accepts</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-        <span class="k">assert</span> <span class="nf">len</span><span class="p">(</span><span class="n">types</span><span class="p">)</span> <span class="o">==</span> <span class="n">f</span><span class="p">.</span><span class="n">func_code</span><span class="p">.</span><span class="n">co_argcount</span>
-        <span class="k">def</span> <span class="nf">new_f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
-            <span class="nf">for </span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="ow">in</span> <span class="nf">zip</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">types</span><span class="p">):</span>
-                <span class="k">assert</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">t</span><span class="p">),</span> \
-                       <span class="s">"arg %r does not match %s"</span> <span class="o">%</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">t</span><span class="p">)</span>
-            <span class="k">return</span> <span class="nf">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
-        <span class="n">new_f</span><span class="p">.</span><span class="n">func_name</span> <span class="o">=</span> <span class="n">f</span><span class="p">.</span><span class="n">func_name</span>
-        <span class="k">return</span> <span class="n">new_f</span>
-    <span class="k">return</span> <span class="n">check_accepts</span>
-
-<span class="k">def</span> <span class="nf">returns</span><span class="p">(</span><span class="n">rtype</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">check_returns</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-        <span class="k">def</span> <span class="nf">new_f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="nf">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
-            <span class="k">assert</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">rtype</span><span class="p">),</span> \
-                   <span class="s">"return value %r does not match %s"</span> <span class="o">%</span> <span class="p">(</span><span class="n">result</span><span class="p">,</span><span class="n">rtype</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">result</span>
-        <span class="n">new_f</span><span class="p">.</span><span class="n">func_name</span> <span class="o">=</span> <span class="n">f</span><span class="p">.</span><span class="n">func_name</span>
-        <span class="k">return</span> <span class="n">new_f</span>
-    <span class="k">return</span> <span class="n">check_returns</span>
-
-<span class="nd">@accepts</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span><span class="nb">float</span><span class="p">))</span>
-<span class="nd">@returns</span><span class="p">((</span><span class="nb">int</span><span class="p">,</span><span class="nb">float</span><span class="p">))</span>
-<span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">arg1</span> <span class="o">*</span> <span class="n">arg2</span>
-</code></pre></div></div>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Example 5: Declare that a class implements a particular (set of) interface(s).
-</span><span class="k">def</span> <span class="nf">provides</span><span class="p">(</span><span class="o">*</span><span class="n">interfaces</span><span class="p">):</span>
-     <span class="s">"""
-     An actual, working, implementation of provides for
-     the current implementation of PyProtocols.  Not
-     particularly important for the PEP text.
-     """</span>
-     <span class="k">def</span> <span class="nf">provides</span><span class="p">(</span><span class="n">typ</span><span class="p">):</span>
-         <span class="nf">declareImplementation</span><span class="p">(</span><span class="n">typ</span><span class="p">,</span> <span class="n">instancesProvide</span><span class="o">=</span><span class="n">interfaces</span><span class="p">)</span>
-         <span class="k">return</span> <span class="n">typ</span>
-     <span class="k">return</span> <span class="n">provides</span>
-
-<span class="k">class</span> <span class="nc">IBar</span><span class="p">(</span><span class="n">Interface</span><span class="p">):</span>
-     <span class="s">"""Declare something about IBar here"""</span>
-
-<span class="nd">@provides</span><span class="p">(</span><span class="n">IBar</span><span class="p">)</span>
-<span class="k">class</span> <span class="nc">Foo</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-        <span class="s">"""Implement something here..."""</span>
-</code></pre></div></div>
-<p>Commen decorators in python:</p>
-<ul>
-    <li>@property</li>
-    <li>@classmethod</li>
-    <li>@staticmethod</li>
-</ul>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Mass</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">kilos</span><span class="p">):</span>
-        <span class="n">self</span><span class="p">.</span><span class="n">kilos</span> <span class="o">=</span> <span class="n">kilos</span>
-        
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">pounds</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">kilos</span> <span class="o">*</span> <span class="mf">2.205</span>
-
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_pounds</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">pounds</span><span class="p">):</span>
-        <span class="c1"># convert pounds to kilos
-</span>        <span class="n">kilos</span> <span class="o">=</span> <span class="n">pounds</span> <span class="o">/</span> <span class="mf">2.205</span>
-        <span class="c1"># cls is the same as Weight. calling cls(kilos) is the same as Weight(kilos)
-</span>        <span class="k">return</span> <span class="nf">cls</span><span class="p">(</span><span class="n">kilos</span><span class="p">)</span>
-
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">conversion_info</span><span class="p">():</span>
-        <span class="nf">print</span><span class="p">(</span><span class="s">"Kilos are converted to pounds by multiplying by 2.205."</span><span class="p">)</span>
-
-</code></pre></div></div>
-<blockquote>
-<p style="font-size:16px">
-A static method is tied to the class, not to its instance. This may remind you of a class method but the key difference is that a static method doesn’t modify the class at all. In other words, a static method doesn’t take self or cls as its arguments. 
-</p>
-</blockquote>
-
-<h4 id="type-annotation-and-protocol-usage">Type annotation and protocol usage</h4>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Example 1: protocol
-</span><span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Protocol</span>
-
-<span class="k">class</span> <span class="nc">HasBirthYear</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
-	<span class="c1"># use ellipsis (...) as the function body.
-</span>    <span class="k">def</span> <span class="nf">get_birthyear</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span> <span class="p">...</span>
-
-<span class="k">class</span> <span class="nc">Person</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">birthyear</span><span class="p">):</span>
-        <span class="n">self</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
-        <span class="n">self</span><span class="p">.</span><span class="n">birthyear</span> <span class="o">=</span> <span class="n">birthyear</span>
-
-    <span class="k">def</span> <span class="nf">get_birthyear</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">birthyear</span>
-
-<span class="k">def</span> <span class="nf">calc_age</span><span class="p">(</span><span class="n">current_year</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">HasBirthYear</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">current_year</span> <span class="o">-</span> <span class="n">data</span><span class="p">.</span><span class="nf">get_birthyear</span><span class="p">()</span>
-
-<span class="n">john</span> <span class="o">=</span> <span class="nc">Person</span><span class="p">(</span><span class="s">"john doe"</span><span class="p">,</span> <span class="mi">1996</span><span class="p">)</span>
-</code></pre></div></div>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Example 2: Add type hints for Iterable class.
-# Iterable type that implements the __iter__ method.
-</span><span class="kn">from</span> <span class="n">collections.abc</span> <span class="kn">import</span> <span class="n">Iterable</span>
-
-<span class="k">def</span> <span class="nf">double_elements</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">item</span> <span class="o">*</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">]</span>
-
-<span class="nf">print</span><span class="p">(</span><span class="nf">double_elements</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">]))</span> <span class="c1"># list
-</span><span class="nf">print</span><span class="p">(</span><span class="nf">double_elements</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)))</span>     <span class="c1"># tuple
-</span></code></pre></div></div>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Example 3: Add type hints for Sequence class.
-# Sequence type that have special methods: __getitem__ and __len__.
-</span><span class="kn">from</span> <span class="n">collections.abc</span> <span class="kn">import</span> <span class="n">Sequence</span>
-
-<span class="k">def</span> <span class="nf">get_last_element</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-
-<span class="n">first_item</span> <span class="o">=</span> <span class="nf">get_last_element</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>    <span class="c1"># 5
-</span><span class="n">second_item</span> <span class="o">=</span> <span class="n">get_last_element</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">8</span><span class="p">]</span>    <span class="c1"># 8
-</span></code></pre></div></div>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Example 4: Add type hints for Mapping class.
-# Mapping type that implements the following methods:
-#   __getitem__: for accessing an element
-#   __iter__: for iterating
-#   __len__: computing the length
-</span><span class="kn">from</span> <span class="n">collections.abc</span> <span class="kn">import</span> <span class="n">Mapping</span>
-
-<span class="k">def</span> <span class="nf">get_full_name</span><span class="p">(</span><span class="n">student</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">student</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="s">"first_name"</span><span class="p">)</span><span class="si">}</span><span class="s"> </span><span class="si">{</span><span class="n">student</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="s">"last_name"</span><span class="p">)</span><span class="si">}</span><span class="s">'</span>
-
-<span class="n">john</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="s">"first_name"</span><span class="p">:</span> <span class="s">"John"</span><span class="p">,</span>
-  <span class="s">"last_name"</span><span class="p">:</span> <span class="s">"Doe"</span><span class="p">,</span>
-<span class="p">}</span>
-
-<span class="nf">get_full_name</span><span class="p">(</span><span class="n">john</span><span class="p">)</span>
-</code></pre></div></div>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Example 5: Add type hints for MutableMapping class.
-# Mapping type that implements the following methods:
-#   __getitem__: for accessing an element
-#   __setitem__: for setting an element
-#   __delitem__: for deleting an element
-#   __iter__: for iterating
-#   __len__: computing the length
-</span><span class="kn">from</span> <span class="n">collections.abc</span> <span class="kn">import</span> <span class="n">MutableMapping</span>
-
-<span class="k">def</span> <span class="nf">update_first_name</span><span class="p">(</span><span class="n">student</span><span class="p">:</span> <span class="n">MutableMapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">first_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
-    <span class="n">student</span><span class="p">[</span><span class="s">"first_name"</span><span class="p">]</span> <span class="o">=</span> <span class="n">first_name</span>
-
-<span class="n">john</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s">"first_name"</span><span class="p">:</span> <span class="s">"John"</span><span class="p">,</span>
-    <span class="s">"last_name"</span><span class="p">:</span> <span class="s">"Doe"</span><span class="p">,</span>
-<span class="p">}</span>
-
-<span class="nf">update_first_name</span><span class="p">(</span><span class="n">john</span><span class="p">,</span> <span class="s">"james"</span><span class="p">)</span>
-</code></pre></div></div>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Example 6: Add type hints to tuples
-# Annotate a tuple with two elements
-</span><span class="n">student</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s">"John Doe"</span><span class="p">,</span> <span class="mi">18</span><span class="p">)</span>
-<span class="c1"># Annotate a tuple with an unknown amount of elements of a similar type
-</span><span class="n">letters</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="p">...]</span> <span class="o">=</span> <span class="p">(</span><span class="s">'a'</span><span class="p">,</span> <span class="s">'h'</span><span class="p">,</span> <span class="s">'j'</span><span class="p">,</span> <span class="s">'n'</span><span class="p">,</span> <span class="s">'m'</span><span class="p">,</span> <span class="s">'n'</span><span class="p">,</span> <span class="s">'z'</span><span class="p">)</span>
-
-<span class="c1"># Annotate a tuple with a named type
-</span><span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">NamedTuple</span>
-
-<span class="k">class</span> <span class="nc">StudentTuple</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">age</span><span class="p">:</span> <span class="nb">int</span>
-
-<span class="n">john</span> <span class="o">=</span> <span class="nc">StudentTuple</span><span class="p">(</span><span class="s">"John Doe"</span><span class="p">,</span> <span class="mi">33</span><span class="p">)</span>
-</code></pre></div></div>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Example 7: Add type hints to TypedDict.
-</span><span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">TypedDict</span>
-
-<span class="k">class</span> <span class="nc">StudentDict</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
-    <span class="n">first_name</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">last_name</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">age</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="n">hobbies</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-
-<span class="n">student1</span><span class="p">:</span> <span class="n">StudentDict</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s">"first_name"</span><span class="p">:</span> <span class="s">"John"</span><span class="p">,</span>
-    <span class="s">"last_name"</span><span class="p">:</span> <span class="s">"Doe"</span><span class="p">,</span>
-    <span class="s">"age"</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span>
-    <span class="s">"hobbies"</span><span class="p">:</span> <span class="p">[</span><span class="s">"singing"</span><span class="p">,</span> <span class="s">"dancing"</span><span class="p">],</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Example 8: Add type hints for a union type.
-</span><span class="k">def</span> <span class="nf">show_type</span><span class="p">(</span><span class="n">num</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">):</span>
-    <span class="nf">if</span><span class="p">(</span><span class="nf">isinstance</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="nb">str</span><span class="p">)):</span>
-        <span class="nf">print</span><span class="p">(</span><span class="s">"You entered a string"</span><span class="p">)</span>
-    <span class="nf">elif </span><span class="p">(</span><span class="nf">isinstance</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
-        <span class="nf">print</span><span class="p">(</span><span class="s">"You entered an integer"</span><span class="p">)</span>
-
-<span class="nf">show_type</span><span class="p">(</span><span class="s">'hello'</span><span class="p">)</span> <span class="c1"># You entered a string
-</span><span class="nf">show_type</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>       <span class="c1"># You entered an integer
-</span></code></pre></div></div>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Example 9: overloaded function
-</span><span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">overload</span>
-
-<span class="c1"># Decorator: @overload
-</span><span class="nd">@overload</span>
-<span class="k">def</span> <span class="nf">add_number</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">num</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span> <span class="p">...</span>
-
-<span class="nd">@overload</span>
-<span class="k">def</span> <span class="nf">add_number</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">num</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span> <span class="p">...</span>
-
-<span class="k">def</span> <span class="nf">add_number</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
-    <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">value</span> <span class="o">+</span> <span class="n">num</span>
-    <span class="k">elif</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">num</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">value</span><span class="p">]</span>
-
-<span class="nf">print</span><span class="p">(</span><span class="nf">add_number</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
-<span class="nf">print</span><span class="p">(</span><span class="nf">add_number</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="mi">4</span><span class="p">)</span>
-</code></pre></div></div>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Example 10: Add type hints for optional parameters
-</span><span class="k">def</span> <span class="nf">format_name</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">title</span><span class="p">:</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s">"Name: </span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s">. </span><span class="si">{</span><span class="n">name</span><span class="p">.</span><span class="nf">title</span><span class="p">()</span><span class="si">}</span><span class="s">"</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s">"Name: </span><span class="si">{</span><span class="n">name</span><span class="p">.</span><span class="nf">title</span><span class="p">()</span><span class="si">}</span><span class="s">"</span>
-
-<span class="nf">format_name</span><span class="p">(</span><span class="s">"john doe"</span><span class="p">,</span> <span class="s">"Mr"</span><span class="p">)</span>
-</code></pre></div></div>
-
-<h4 id="references">References</h4>
-<ul>
-	<li><a href="https://peps.python.org/pep-0318/">PEP 318 – Decorators for Functions and Methods</a></li>
-    <li>Decorators in python: <a href="https://builtin.com/software-engineering-perspectives/python-symbol">What Is the @ Symbol in Python and How Do I Use It?</a></li>
-    <li>Packing&amp;unpacking using asterisk(*):<a href="https://www.scaler.com/topics/asterisk-python/"> What is the Asterisk Operator in Python?</a></li>
-    <li>Type annotation and protocol: <a href="https://blog.logrocket.com/understanding-type-annotation-python/">Understanding type annotation in Python</a></li>
-</ul>]]></content><author><name></name></author><category term="note-posts" /><category term="notes" /><category term="code" /><summary type="html"><![CDATA[Cheatsheet]]></summary></entry><entry><title type="html">a post with code</title><link href="http://localhost:4000/blog/2023/code/" rel="alternate" type="text/html" title="a post with code" /><published>2023-05-11T08:09:00-07:00</published><updated>2023-05-11T08:09:00-07:00</updated><id>http://localhost:4000/blog/2023/code</id><content type="html" xml:base="http://localhost:4000/blog/2023/code/"><![CDATA[<p>This theme implements a built-in Jekyll feature, the use of Rouge, for <a href="https://jekyllrb.com/docs/liquid/tags/">syntax highlighting</a> with <a href="https://shopify.github.io/liquid/tags/control-flow/">Liquid tags</a>.
-It supports more than 100 languages.
-This example is in C++.
-All you have to do is wrap your code in markdown code tags:</p>
-
-<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">```</span><span class="nl">c++
-</span><span class="n">code</span> <span class="n">code</span> <span class="n">code</span>
-<span class="p">```</span>
-</code></pre></div></div>
-
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="k">const</span> <span class="err">\</span><span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
-<span class="p">{</span>
-    <span class="n">string</span> <span class="n">myString</span><span class="p">;</span>
-
-    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"input a string: "</span><span class="p">;</span>
-    <span class="n">getline</span><span class="p">(</span><span class="n">cin</span><span class="p">,</span> <span class="n">myString</span><span class="p">);</span>
-    <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="n">myString</span><span class="p">.</span><span class="n">length</span><span class="p">();</span>
-
-    <span class="kt">char</span> <span class="n">charArray</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span> <span class="o">*</span> <span class="p">[</span><span class="n">length</span><span class="p">];</span>
-
-    <span class="n">charArray</span> <span class="o">=</span> <span class="n">myString</span><span class="p">;</span>
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
-        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">charArray</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>By default, it does not display line numbers. If you want to display line numbers for every code block, you can set <code class="language-plaintext highlighter-rouge">kramdown.syntax_highlighter_opts.block.line_numbers</code> to true in your <code class="language-plaintext highlighter-rouge">_config.yml</code> file.</p>
-
-<p>If you want to display line numbers for a specific code block, all you have to do is wrap your code in a liquid tag:</p>
-
-<p>{% highlight c++ linenos %}  <br /> code code code <br /> {% endhighlight %}</p>
-
-<p>The keyword <code class="language-plaintext highlighter-rouge">linenos</code> triggers display of line numbers.
-Produces something like this:</p>
-
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-</pre></td><td class="code"><pre><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="k">const</span> <span class="err">\</span><span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
-<span class="p">{</span>
-    <span class="n">string</span> <span class="n">myString</span><span class="p">;</span>
-
-    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"input a string: "</span><span class="p">;</span>
-    <span class="n">getline</span><span class="p">(</span><span class="n">cin</span><span class="p">,</span> <span class="n">myString</span><span class="p">);</span>
-    <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="n">myString</span><span class="p">.</span><span class="n">length</span><span class="p">();</span>
-
-    <span class="kt">char</span> <span class="n">charArray</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span> <span class="o">*</span> <span class="p">[</span><span class="n">length</span><span class="p">];</span>
-
-    <span class="n">charArray</span> <span class="o">=</span> <span class="n">myString</span><span class="p">;</span>
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
-        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">charArray</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">" "</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</pre></td></tr></tbody></table></code></pre></figure>]]></content><author><name></name></author><category term="sample-posts" /><category term="formatting" /><category term="code" /><summary type="html"><![CDATA[an example of a blog post with some code]]></summary></entry><entry><title type="html">Deploy jekyll github homepage</title><link href="http://localhost:4000/blog/2023/jekyll-deploy/" rel="alternate" type="text/html" title="Deploy jekyll github homepage" /><published>2023-05-11T03:47:00-07:00</published><updated>2023-05-11T03:47:00-07:00</updated><id>http://localhost:4000/blog/2023/jekyll-deploy</id><content type="html" xml:base="http://localhost:4000/blog/2023/jekyll-deploy/"><![CDATA[<h4 id="command-cheatsheet">Command cheatsheet</h4>
-
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">git diff
-git add --all 
-git commit -m "Post update" 
-git push -u origin customized 
-bin/deploy --user
-bundle exec jekyll serve --lsi</span></code></pre></figure>
-
-<h4 id="git-commands">git commands</h4>
-
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">git branch #</span><span class="w"> </span>List <span class="nb">local </span>branches 
-<span class="gp">git branch -r #</span><span class="w"> </span>List remote branches 
-<span class="gp">git branch -a #</span><span class="w"> </span>List <span class="nb">local </span>and remote branches
-<span class="go">
-git checkout my-branch-name</span></code></pre></figure>
-
-<h4 id="references">References</h4>
-<ul>
-    <li><a href="https://docs.github.com/en/get-started/quickstart/fork-a-repo">Fork a repo.</a></li>
-</ul>]]></content><author><name></name></author><category term="note-posts" /><category term="notes" /><category term="code" /><summary type="html"><![CDATA[Command cheatsheet]]></summary></entry><entry><title type="html">a post with table of contents on a sidebar</title><link href="http://localhost:4000/blog/2023/sidebar-table-of-contents/" rel="alternate" type="text/html" title="a post with table of contents on a sidebar" /><published>2023-04-25T07:14:00-07:00</published><updated>2023-04-25T07:14:00-07:00</updated><id>http://localhost:4000/blog/2023/sidebar-table-of-contents</id><content type="html" xml:base="http://localhost:4000/blog/2023/sidebar-table-of-contents/"><![CDATA[<p>This post shows how to add a table of contents as a sidebar.</p>
-
-<h2 id="adding-a-table-of-contents">Adding a Table of Contents</h2>
-
-<p>To add a table of contents to a post as a sidebar, simply add</p>
-<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">toc</span><span class="pi">:</span>
-  <span class="na">sidebar</span><span class="pi">:</span> <span class="s">left</span>
-</code></pre></div></div>
-<p>to the front matter of the post. The table of contents will be automatically generated from the headings in the post. If you wish to display the sidebar to the right, simply change <code class="language-plaintext highlighter-rouge">left</code> to <code class="language-plaintext highlighter-rouge">right</code>.</p>
-
-<h3 id="example-of-sub-heading-1">Example of Sub-Heading 1</h3>
-
-<p>Jean shorts raw denim Vice normcore, art party High Life PBR skateboard stumptown vinyl kitsch. Four loko meh 8-bit, tousled banh mi tilde forage Schlitz dreamcatcher twee 3 wolf moon. Chambray asymmetrical paleo salvia, sartorial umami four loko master cleanse drinking vinegar brunch. <a href="https://www.pinterest.com">Pinterest</a> DIY authentic Schlitz, hoodie Intelligentsia butcher trust fund brunch shabby chic Kickstarter forage flexitarian. Direct trade <a href="https://en.wikipedia.org/wiki/Cold-pressed_juice">cold-pressed</a> meggings stumptown plaid, pop-up taxidermy. Hoodie XOXO fingerstache scenester Echo Park. Plaid ugh Wes Anderson, freegan pug selvage fanny pack leggings pickled food truck DIY irony Banksy.</p>
-
-<h3 id="example-of-another-sub-heading-1">Example of another Sub-Heading 1</h3>
-
-<p>Jean shorts raw denim Vice normcore, art party High Life PBR skateboard stumptown vinyl kitsch. Four loko meh 8-bit, tousled banh mi tilde forage Schlitz dreamcatcher twee 3 wolf moon. Chambray asymmetrical paleo salvia, sartorial umami four loko master cleanse drinking vinegar brunch. <a href="https://www.pinterest.com">Pinterest</a> DIY authentic Schlitz, hoodie Intelligentsia butcher trust fund brunch shabby chic Kickstarter forage flexitarian. Direct trade <a href="https://en.wikipedia.org/wiki/Cold-pressed_juice">cold-pressed</a> meggings stumptown plaid, pop-up taxidermy. Hoodie XOXO fingerstache scenester Echo Park. Plaid ugh Wes Anderson, freegan pug selvage fanny pack leggings pickled food truck DIY irony Banksy.</p>
-
-<h2 data-toc-text="Customizing" id="customizing-your-table-of-contents">Customizing Your Table of Contents</h2>
-
-<p>If you want to learn more about how to customize the table of contents of your sidebar, you can check the <a href="https://afeld.github.io/bootstrap-toc/">bootstrap-toc</a> documentation. Notice that you can even customize the text of the heading that will be displayed on the sidebar.</p>
-
-<h3 id="example-of-sub-heading-2">Example of Sub-Heading 2</h3>
-
-<p>Jean shorts raw denim Vice normcore, art party High Life PBR skateboard stumptown vinyl kitsch. Four loko meh 8-bit, tousled banh mi tilde forage Schlitz dreamcatcher twee 3 wolf moon. Chambray asymmetrical paleo salvia, sartorial umami four loko master cleanse drinking vinegar brunch. <a href="https://www.pinterest.com">Pinterest</a> DIY authentic Schlitz, hoodie Intelligentsia butcher trust fund brunch shabby chic Kickstarter forage flexitarian. Direct trade <a href="https://en.wikipedia.org/wiki/Cold-pressed_juice">cold-pressed</a> meggings stumptown plaid, pop-up taxidermy. Hoodie XOXO fingerstache scenester Echo Park. Plaid ugh Wes Anderson, freegan pug selvage fanny pack leggings pickled food truck DIY irony Banksy.</p>
-
-<h3 id="example-of-another-sub-heading-2">Example of another Sub-Heading 2</h3>
-
-<p>Jean shorts raw denim Vice normcore, art party High Life PBR skateboard stumptown vinyl kitsch. Four loko meh 8-bit, tousled banh mi tilde forage Schlitz dreamcatcher twee 3 wolf moon. Chambray asymmetrical paleo salvia, sartorial umami four loko master cleanse drinking vinegar brunch. <a href="https://www.pinterest.com">Pinterest</a> DIY authentic Schlitz, hoodie Intelligentsia butcher trust fund brunch shabby chic Kickstarter forage flexitarian. Direct trade <a href="https://en.wikipedia.org/wiki/Cold-pressed_juice">cold-pressed</a> meggings stumptown plaid, pop-up taxidermy. Hoodie XOXO fingerstache scenester Echo Park. Plaid ugh Wes Anderson, freegan pug selvage fanny pack leggings pickled food truck DIY irony Banksy.</p>]]></content><author><name></name></author><category term="sample-posts" /><category term="toc" /><category term="sidebar" /><summary type="html"><![CDATA[an example of a blog post with table of contents on a sidebar]]></summary></entry><entry><title type="html">displaying beatiful tables with Bootstrap Tables</title><link href="http://localhost:4000/blog/2023/tables/" rel="alternate" type="text/html" title="displaying beatiful tables with Bootstrap Tables" /><published>2023-03-20T11:37:00-07:00</published><updated>2023-03-20T11:37:00-07:00</updated><id>http://localhost:4000/blog/2023/tables</id><content type="html" xml:base="http://localhost:4000/blog/2023/tables/"><![CDATA[<p>Using markdown to display tables is easy. Just use the following syntax:</p>
-
-<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code>| Left aligned | Center aligned | Right aligned |
-| :----------- | :------------: | ------------: |
-| Left 1       | center 1       | right 1       |
-| Left 2       | center 2       | right 2       |
-| Left 3       | center 3       | right 3       |
-</code></pre></div></div>
-
-<p>That will generate:</p>
-
-<table>
-  <thead>
-    <tr>
-      <th style="text-align: left">Left aligned</th>
-      <th style="text-align: center">Center aligned</th>
-      <th style="text-align: right">Right aligned</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: left">Left 1</td>
-      <td style="text-align: center">center 1</td>
-      <td style="text-align: right">right 1</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">Left 2</td>
-      <td style="text-align: center">center 2</td>
-      <td style="text-align: right">right 2</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">Left 3</td>
-      <td style="text-align: center">center 3</td>
-      <td style="text-align: right">right 3</td>
-    </tr>
-  </tbody>
-</table>
-
-<p></p>
-
-<p>It is also possible to use HTML to display tables. For example, the following HTML code will display a table with <a href="https://bootstrap-table.com/">Bootstrap Table</a>, loaded from a JSON file:</p>
-
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;table</span>
-  <span class="na">id=</span><span class="s">"table"</span>
-  <span class="na">data-toggle=</span><span class="s">"table"</span>
-  <span class="na">data-url=</span><span class="s">"{{ '/assets/json/table_data.json' | relative_url }}"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;thead&gt;</span>
-    <span class="nt">&lt;tr&gt;</span>
-      <span class="nt">&lt;th</span> <span class="na">data-field=</span><span class="s">"id"</span><span class="nt">&gt;</span>ID<span class="nt">&lt;/th&gt;</span>
-      <span class="nt">&lt;th</span> <span class="na">data-field=</span><span class="s">"name"</span><span class="nt">&gt;</span>Item Name<span class="nt">&lt;/th&gt;</span>
-      <span class="nt">&lt;th</span> <span class="na">data-field=</span><span class="s">"price"</span><span class="nt">&gt;</span>Item Price<span class="nt">&lt;/th&gt;</span>
-    <span class="nt">&lt;/tr&gt;</span>
-  <span class="nt">&lt;/thead&gt;</span>
-<span class="nt">&lt;/table&gt;</span>
-</code></pre></div></div>
-
-<table data-toggle="table" data-url="/assets/json/table_data.json">
-  <thead>
-    <tr>
-      <th data-field="id">ID</th>
-      <th data-field="name">Item Name</th>
-      <th data-field="price">Item Price</th>
-    </tr>
-  </thead>
-</table>
-
-<p></p>
-
-<p>By using <a href="https://bootstrap-table.com/">Bootstrap Table</a> it is possible to create pretty complex tables, with pagination, search, and more. For example, the following HTML code will display a table, loaded from a JSON file, with pagination, search, checkboxes, and header/content alignment. For more information, check the <a href="https://examples.bootstrap-table.com/index.html">documentation</a>.</p>
-
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;table</span>
-  <span class="na">data-click-to-select=</span><span class="s">"true"</span>
-  <span class="na">data-height=</span><span class="s">"460"</span>
-  <span class="na">data-pagination=</span><span class="s">"true"</span>
-  <span class="na">data-search=</span><span class="s">"true"</span>
-  <span class="na">data-toggle=</span><span class="s">"table"</span>
-  <span class="na">data-url=</span><span class="s">"{{ '/assets/json/table_data.json' | relative_url }}"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;thead&gt;</span>
-    <span class="nt">&lt;tr&gt;</span>
-      <span class="nt">&lt;th</span> <span class="na">data-checkbox=</span><span class="s">"true"</span><span class="nt">&gt;&lt;/th&gt;</span>
-      <span class="nt">&lt;th</span> <span class="na">data-field=</span><span class="s">"id"</span> <span class="na">data-halign=</span><span class="s">"left"</span> <span class="na">data-align=</span><span class="s">"center"</span> <span class="na">data-sortable=</span><span class="s">"true"</span><span class="nt">&gt;</span>ID<span class="nt">&lt;/th&gt;</span>
-      <span class="nt">&lt;th</span> <span class="na">data-field=</span><span class="s">"name"</span> <span class="na">data-halign=</span><span class="s">"center"</span> <span class="na">data-align=</span><span class="s">"right"</span> <span class="na">data-sortable=</span><span class="s">"true"</span><span class="nt">&gt;</span>Item Name<span class="nt">&lt;/th&gt;</span>
-      <span class="nt">&lt;th</span> <span class="na">data-field=</span><span class="s">"price"</span> <span class="na">data-halign=</span><span class="s">"right"</span> <span class="na">data-align=</span><span class="s">"left"</span> <span class="na">data-sortable=</span><span class="s">"true"</span><span class="nt">&gt;</span>Item Price<span class="nt">&lt;/th&gt;</span>
-    <span class="nt">&lt;/tr&gt;</span>
-  <span class="nt">&lt;/thead&gt;</span>
-<span class="nt">&lt;/table&gt;</span>
-</code></pre></div></div>
-
-<table data-click-to-select="true" data-height="460" data-pagination="true" data-search="true" data-toggle="table" data-url="/assets/json/table_data.json">
-  <thead>
-    <tr>
-      <th data-checkbox="true"></th>
-      <th data-field="id" data-halign="left" data-align="center" data-sortable="true">ID</th>
-      <th data-field="name" data-halign="center" data-align="right" data-sortable="true">Item Name</th>
-      <th data-field="price" data-halign="right" data-align="left" data-sortable="true">Item Price</th>
-    </tr>
-  </thead>
-</table>]]></content><author><name></name></author><category term="sample-posts" /><summary type="html"><![CDATA[an example of how to use Bootstrap Tables]]></summary></entry></feed>
+<p>Github of <a href="https://github.com/lucidrains/x-transformers"> x-transformers </a> by <a href="https://github.com/lucidrains?tab=repositories">lucidrains</a>.</p>]]></content><author><name></name></author><category term="note-posts" /><category term="notes" /><category term="math" /><summary type="html"><![CDATA[Transformer explained]]></summary></entry></feed>

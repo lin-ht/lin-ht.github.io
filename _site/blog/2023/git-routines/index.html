@@ -10,9 +10,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>displaying beatiful tables with Bootstrap Tables | Haiting  Lin</title>
+    <title>Git Routine | Haiting  Lin</title>
     <meta name="author" content="Haiting  Lin">
-    <meta name="description" content="an example of how to use Bootstrap Tables">
+    <meta name="description" content="Routine git commands">
     <meta name="keywords" content="haiting, Adobe">
 
 
@@ -38,7 +38,7 @@
     <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;">
     
     <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="canonical" href="http://localhost:4000/blog/2023/tables/">
+    <link rel="canonical" href="http://localhost:4000/blog/2023/git-routines/">
 
     <!-- Dark Mode -->
     
@@ -120,13 +120,19 @@
 <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">displaying beatiful tables with Bootstrap Tables</h1>
-    <p class="post-meta">March 20, 2023</p>
+    <h1 class="post-title">Git Routine</h1>
+    <p class="post-meta">June 20, 2023</p>
     <p class="post-tags">
       <a href="/blog/2023"> <i class="fas fa-calendar fa-sm"></i> 2023 </a>
         ·  
-        <a href="/blog/category/sample-posts">
-          <i class="fas fa-tag fa-sm"></i> sample-posts</a>  
+        <a href="/blog/tag/notes">
+          <i class="fas fa-hashtag fa-sm"></i> notes</a>  
+          <a href="/blog/tag/code">
+          <i class="fas fa-hashtag fa-sm"></i> code</a>  
+          
+        ·  
+        <a href="/blog/category/note-posts">
+          <i class="fas fa-tag fa-sm"></i> note-posts</a>  
           
 
     </p>
@@ -135,104 +141,133 @@
   <article class="post-content">
 <!--      -->
     <div id="markdown-content">
-      <p>Using markdown to display tables is easy. Just use the following syntax:</p>
+      <h4 id="useful-git-commands">Useful git commands</h4>
 
-<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code>| Left aligned | Center aligned | Right aligned |
-| :----------- | :------------: | ------------: |
-| Left 1       | center 1       | right 1       |
-| Left 2       | center 2       | right 2       |
-| Left 3       | center 3       | right 3       |
+<h5 id="command-cheatsheet">Command cheatsheet</h5>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">git status
+git diff
+</span><span class="gp">git diff &lt;filename&gt;</span><span class="w">
+</span><span class="gp">git add --all #</span><span class="w"> </span>Stage all files
+<span class="gp">git add &lt;filename&gt;</span><span class="w">	</span><span class="c"># Stage a file, ready to commit</span>
+<span class="gp">git reset #</span><span class="w"> </span>Unstage all files
+<span class="gp">git reset &lt;filename&gt;</span><span class="w"> </span><span class="c"># Unstage one file</span>
+<span class="gp">git restore &lt;filename&gt;</span><span class="w"> </span><span class="c"># Discard changes of the file</span>
+<span class="go">
+git commit -m "Post update" 
+</span><span class="gp">git push -u origin &lt;your-branch&gt;</span><span class="w"> </span></code></pre></figure>
+
+<p><a href="#">Git Tools - Branch</a></p>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">git checkout -b &lt;your-branch&gt;</span><span class="w"> </span><span class="c"># new local branch</span>
+<span class="gp">git branch -d &lt;your-branch&gt;</span><span class="w">   </span><span class="c"># delete the branch</span></code></pre></figure>
+
+<p><a href="https://git-scm.com/book/en/v2/Git-Tools-Interactive-Staging" rel="external nofollow noopener" target="_blank">Git Tools - Interactive staging</a></p>
+
+<p>We can stage patches under interactive staging mode.</p>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">git add -i #</span><span class="w"> </span>Interactive Staging
+<span class="gp">git add -p #</span><span class="w"> </span>or <span class="nt">--patch</span> to start partial staging
+<span class="go">git reset -p</span></code></pre></figure>
+
+<p><a href="https://www.cloudbees.com/blog/git-undo-commit" rel="external nofollow noopener" target="_blank">Git Tools - Time Travel</a></p>
+
+<p>Better undoing mistakes before commit:</p>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">git stash
+</span><span class="gp">git checkout -- &lt;filename&gt;</span><span class="w"> </span><span class="c"># Discard file changes permanently</span>
+<span class="gp">git reset --hard #</span><span class="w"> </span>Discard all changes permanently</code></pre></figure>
+
+<p>Undo Committed changes:</p>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">git reflog #</span><span class="w"> </span>To check the commit id.
+<span class="gp">git reset --hard &lt;commit-id&gt;</span><span class="w"> </span><span class="c"># Discard all changes permanently</span>
+<span class="go">
+</span><span class="gp">git rm -rf --cached . #</span><span class="w"> </span>remove the cache
+<span class="gp">git reset --hard HEAD #</span><span class="w"> </span>reset to the latest commit of the current branch</code></pre></figure>
+
+<p>Undoing changes in a shared repo:</p>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">git revert &lt;commit-id&gt;</span><span class="w"> </span><span class="c"># A new commit that reverts the changes of commit-id.</span></code></pre></figure>
+
+<p><a href="https://git-scm.com/book/en/v2/Git-Tools-Submodules" rel="external nofollow noopener" target="_blank">Git Tools - Submodules</a></p>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">git clone --recurse-submodules -j8  target_git@github.com</span></code></pre></figure>
+
+<p>If we cloned the repo without recursively pull submodules, try the following:</p>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">cd &lt;repo-dir&gt;</span><span class="w">
+</span><span class="go">git submodule update --init --recursive</span></code></pre></figure>
+
+<p>To individually update a specific submodule:</p>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">cd &lt;submodule-dir&gt;</span><span class="w">
+</span><span class="go">git pull --recurse-submodules</span></code></pre></figure>
+
+<p><a href="https://linuxhint.com/pull-git-submodules-after-cloning-project-from-github/" rel="external nofollow noopener" target="_blank">Submodule can be added</a> to your current repo by:</p>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">cd &lt;repo-dir&gt;</span><span class="w">
+</span><span class="gp">git submodule add &lt;git_url_to_the_submodule&gt;</span><span class="w"> </span>&lt;submodule_folder_name&gt;</code></pre></figure>
+
+<p><a href="https://stackoverflow.com/questions/11168141/find-which-commit-is-currently-checked-out-in-git" rel="external nofollow noopener" target="_blank">Git Tools - commit information</a></p>
+
+<p>variations:</p>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">git show [--outline -s]
+git reflog 
+</span><span class="gp">git log -1 [--outline] #</span><span class="w"> </span>show the last commit info
+<span class="go">git status</span></code></pre></figure>
+
+<p>Launch gitk graphic display:</p>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">git bisect visualize
+</span><span class="gp">git bisect view  #</span><span class="w"> </span>shorter, means same thing</code></pre></figure>
+
+<p><a href="https://www.codeblocq.com/2016/02/Stash-your-changes-before-switching-branch/" rel="external nofollow noopener" target="_blank">Git Tools - Stash</a>:</p>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">git stash save "changes on the current-branch"
+</span><span class="gp">git stash pop #</span><span class="w"> </span>unstash the changes of the top stash
+<span class="gp">git stash list #</span><span class="w"> </span>list the stash stack
+<span class="gp">git stash pop "stash@{1}" #</span><span class="w"> </span>unstash a specific stash
+<span class="gp">git stash apply #</span><span class="w"> </span>apply the top stash
+<span class="gp">git stash drop #</span><span class="w"> </span>drop the top stash
+<span class="gp">git stash show #</span><span class="w"> </span>Show the files <span class="k">in </span>the most recent stash
+<span class="gp">git stash show -p #</span><span class="w"> </span>show the changes <span class="k">in </span>the most recent stash
+<span class="gp">git stash show -p stash@{1} #</span><span class="w"> </span>show the changes of the specified stash
+<span class="gp">git stash show -p 1 #</span><span class="w"> </span>simplified version of the above comment</code></pre></figure>
+
+<p><a href="https://docs.github.com/en/get-started/getting-started-with-git/configuring-git-to-handle-line-endings?platform=linux" rel="external nofollow noopener" target="_blank">Git Tools - Eol configuration</a></p>
+
+<p>Global settings for line endings:</p>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">git config --global core.autocrlf input
+</span><span class="gp">#</span><span class="w"> </span>Configure Git to ensure line endings <span class="k">in </span>files you checkout are correct <span class="k">for </span>Linux
+<span class="go">
+</span><span class="gp">git config --get core.autocrlf #</span><span class="w"> </span>Check the value</code></pre></figure>
+
+<p>Per-repository settings:</p>
+
+<p>You can configure a <code class="language-plaintext highlighter-rouge">.gitattributes</code> file to manage how Git reads line endings in a specific repository. The <code class="language-plaintext highlighter-rouge">.gitattributes</code> file must be created in the root of the repository and committed like any other file.</p>
+
+<p>An example of the <code class="language-plaintext highlighter-rouge">.gitattributes</code> file content:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Set the default behavior, in case people don't have core.autocrlf set.
+* text=auto
+
+# Explicitly declare text files you want to always be normalized and converted
+# to native line endings on checkout.
+*.c text
+*.h text
+
+# Declare files that will always have CRLF line endings on checkout.
+*.sln text eol=crlf
+
+# Denote all files that are truly binary and should not be modified.
+*.png binary
+*.jpg binary
 </code></pre></div></div>
 
-<p>That will generate:</p>
-
-<table>
-  <thead>
-    <tr>
-      <th style="text-align: left">Left aligned</th>
-      <th style="text-align: center">Center aligned</th>
-      <th style="text-align: right">Right aligned</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: left">Left 1</td>
-      <td style="text-align: center">center 1</td>
-      <td style="text-align: right">right 1</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">Left 2</td>
-      <td style="text-align: center">center 2</td>
-      <td style="text-align: right">right 2</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">Left 3</td>
-      <td style="text-align: center">center 3</td>
-      <td style="text-align: right">right 3</td>
-    </tr>
-  </tbody>
-</table>
-
-<p></p>
-
-<p>It is also possible to use HTML to display tables. For example, the following HTML code will display a table with <a href="https://bootstrap-table.com/" rel="external nofollow noopener" target="_blank">Bootstrap Table</a>, loaded from a JSON file:</p>
-
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;table</span>
-  <span class="na">id=</span><span class="s">"table"</span>
-  <span class="na">data-toggle=</span><span class="s">"table"</span>
-  <span class="na">data-url=</span><span class="s">"{{ '/assets/json/table_data.json' | relative_url }}"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;thead&gt;</span>
-    <span class="nt">&lt;tr&gt;</span>
-      <span class="nt">&lt;th</span> <span class="na">data-field=</span><span class="s">"id"</span><span class="nt">&gt;</span>ID<span class="nt">&lt;/th&gt;</span>
-      <span class="nt">&lt;th</span> <span class="na">data-field=</span><span class="s">"name"</span><span class="nt">&gt;</span>Item Name<span class="nt">&lt;/th&gt;</span>
-      <span class="nt">&lt;th</span> <span class="na">data-field=</span><span class="s">"price"</span><span class="nt">&gt;</span>Item Price<span class="nt">&lt;/th&gt;</span>
-    <span class="nt">&lt;/tr&gt;</span>
-  <span class="nt">&lt;/thead&gt;</span>
-<span class="nt">&lt;/table&gt;</span>
-</code></pre></div></div>
-
-<table data-toggle="table" data-url="/assets/json/table_data.json">
-  <thead>
-    <tr>
-      <th data-field="id">ID</th>
-      <th data-field="name">Item Name</th>
-      <th data-field="price">Item Price</th>
-    </tr>
-  </thead>
-</table>
-
-<p></p>
-
-<p>By using <a href="https://bootstrap-table.com/" rel="external nofollow noopener" target="_blank">Bootstrap Table</a> it is possible to create pretty complex tables, with pagination, search, and more. For example, the following HTML code will display a table, loaded from a JSON file, with pagination, search, checkboxes, and header/content alignment. For more information, check the <a href="https://examples.bootstrap-table.com/index.html" rel="external nofollow noopener" target="_blank">documentation</a>.</p>
-
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;table</span>
-  <span class="na">data-click-to-select=</span><span class="s">"true"</span>
-  <span class="na">data-height=</span><span class="s">"460"</span>
-  <span class="na">data-pagination=</span><span class="s">"true"</span>
-  <span class="na">data-search=</span><span class="s">"true"</span>
-  <span class="na">data-toggle=</span><span class="s">"table"</span>
-  <span class="na">data-url=</span><span class="s">"{{ '/assets/json/table_data.json' | relative_url }}"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;thead&gt;</span>
-    <span class="nt">&lt;tr&gt;</span>
-      <span class="nt">&lt;th</span> <span class="na">data-checkbox=</span><span class="s">"true"</span><span class="nt">&gt;&lt;/th&gt;</span>
-      <span class="nt">&lt;th</span> <span class="na">data-field=</span><span class="s">"id"</span> <span class="na">data-halign=</span><span class="s">"left"</span> <span class="na">data-align=</span><span class="s">"center"</span> <span class="na">data-sortable=</span><span class="s">"true"</span><span class="nt">&gt;</span>ID<span class="nt">&lt;/th&gt;</span>
-      <span class="nt">&lt;th</span> <span class="na">data-field=</span><span class="s">"name"</span> <span class="na">data-halign=</span><span class="s">"center"</span> <span class="na">data-align=</span><span class="s">"right"</span> <span class="na">data-sortable=</span><span class="s">"true"</span><span class="nt">&gt;</span>Item Name<span class="nt">&lt;/th&gt;</span>
-      <span class="nt">&lt;th</span> <span class="na">data-field=</span><span class="s">"price"</span> <span class="na">data-halign=</span><span class="s">"right"</span> <span class="na">data-align=</span><span class="s">"left"</span> <span class="na">data-sortable=</span><span class="s">"true"</span><span class="nt">&gt;</span>Item Price<span class="nt">&lt;/th&gt;</span>
-    <span class="nt">&lt;/tr&gt;</span>
-  <span class="nt">&lt;/thead&gt;</span>
-<span class="nt">&lt;/table&gt;</span>
-</code></pre></div></div>
-
-<table data-click-to-select="true" data-height="460" data-pagination="true" data-search="true" data-toggle="table" data-url="/assets/json/table_data.json">
-  <thead>
-    <tr>
-      <th data-checkbox="true"></th>
-      <th data-field="id" data-halign="left" data-align="center" data-sortable="true">ID</th>
-      <th data-field="name" data-halign="center" data-align="right" data-sortable="true">Item Name</th>
-      <th data-field="price" data-halign="right" data-align="left" data-sortable="true">Item Price</th>
-    </tr>
-  </thead>
-</table>
+<p>Reference:
+<a href="https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration" rel="external nofollow noopener" target="_blank">Customizing your git configuration</a></p>
 
     </div>
   </article>
@@ -278,34 +313,6 @@
     <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/docker/">What is Docker</a>
   </li>
 
-<div id="giscus_thread" style="max-width: 800px; margin: 0 auto;">
-  <script>
-    let giscusTheme = localStorage.getItem("theme");
-    let giscusAttributes = {
-        "src": "https://giscus.app/client.js",
-        "data-repo": "alshedivat/al-folio",
-        "data-repo-id": "MDEwOlJlcG9zaXRvcnk2MDAyNDM2NQ==",
-        "data-category": "Comments",
-        "data-category-id": "DIC_kwDOA5PmLc4CTBt6",
-        "data-mapping": "title",
-        "data-strict": "1",
-        "data-reactions-enabled": "1",
-        "data-emit-metadata": "0",
-        "data-input-position": "bottom",
-        "data-theme": giscusTheme,
-        "data-lang": "en",
-        "crossorigin": "anonymous",
-        "async": "",
-    };
-
-
-    let giscusScript = document.createElement("script");
-    Object.entries(giscusAttributes).forEach(([key, value]) => giscusScript.setAttribute(key, value));
-    document.getElementById("giscus_thread").appendChild(giscusScript);
-  </script>
-  <noscript>Please enable JavaScript to view the <a href="http://giscus.app/?ref_noscript" rel="external nofollow noopener" target="_blank">comments powered by giscus.</a>
-</noscript>
-</div>
 </div>
 
       

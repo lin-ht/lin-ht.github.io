@@ -6,6 +6,16 @@ description: Command cheatsheet
 tags: notes code
 categories: note-posts
 ---
+#### Installation cheatsheet
+Update ruby
+{% highlight terminal %}
+which ruby # Old ruby
+
+brew install chruby
+brew info chruby # Check its information
+
+{% endhighlight %}
+
 #### Command cheatsheet
 
 {% highlight terminal %}
