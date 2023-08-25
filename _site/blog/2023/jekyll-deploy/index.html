@@ -142,29 +142,101 @@
 <!--      -->
     <div id="markdown-content">
       <h4 id="installation-cheatsheet">Installation cheatsheet</h4>
-<p>Update ruby</p>
+<p>Install chruby:</p>
 
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">which ruby #</span><span class="w"> </span>Old ruby
-<span class="go">
-brew install chruby
-</span><span class="gp">brew info chruby #</span><span class="w"> </span>Check its information</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">which ruby <span class="c"># Old ruby</span>
+
+brew <span class="nb">install </span>chruby
+brew info chruby <span class="c"># Check its information</span>
+
+<span class="c"># https://github.com/postmodern/chruby/wiki/Ruby</span>
+brew <span class="nb">install </span>automake bison openssl readline libyaml gdbm libffi
+
+brew tap raggi/ale
+<span class="c"># macOS users must update their OpenSSL CA cert bundle</span>
+<span class="c"># https://github.com/raggi/openssl-osx-ca#readme</span>
+brew <span class="nb">install </span>openssl-osx-ca
+
+brew services start openssl-osx-ca
+
+<span class="c"># Caveat: restart raggi/ale/openssl-osx-ca after an upgrade</span>
+brew services restart raggi/ale/openssl-osx-ca</code></pre></figure>
+
+<p>Install Ruby:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">curl <span class="nt">--remote-name</span> https://cache.ruby-lang.org/pub/ruby/3.2/ruby-3.2.0.tar.xz
+<span class="nb">tar</span> <span class="nt">-xJvf</span> ruby-3.2.0.tar.xz
+<span class="nb">cd </span>ruby-3.2.0
+./configure <span class="nt">--prefix</span><span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/.rubies/ruby-3.2.0"</span> <span class="nt">--with-opt-dir</span><span class="o">=</span><span class="s2">"</span><span class="si">$(</span>brew <span class="nt">--prefix</span> openssl<span class="si">)</span><span class="s2">:</span><span class="si">$(</span>brew <span class="nt">--prefix</span> readline<span class="si">)</span><span class="s2">:</span><span class="si">$(</span>brew <span class="nt">--prefix</span> libyaml<span class="si">)</span><span class="s2">:</span><span class="si">$(</span>brew <span class="nt">--prefix</span> gdbm<span class="si">)</span><span class="s2">:</span><span class="si">$(</span>brew <span class="nt">--prefix</span> libffi<span class="si">)</span><span class="s2">"</span>
+make <span class="nt">-j4</span>
+make <span class="nb">install</span></code></pre></figure>
+
+<p>Switch Ruby:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">chruby <span class="c"># List ruby</span>
+chruby 3.2.0 <span class="c"># Select ruby</span></code></pre></figure>
+
+<p>Update gem:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">gem update <span class="nt">--system</span> 3.4.13</code></pre></figure>
+
+<p>Install Imagemagick:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">brew <span class="nb">install </span>imagemagick</code></pre></figure>
+
+<p>Configure:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># To solve openssl ssl error:</span>
+<span class="nb">export </span><span class="nv">SSL_CERT_DIR</span><span class="o">=</span>/Users/halin/mambaforge/ssl
+<span class="nb">export </span><span class="nv">SSL_CERT_FILE</span><span class="o">=</span>/Users/halin/mambaforge/ssl/cacert.pem
+
+<span class="c"># Set repository</span>
+<span class="nb">export </span><span class="nv">PAGES_REPO_NWO</span><span class="o">=</span><span class="s2">"lin-ht/lin-ht.github.io"</span></code></pre></figure>
+
+<p>Personal github page set up:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">cd</span> &lt;path-to-the-repo-lin-ht.github.io&gt;
+
+<span class="c"># deploy the page</span>
+bin/deploy <span class="nt">--user</span>
+
+<span class="c"># start local server</span>
+bundle <span class="nb">install
+</span>bundle <span class="nb">exec </span>jekyll serve</code></pre></figure>
+
+<p>To resolve <a href="">baseurl error while deployed on github</a>, use empty string <code class="language-plaintext highlighter-rouge">baseurl: ''</code> in <code class="language-plaintext highlighter-rouge">_config.yml</code>.</p>
+
+<h4 id="new-terminal-configuration-cheatsheet">New terminal configuration cheatsheet</h4>
+
+<p>When open a new terminal, remember to chruby:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">chruby <span class="c"># List ruby</span>
+chruby 3.2.0 <span class="c"># Switch ruby</span>
+ruby <span class="nt">-v</span> <span class="c"># check the current ruby version</span>
+
+<span class="c"># configuration</span>
+<span class="nb">export </span><span class="nv">SSL_CERT_DIR</span><span class="o">=</span>/Users/halin/mambaforge/ssl
+<span class="nb">export </span><span class="nv">SSL_CERT_FILE</span><span class="o">=</span>/Users/halin/mambaforge/ssl/cacert.pem
+<span class="nb">export </span><span class="nv">PAGES_REPO_NWO</span><span class="o">=</span><span class="s2">"lin-ht/lin-ht.github.io"</span>
+
+bundle <span class="nb">exec </span>jekyll serve</code></pre></figure>
 
 <h4 id="command-cheatsheet">Command cheatsheet</h4>
 
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">git diff
-git add --all 
-git commit -m "Post update" 
-git push -u origin customized 
-bin/deploy --user
-bundle exec jekyll serve --lsi</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">git diff
+git add <span class="nt">--all</span> 
+git commit <span class="nt">-m</span> <span class="s2">"Post update"</span> 
+git push <span class="nt">-u</span> origin customized 
+bin/deploy <span class="nt">--user</span>
+bundle <span class="nb">exec </span>jekyll serve <span class="nt">--lsi</span></code></pre></figure>
 
 <h4 id="git-commands">git commands</h4>
 
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">git branch #</span><span class="w"> </span>List <span class="nb">local </span>branches 
-<span class="gp">git branch -r #</span><span class="w"> </span>List remote branches 
-<span class="gp">git branch -a #</span><span class="w"> </span>List <span class="nb">local </span>and remote branches
-<span class="go">
-git checkout my-branch-name</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">git branch <span class="c"># List local branches </span>
+git branch <span class="nt">-r</span> <span class="c"># List remote branches </span>
+git branch <span class="nt">-a</span> <span class="c"># List local and remote branches</span>
+
+git checkout my-branch-name</code></pre></figure>
 
 <h4 id="references">References</h4>
 <ul>
@@ -194,25 +266,25 @@ git checkout my-branch-name</span></code></pre></figure>
   
 
   <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/pytorch-coding/">Pytorch coding</a>
+  </li>
+
+  
+
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/cuda-coding/">Cuda coding</a>
+  </li>
+
+  
+
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/cvcuda-installation/">CVCuda installation</a>
+  </li>
+
+  
+
+  <li class="my-2">
     <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/conda-tutorial/">Conda Tutorial</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/PyPI-your-python-package/">PyPI your python package</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/tritonserver/">Triton server tutorial</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/docker/">What is Docker</a>
   </li>
 
 </div>

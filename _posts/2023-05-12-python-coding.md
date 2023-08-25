@@ -311,10 +311,94 @@ def format_name(name: str, title: Optional[str] = None) -> str:
 format_name("john doe", "Mr")
 ```
 
+
+#### Pytest
+The <a href="https://docs.pytest.org/en/7.3.x/index.html">pytest framework</a> makes it easy to write small, readable tests, and can scale to support complex functional testing for applications and libraries. Pytest is equiped with metabuild ability so that it can compile the test files as desired.
+
+What is <a href="https://docs.pytest.org/en/7.3.x/explanation/fixtures.html#about-fixtures">fixtures</a>? We can tell pytest that a particular function is a fixture by decorating it with `@pytest.fixture`. Fixtures are acquired by test funcitons by <a href="https://docs.pytest.org/en/7.3.x/how-to/fixtures.html#how-to-fixtures">declaring them as arguments</a>. Pytest has several useful <a href="https://docs.pytest.org/en/7.3.x/reference/fixtures.html">built-in fixtures</a>.
+
+
+<a href="https://docs.pytest.org/en/7.3.x/how-to/parametrize.html">How to parametrize fixtures and test functions</a>
+
+```bash
+# run all the tests in a repo
+pytest
+
+# run a specific test
+cd /path/to/code/
+pytest -v test_file.py::test_case
+```
+
+```python
+# content of test_expectation.py
+import pytest
+
+# pytest mark a function
+@pytest.mark.parametrize("test_input,expected", [("3+5", 8), ("2+4", 6), ("6*9", 42)])
+def test_eval(test_input, expected):
+    assert eval(test_input) == expected
+
+# pytest mark a class
+@pytest.mark.parametrize("n,expected", [(1, 2), (3, 4)])
+class TestClass:
+    def test_simple_case(self, n, expected):
+        assert n + 1 == expected
+
+    def test_weird_simple_case(self, n, expected):
+        assert (n * 1) + 1 == expected
+```
+
+```python
+import pytest
+# global pytest mark which parametrize all tests in a module
+pytestmark = pytest.mark.parametrize("n,expected", [(1, 2), (3, 4)])
+
+class TestClass:
+    def test_simple_case(self, n, expected):
+        assert n + 1 == expected
+
+    def test_weird_simple_case(self, n, expected):
+        assert (n * 1) + 1 == expected
+```
+
+```python
+# mark individual test instances
+import pytest
+
+# use built-in xfail to set an expected failure test.
+@pytest.mark.parametrize(
+    "test_input,expected",
+    [("3+5", 8), ("2+4", 6), pytest.param("6*9", 42, marks=pytest.mark.xfail)],
+)
+def test_eval(test_input, expected):
+    assert eval(test_input) == expected
+```
+
+#### MISC
+
+Ruff extension for VSCode as a quick linter:
+```bash
+ruff check --exclude clio-docker --ignore ANN,D . 
+ruff check --exclude clio-docker --select UP . [--fix]
+
+ruff rule S101
+```
+
+mypy for annotation check. (Check rules installed in `pyproject.toml`)
+```bash
+mypy /path/to/dir
+```
+
+Print Env var `LD_LIBRARY_PATH` in python:
+```python
+import os, sys
+print(os.environ['LD_LIBRARY_PATH'])
+```
 #### References
 <ul>
 	<li><a href="https://peps.python.org/pep-0318/">PEP 318 – Decorators for Functions and Methods</a></li>
     <li>Decorators in python: <a href="https://builtin.com/software-engineering-perspectives/python-symbol">What Is the @ Symbol in Python and How Do I Use It?</a></li>
     <li>Packing&unpacking using asterisk(*):<a href="https://www.scaler.com/topics/asterisk-python/"> What is the Asterisk Operator in Python?</a></li>
     <li>Type annotation and protocol: <a href="https://blog.logrocket.com/understanding-type-annotation-python/">Understanding type annotation in Python</a></li>
+    <li>Pytest <a href="https://docs.pytest.org/en/7.3.x/reference/reference.html">API reference</a></li>
 </ul>

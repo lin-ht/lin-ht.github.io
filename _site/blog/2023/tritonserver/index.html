@@ -127,6 +127,8 @@
         ·  
         <a href="/blog/tag/notes">
           <i class="fas fa-hashtag fa-sm"></i> notes</a>  
+          <a href="/blog/tag/code">
+          <i class="fas fa-hashtag fa-sm"></i> code</a>  
           
         ·  
         <a href="/blog/category/note-posts">
@@ -146,8 +148,8 @@
 <h4 id="introduction">Introduction</h4>
 
 <p>Specify triton model by providing model repository path:</p>
-
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">tritonserver --model-repository=&lt;repository-path&gt;</span></code></pre></figure>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tritonserver <span class="nt">--model-repository</span><span class="o">=</span>&lt;repository-path&gt;
+</code></pre></div></div>
 
 <p>There can be multiple versions of each model, with each version stored in a numerically-named subdirectory. The subdirectory’s name must be the model’s version number and it should not be 0.</p>
 
@@ -164,17 +166,19 @@ Through GRPC or HTTP requests, to send inputs to Triton and receive outputs.
 Examples could be found <a href="https://github.com/triton-inference-server/server/tree/main/docs/examples/model_repository" rel="external nofollow noopener" target="_blank">here</a>.</p>
 
 <h4 id="install-and-run-triton">Install and Run Triton</h4>
+
 <h5 id="install-triton-docker-image">Install Triton Docker Image</h5>
 
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">docker pull nvcr.io/nvidia/tritonserver:&lt;xx.yy&gt;</span><span class="nt">-py3</span> 
-<span class="gp">#</span>&lt;xx.yy&gt; represents the version of Triton</code></pre></figure>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull nvcr.io/nvidia/tritonserver:&lt;xx.yy&gt;-py3 
+<span class="c">#&lt;xx.yy&gt; represents the version of Triton</span>
+</code></pre></div></div>
 
 <h5 id="create-your-model-repository">Create Your Model Repository</h5>
 
 <h5 id="run-triton">Run Triton</h5>
 
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">docker run --gpus=3 --rm -p8000:8000 -p8001:8001 -p8002:8002 -v/full/path/to/docs/examples/model_repository:/models nvcr.io/nvidia/tritonserver:&lt;xx.yy&gt;</span><span class="nt">-py3</span> tritonserver <span class="nt">--model-repository</span><span class="o">=</span>/models</code></pre></figure>
-
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run <span class="nt">--gpus</span><span class="o">=</span>3 <span class="nt">--rm</span> <span class="nt">-p8000</span>:8000 <span class="nt">-p8001</span>:8001 <span class="nt">-p8002</span>:8002 <span class="nt">-v</span>/full/path/to/docs/examples/model_repository:/models nvcr.io/nvidia/tritonserver:&lt;xx.yy&gt;-py3 tritonserver <span class="nt">--model-repository</span><span class="o">=</span>/models
+</code></pre></div></div>
 
     </div>
   </article>
@@ -199,25 +203,25 @@ Examples could be found <a href="https://github.com/triton-inference-server/serv
   
 
   <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/pytorch-coding/">Pytorch coding</a>
+  </li>
+
+  
+
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/cuda-coding/">Cuda coding</a>
+  </li>
+
+  
+
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/cvcuda-installation/">CVCuda installation</a>
+  </li>
+
+  
+
+  <li class="my-2">
     <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/conda-tutorial/">Conda Tutorial</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/PyPI-your-python-package/">PyPI your python package</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/docker/">What is Docker</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/shell-programming/">Linux Shell Scripting</a>
   </li>
 
 </div>

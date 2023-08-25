@@ -144,106 +144,194 @@
       <h4 id="useful-git-commands">Useful git commands</h4>
 
 <h5 id="command-cheatsheet">Command cheatsheet</h5>
-
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">git status
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git status
 git diff
-</span><span class="gp">git diff &lt;filename&gt;</span><span class="w">
-</span><span class="gp">git add --all #</span><span class="w"> </span>Stage all files
-<span class="gp">git add &lt;filename&gt;</span><span class="w">	</span><span class="c"># Stage a file, ready to commit</span>
-<span class="gp">git reset #</span><span class="w"> </span>Unstage all files
-<span class="gp">git reset &lt;filename&gt;</span><span class="w"> </span><span class="c"># Unstage one file</span>
-<span class="gp">git restore &lt;filename&gt;</span><span class="w"> </span><span class="c"># Discard changes of the file</span>
-<span class="go">
-git commit -m "Post update" 
-</span><span class="gp">git push -u origin &lt;your-branch&gt;</span><span class="w"> </span></code></pre></figure>
+git diff &lt;filename&gt;
+git add <span class="nt">--all</span> <span class="c"># Stage all files</span>
+git add &lt;filename&gt;	<span class="c"># Stage a file, ready to commit</span>
+git reset <span class="c"># Unstage all files</span>
+git reset &lt;filename&gt; <span class="c"># Unstage one file</span>
+git restore &lt;filename&gt; <span class="c"># Discard changes of the file</span>
+
+git commit <span class="nt">-m</span> <span class="s2">"Post update"</span> 
+git push <span class="nt">-u</span> origin &lt;your-branch&gt; 
+</code></pre></div></div>
 
 <p><a href="#">Git Tools - Branch</a></p>
-
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">git checkout -b &lt;your-branch&gt;</span><span class="w"> </span><span class="c"># new local branch</span>
-<span class="gp">git branch -d &lt;your-branch&gt;</span><span class="w">   </span><span class="c"># delete the branch</span></code></pre></figure>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout <span class="nt">-b</span> &lt;your-branch&gt; <span class="c"># new local branch</span>
+git branch <span class="nt">-d</span> &lt;your-branch&gt;   <span class="c"># delete the branch</span>
+</code></pre></div></div>
 
 <p><a href="https://git-scm.com/book/en/v2/Git-Tools-Interactive-Staging" rel="external nofollow noopener" target="_blank">Git Tools - Interactive staging</a></p>
 
 <p>We can stage patches under interactive staging mode.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add <span class="nt">-i</span> <span class="c"># Interactive Staging</span>
+git add <span class="nt">-p</span> <span class="c"># or --patch to start partial staging</span>
+git reset <span class="nt">-p</span>
+</code></pre></div></div>
 
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">git add -i #</span><span class="w"> </span>Interactive Staging
-<span class="gp">git add -p #</span><span class="w"> </span>or <span class="nt">--patch</span> to start partial staging
-<span class="go">git reset -p</span></code></pre></figure>
+<p><a href="https://git-scm.com/docs/git-merge" rel="external nofollow noopener" target="_blank">Git Tools - Merge</a>
+Caution: before merging, make sure there is no non-trivial uncommitted changes.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Example:</span>
+<span class="c">#       A---B---C topic</span>
+<span class="c">#      /</span>
+<span class="c"># D---E---F---G master</span>
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout master
+git merge topic
+
+<span class="c"># Result:</span>
+<span class="c">#       A---B---C topic</span>
+<span class="c">#      /         \</span>
+<span class="c"># D---E---F---G---H master</span>
+</code></pre></div></div>
+
+<p>Better practice:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git merge <span class="nt">--no-commit</span> <span class="o">[</span><span class="nt">-s</span> ort] topic
+<span class="c"># --no-commit: permform merge but stop before creating a merge commit.</span>
+<span class="c"># -s: merge strategy option. By default, its `ort`.</span>
+
+git commit <span class="nt">-m</span> <span class="s2">"msg"</span>
+<span class="c"># -m: message about the merge</span>
+</code></pre></div></div>
+
+<p>What should we do if we run into conflicts:</p>
+
+<ol>
+  <li>
+    <p>Abort the merge to start over again?</p>
+
+    <div class="language-bash highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code> <span class="c"># Abort the merge process and *try* to reconstruct the pre-merge state:</span>
+ git merge <span class="nt">--abort</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Resolve the conflicts with tools</p>
+
+    <p>Use your favorate editor to resolve the changes.</p>
+
+    <p><code class="language-plaintext highlighter-rouge">HEAD</code>: current branch head</p>
+
+    <p><code class="language-plaintext highlighter-rouge">MERGED_HEAD</code>: other branch head</p>
+
+    <div class="language-bash highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code> <span class="c"># Option 1: use graphical mergetool</span>
+ git mergetool
+
+ <span class="c"># Option 2: highlight diff</span>
+ git diff
+
+ git log <span class="nt">--merge</span> <span class="nt">-p</span> &lt;path&gt; <span class="c"># show diffs first for the HEAD version and then MERGED_HEAD version</span>
+
+ git show :1:&lt;filename&gt; <span class="c"># show the common ancestor</span>
+ git show :2:&lt;filename&gt; <span class="c"># show the HEAD version of the file</span>
+ git show :3:&lt;filename&gt; <span class="c"># show the MERGED_HEAD version</span>
+
+</code></pre></div>    </div>
+  </li>
+</ol>
 
 <p><a href="https://www.cloudbees.com/blog/git-undo-commit" rel="external nofollow noopener" target="_blank">Git Tools - Time Travel</a></p>
 
 <p>Better undoing mistakes before commit:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git stash
+git checkout <span class="nt">--</span> &lt;filename&gt; <span class="c"># Discard file changes permanently</span>
+git reset <span class="nt">--hard</span> <span class="c"># Discard all changes permanently</span>
+</code></pre></div></div>
 
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">git stash
-</span><span class="gp">git checkout -- &lt;filename&gt;</span><span class="w"> </span><span class="c"># Discard file changes permanently</span>
-<span class="gp">git reset --hard #</span><span class="w"> </span>Discard all changes permanently</code></pre></figure>
+<p>Undo <code class="language-plaintext highlighter-rouge">git add</code> files:</p>
+
+<p>Concepts:</p>
+<ul>
+  <li>Working directory: where you make changes to your code;</li>
+  <li>Staging area: intermedia step where you prepare changes for commit.</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># option 1:</span>
+git reset &lt;file&gt; <span class="c"># remove a single file from staging area, i.e. undo git add</span>
+git reset <span class="c"># remove all files from staging area, changes are still in working directory</span>
+
+<span class="c"># option 2:</span>
+git <span class="nb">rm</span> <span class="nt">--cached</span> &lt;file&gt; <span class="c"># remove a single file from the staging area</span>
+
+<span class="c"># Caution:</span>
+git <span class="nb">rm</span> &lt;file&gt; <span class="c"># remove the changes from both working directory and staging area.</span>
+</code></pre></div></div>
 
 <p>Undo Committed changes:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git reflog <span class="c"># To check the commit id.</span>
+git reset <span class="nt">--hard</span> &lt;commit-id&gt; <span class="c"># Discard all changes permanently</span>
 
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">git reflog #</span><span class="w"> </span>To check the commit id.
-<span class="gp">git reset --hard &lt;commit-id&gt;</span><span class="w"> </span><span class="c"># Discard all changes permanently</span>
-<span class="go">
-</span><span class="gp">git rm -rf --cached . #</span><span class="w"> </span>remove the cache
-<span class="gp">git reset --hard HEAD #</span><span class="w"> </span>reset to the latest commit of the current branch</code></pre></figure>
+git <span class="nb">rm</span> <span class="nt">-rf</span> <span class="nt">--cached</span> <span class="nb">.</span> <span class="c"># remove the cache</span>
+git reset <span class="nt">--hard</span> HEAD <span class="c"># reset to the latest commit of the current branch</span>
+</code></pre></div></div>
 
 <p>Undoing changes in a shared repo:</p>
-
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">git revert &lt;commit-id&gt;</span><span class="w"> </span><span class="c"># A new commit that reverts the changes of commit-id.</span></code></pre></figure>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git revert &lt;commit-id&gt; <span class="c"># A new commit that reverts the changes of commit-id.</span>
+</code></pre></div></div>
 
 <p><a href="https://git-scm.com/book/en/v2/Git-Tools-Submodules" rel="external nofollow noopener" target="_blank">Git Tools - Submodules</a></p>
-
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">git clone --recurse-submodules -j8  target_git@github.com</span></code></pre></figure>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone <span class="nt">--recurse-submodules</span> <span class="nt">-j8</span>  target_git@github.com
+</code></pre></div></div>
 
 <p>If we cloned the repo without recursively pull submodules, try the following:</p>
-
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">cd &lt;repo-dir&gt;</span><span class="w">
-</span><span class="go">git submodule update --init --recursive</span></code></pre></figure>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> &lt;repo-dir&gt;
+git submodule update <span class="nt">--init</span> <span class="nt">--recursive</span>
+</code></pre></div></div>
 
 <p>To individually update a specific submodule:</p>
-
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">cd &lt;submodule-dir&gt;</span><span class="w">
-</span><span class="go">git pull --recurse-submodules</span></code></pre></figure>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> &lt;submodule-dir&gt;
+git pull <span class="nt">--recurse-submodules</span>
+</code></pre></div></div>
 
 <p><a href="https://linuxhint.com/pull-git-submodules-after-cloning-project-from-github/" rel="external nofollow noopener" target="_blank">Submodule can be added</a> to your current repo by:</p>
-
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">cd &lt;repo-dir&gt;</span><span class="w">
-</span><span class="gp">git submodule add &lt;git_url_to_the_submodule&gt;</span><span class="w"> </span>&lt;submodule_folder_name&gt;</code></pre></figure>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> &lt;repo-dir&gt;
+git submodule add &lt;git_url_to_the_submodule&gt; &lt;submodule_folder_name&gt;
+</code></pre></div></div>
 
 <p><a href="https://stackoverflow.com/questions/11168141/find-which-commit-is-currently-checked-out-in-git" rel="external nofollow noopener" target="_blank">Git Tools - commit information</a></p>
 
 <p>variations:</p>
-
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">git show [--outline -s]
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git show <span class="o">[</span><span class="nt">--outline</span> <span class="nt">-s</span><span class="o">]</span>
 git reflog 
-</span><span class="gp">git log -1 [--outline] #</span><span class="w"> </span>show the last commit info
-<span class="go">git status</span></code></pre></figure>
+git log <span class="nt">-1</span> <span class="o">[</span><span class="nt">--outline</span><span class="o">]</span> <span class="c"># show the last commit info</span>
+git status
+</code></pre></div></div>
 
 <p>Launch gitk graphic display:</p>
-
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">git bisect visualize
-</span><span class="gp">git bisect view  #</span><span class="w"> </span>shorter, means same thing</code></pre></figure>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git bisect visualize
+git bisect view  <span class="c"># shorter, means same thing</span>
+</code></pre></div></div>
 
 <p><a href="https://www.codeblocq.com/2016/02/Stash-your-changes-before-switching-branch/" rel="external nofollow noopener" target="_blank">Git Tools - Stash</a>:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git stash save <span class="s2">"changes on the current-branch"</span>
+git stash pop <span class="c"># unstash the changes of the top stash</span>
+git stash list <span class="c"># list the stash stack</span>
+git stash pop <span class="s2">"stash@{1}"</span> <span class="c"># unstash a specific stash</span>
+git stash apply <span class="c"># apply the top stash</span>
+git stash drop <span class="c"># drop the top stash</span>
+git stash show <span class="c"># Show the files in the most recent stash</span>
+git stash show <span class="nt">-p</span> <span class="c"># show the changes in the most recent stash</span>
+git stash show <span class="nt">-p</span> stash@<span class="o">{</span>1<span class="o">}</span> <span class="c"># show the changes of the specified stash</span>
+git stash show <span class="nt">-p</span> 1 <span class="c"># simplified version of the above comment</span>
+</code></pre></div></div>
 
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">git stash save "changes on the current-branch"
-</span><span class="gp">git stash pop #</span><span class="w"> </span>unstash the changes of the top stash
-<span class="gp">git stash list #</span><span class="w"> </span>list the stash stack
-<span class="gp">git stash pop "stash@{1}" #</span><span class="w"> </span>unstash a specific stash
-<span class="gp">git stash apply #</span><span class="w"> </span>apply the top stash
-<span class="gp">git stash drop #</span><span class="w"> </span>drop the top stash
-<span class="gp">git stash show #</span><span class="w"> </span>Show the files <span class="k">in </span>the most recent stash
-<span class="gp">git stash show -p #</span><span class="w"> </span>show the changes <span class="k">in </span>the most recent stash
-<span class="gp">git stash show -p stash@{1} #</span><span class="w"> </span>show the changes of the specified stash
-<span class="gp">git stash show -p 1 #</span><span class="w"> </span>simplified version of the above comment</code></pre></figure>
+<p><a href="#">Git Tools - working tree</a>
+TODO…</p>
 
 <p><a href="https://docs.github.com/en/get-started/getting-started-with-git/configuring-git-to-handle-line-endings?platform=linux" rel="external nofollow noopener" target="_blank">Git Tools - Eol configuration</a></p>
 
 <p>Global settings for line endings:</p>
 
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">git config --global core.autocrlf input
-</span><span class="gp">#</span><span class="w"> </span>Configure Git to ensure line endings <span class="k">in </span>files you checkout are correct <span class="k">for </span>Linux
-<span class="go">
-</span><span class="gp">git config --get core.autocrlf #</span><span class="w"> </span>Check the value</code></pre></figure>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config <span class="nt">--global</span> core.autocrlf input
+<span class="c"># Configure Git to ensure line endings in files you checkout are correct for Linux</span>
+
+git config <span class="nt">--get</span> core.autocrlf <span class="c"># Check the value</span>
+</code></pre></div></div>
 
 <p>Per-repository settings:</p>
 
@@ -292,25 +380,25 @@ git reflog
   
 
   <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/pytorch-coding/">Pytorch coding</a>
+  </li>
+
+  
+
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/cuda-coding/">Cuda coding</a>
+  </li>
+
+  
+
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/cvcuda-installation/">CVCuda installation</a>
+  </li>
+
+  
+
+  <li class="my-2">
     <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/conda-tutorial/">Conda Tutorial</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/PyPI-your-python-package/">PyPI your python package</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/tritonserver/">Triton server tutorial</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/docker/">What is Docker</a>
   </li>
 
 </div>

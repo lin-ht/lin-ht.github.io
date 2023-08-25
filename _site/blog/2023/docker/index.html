@@ -139,7 +139,80 @@
   <article class="post-content">
 <!--      -->
     <div id="markdown-content">
-      <p><a href="https://djangostars.com/blog/what-is-docker-and-how-to-use-it-with-python/" rel="external nofollow noopener" target="_blank">What is docker and how to use it</a></p>
+      <h4 id="docker">Docker</h4>
+<p><a href="https://djangostars.com/blog/what-is-docker-and-how-to-use-it-with-python/" rel="external nofollow noopener" target="_blank">What is docker and how to use it</a></p>
+
+<h5 id="a-dockerfile-example">A Dockerfile example:</h5>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FROM ubuntu:latest
+RUN apt-get update
+    <span class="o">&amp;&amp;</span> apt-get <span class="nb">install</span> <span class="nt">--no-install-recommends</span> <span class="nt">--no-install-suggests</span> <span class="nt">-y</span> curl
+    <span class="o">&amp;&amp;</span> <span class="nb">rm</span> <span class="nt">-rf</span> /var/lib/apt/lists/<span class="k">*</span>
+ENV SITE_URL http://example.com/
+WORKDIR /data
+VOLUME /data
+CMD sh <span class="nt">-c</span> <span class="s2">"curl -Lk </span><span class="nv">$SITE_URL</span><span class="s2"> &gt; /data/results"</span>
+</code></pre></div></div>
+
+<h5 id="docker-image-management">Docker image management:</h5>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Build a docker image from a Dockerfile</span>
+docker build ./ <span class="nt">-t</span> &lt;image-name&gt;:&lt;version&gt;
+<span class="c"># option -t sets the name tag to an image</span>
+
+<span class="c"># check docker image list</span>
+docker images
+
+<span class="c"># remove image by image id or image name and tag</span>
+docker rmi &lt;image-id&gt;|&lt;image-name&gt;:&lt;image-tag&gt;
+
+</code></pre></div></div>
+
+<h5 id="docker-container-management">Docker container management:</h5>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># run a docker container</span>
+docker run <span class="nt">--rm</span> <span class="nt">-e</span> <span class="nv">SITE_URL</span><span class="o">=</span>https://facebook.com/ <span class="o">[</span><span class="nt">-d</span><span class="o">]</span> <span class="o">[</span><span class="nt">-p</span> &lt;HOST-PORT&gt;:&lt;CONTAINER-PORT&gt;] <span class="se">\</span>
+<span class="nt">-v</span> <span class="si">$(</span><span class="nb">pwd</span><span class="si">)</span>/vol:/data/:rw &lt;image-name&gt;
+<span class="c"># option --rm will remove the container first if it is running</span>
+<span class="c"># option -v volume mounting &lt;HOST-DIRECTORY&gt;:&lt;CONTAINER-DIRECTORY&gt;</span>
+<span class="c"># option -e sets/overides the env var</span>
+<span class="c"># option -d sets the container to run in the background (daemon mode)</span>
+<span class="c"># option -p is a ports mapping &lt;HOST-PORT&gt;:&lt;CONTAINER-PORT&gt;</span>
+
+<span class="c"># Check the container's log</span>
+docker logs <span class="nt">-f</span> &lt;container-name&gt;
+
+<span class="c"># list the containers</span>
+docker ps <span class="o">[</span><span class="nt">-aq</span><span class="o">]</span>
+<span class="c"># option -a list all active/running and inactive ones</span>
+<span class="c"># option -q to print only container IDs</span>
+
+<span class="c"># start the container</span>
+docker start &lt;container-name&gt;
+
+<span class="c"># stop the container</span>
+docker stop &lt;container-name&gt;
+
+<span class="c"># remove the container</span>
+docker <span class="nb">rm</span> &lt;container-name&gt;
+
+<span class="c"># remove all the containers</span>
+docker <span class="nb">rm</span> <span class="nt">-f</span> <span class="si">$(</span>docker ps <span class="nt">-aq</span><span class="si">)</span>
+<span class="c"># option -f force to stop and remove the container</span>
+</code></pre></div></div>
+
+<h5 id="additional-execution-on-a-running-docker">Additional execution on a running Docker</h5>
+<p>Run <a href="https://docs.docker.com/engine/reference/commandline/exec/" rel="external nofollow noopener" target="_blank">docker exec</a> into a running container:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># First run the container, as an example:</span>
+docker run <span class="nt">--name</span> mycontainer <span class="nt">-d</span> <span class="nt">-i</span> <span class="nt">-t</span> alpine /bin/sh
+</code></pre></div></div>
+
+<p>This creates and starts a container named mycontainer from an alpine image with an sh shell as its main process. The <code class="language-plaintext highlighter-rouge">-d</code> option (shorthand for <code class="language-plaintext highlighter-rouge">--detach</code>) sets the container to run in the background, in detached mode, with a pseudo-TTY attached (<code class="language-plaintext highlighter-rouge">-t</code>). The <code class="language-plaintext highlighter-rouge">-i</code> option is set to keep STDIN attached, which prevents the sh process from exiting immediately.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Then run sh inside mycontainer</span>
+<span class="c"># docker exec [OPTION] CONTAINER COMMAND [ARG...]</span>
+docker <span class="nb">exec</span> <span class="nt">-it</span> mycontainer sh
+</code></pre></div></div>
+
+<h4 id="deployment">Deployment</h4>
 
 <p><a href="https://kubernetes.io/docs/tutorials/kubernetes-basics/" rel="external nofollow noopener" target="_blank">Kubernetes</a></p>
 
@@ -168,25 +241,25 @@
   
 
   <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/pytorch-coding/">Pytorch coding</a>
+  </li>
+
+  
+
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/cuda-coding/">Cuda coding</a>
+  </li>
+
+  
+
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/cvcuda-installation/">CVCuda installation</a>
+  </li>
+
+  
+
+  <li class="my-2">
     <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/conda-tutorial/">Conda Tutorial</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/PyPI-your-python-package/">PyPI your python package</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/tritonserver/">Triton server tutorial</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/shell-programming/">Linux Shell Scripting</a>
   </li>
 
 </div>

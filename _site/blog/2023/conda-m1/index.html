@@ -221,6 +221,26 @@ This will enable users to create an environment that installs arm64 or x86_64 (o
     Figure. Example output of package installation from subdirectory osx-64.
 </div>
 
+<h5 id="5-moving-conda-environment">5. Moving conda environment</h5>
+<p><a href="https://www.anaconda.com/blog/moving-conda-environments" rel="external nofollow noopener" target="_blank">Moving Conda Environments</a></p>
+
+<p>Install conda-pack</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># Through conda-forge</span>
+conda <span class="nb">install</span> <span class="nt">-c</span> conda-forge conda-pack
+
+<span class="c"># Through PyPI</span>
+pip <span class="nb">install </span>conda-pack</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># Pack environment my_env into my_env.tar.gz</span>
+conda pack <span class="nt">-n</span> my_env
+
+<span class="c"># Pack environment my_env into out_name.tar.gz</span>
+conda pack <span class="nt">-n</span> my_env <span class="nt">-o</span> out_name.tar.gz
+
+<span class="c"># Pack environment located at an explicit path into my_env.tar.gz</span>
+conda pack <span class="nt">-p</span> /explicit/path/to/my_env</code></pre></figure>
+
 <h4 id="references">References</h4>
 <ul>
     <li>
@@ -252,25 +272,25 @@ This will enable users to create an environment that installs arm64 or x86_64 (o
   
 
   <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/pytorch-coding/">Pytorch coding</a>
+  </li>
+
+  
+
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/cuda-coding/">Cuda coding</a>
+  </li>
+
+  
+
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/cvcuda-installation/">CVCuda installation</a>
+  </li>
+
+  
+
+  <li class="my-2">
     <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/conda-tutorial/">Conda Tutorial</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/PyPI-your-python-package/">PyPI your python package</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/tritonserver/">Triton server tutorial</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/docker/">What is Docker</a>
   </li>
 
 </div>

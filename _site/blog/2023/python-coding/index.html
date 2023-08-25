@@ -430,6 +430,80 @@ A static method is tied to the class, not to its instance. This may remind you o
 <span class="nf">format_name</span><span class="p">(</span><span class="s">"john doe"</span><span class="p">,</span> <span class="s">"Mr"</span><span class="p">)</span>
 </code></pre></div></div>
 
+<h4 id="pytest">Pytest</h4>
+<p>The <a href="https://docs.pytest.org/en/7.3.x/index.html" rel="external nofollow noopener" target="_blank">pytest framework</a> makes it easy to write small, readable tests, and can scale to support complex functional testing for applications and libraries. Pytest is equiped with metabuild ability so that it can compile the test files as desired.</p>
+
+<p>What is <a href="https://docs.pytest.org/en/7.3.x/explanation/fixtures.html#about-fixtures" rel="external nofollow noopener" target="_blank">fixtures</a>? We can tell pytest that a particular function is a fixture by decorating it with <code class="language-plaintext highlighter-rouge">@pytest.fixture</code>. Fixtures are acquired by test funcitons by <a href="https://docs.pytest.org/en/7.3.x/how-to/fixtures.html#how-to-fixtures" rel="external nofollow noopener" target="_blank">declaring them as arguments</a>. Pytest has several useful <a href="https://docs.pytest.org/en/7.3.x/reference/fixtures.html" rel="external nofollow noopener" target="_blank">built-in fixtures</a>.</p>
+
+<p><a href="https://docs.pytest.org/en/7.3.x/how-to/parametrize.html" rel="external nofollow noopener" target="_blank">How to parametrize fixtures and test functions</a></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># run all the tests in a repo</span>
+pytest
+
+<span class="c"># run a specific test</span>
+<span class="nb">cd</span> /path/to/code/
+pytest <span class="nt">-v</span> test_file.py::test_case
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># content of test_expectation.py
+</span><span class="kn">import</span> <span class="n">pytest</span>
+
+<span class="c1"># pytest mark a function
+</span><span class="nd">@pytest.mark.parametrize</span><span class="p">(</span><span class="s">"test_input,expected"</span><span class="p">,</span> <span class="p">[(</span><span class="s">"3+5"</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="p">(</span><span class="s">"2+4"</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="p">(</span><span class="s">"6*9"</span><span class="p">,</span> <span class="mi">42</span><span class="p">)])</span>
+<span class="k">def</span> <span class="nf">test_eval</span><span class="p">(</span><span class="n">test_input</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="nf">eval</span><span class="p">(</span><span class="n">test_input</span><span class="p">)</span> <span class="o">==</span> <span class="n">expected</span>
+
+<span class="c1"># pytest mark a class
+</span><span class="nd">@pytest.mark.parametrize</span><span class="p">(</span><span class="s">"n,expected"</span><span class="p">,</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)])</span>
+<span class="k">class</span> <span class="nc">TestClass</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">test_simple_case</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">==</span> <span class="n">expected</span>
+
+    <span class="k">def</span> <span class="nf">test_weird_simple_case</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+        <span class="nf">assert </span><span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">==</span> <span class="n">expected</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">pytest</span>
+<span class="c1"># global pytest mark which parametrize all tests in a module
+</span><span class="n">pytestmark</span> <span class="o">=</span> <span class="n">pytest</span><span class="p">.</span><span class="n">mark</span><span class="p">.</span><span class="nf">parametrize</span><span class="p">(</span><span class="s">"n,expected"</span><span class="p">,</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)])</span>
+
+<span class="k">class</span> <span class="nc">TestClass</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">test_simple_case</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">==</span> <span class="n">expected</span>
+
+    <span class="k">def</span> <span class="nf">test_weird_simple_case</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+        <span class="nf">assert </span><span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">==</span> <span class="n">expected</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># mark individual test instances
+</span><span class="kn">import</span> <span class="n">pytest</span>
+
+<span class="c1"># use built-in xfail to set an expected failure test.
+</span><span class="nd">@pytest.mark.parametrize</span><span class="p">(</span>
+    <span class="s">"test_input,expected"</span><span class="p">,</span>
+    <span class="p">[(</span><span class="s">"3+5"</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="p">(</span><span class="s">"2+4"</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">pytest</span><span class="p">.</span><span class="nf">param</span><span class="p">(</span><span class="s">"6*9"</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="n">marks</span><span class="o">=</span><span class="n">pytest</span><span class="p">.</span><span class="n">mark</span><span class="p">.</span><span class="n">xfail</span><span class="p">)],</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_eval</span><span class="p">(</span><span class="n">test_input</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="nf">eval</span><span class="p">(</span><span class="n">test_input</span><span class="p">)</span> <span class="o">==</span> <span class="n">expected</span>
+</code></pre></div></div>
+
+<h4 id="misc">MISC</h4>
+
+<p>Ruff extension for VSCode as a quick linter:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ruff check <span class="nt">--exclude</span> clio-docker <span class="nt">--ignore</span> ANN,D <span class="nb">.</span> 
+ruff check <span class="nt">--exclude</span> clio-docker <span class="nt">--select</span> UP <span class="nb">.</span> <span class="o">[</span><span class="nt">--fix</span><span class="o">]</span>
+
+ruff rule S101
+</code></pre></div></div>
+
+<p>mypy for annotation check. (Check rules installed in <code class="language-plaintext highlighter-rouge">pyproject.toml</code>)</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mypy /path/to/dir
+</code></pre></div></div>
+
+<p>Print Env var <code class="language-plaintext highlighter-rouge">LD_LIBRARY_PATH</code> in python:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">os</span><span class="p">,</span> <span class="n">sys</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">[</span><span class="s">'LD_LIBRARY_PATH'</span><span class="p">])</span>
+</code></pre></div></div>
 <h4 id="references">References</h4>
 <ul>
 	<li><a href="https://peps.python.org/pep-0318/" rel="external nofollow noopener" target="_blank">PEP 318 – Decorators for Functions and Methods</a></li>
@@ -438,6 +512,8 @@ A static method is tied to the class, not to its instance. This may remind you o
     <li>Packing&amp;unpacking using asterisk(*):<a href="https://www.scaler.com/topics/asterisk-python/" rel="external nofollow noopener" target="_blank"> What is the Asterisk Operator in Python?</a>
 </li>
     <li>Type annotation and protocol: <a href="https://blog.logrocket.com/understanding-type-annotation-python/" rel="external nofollow noopener" target="_blank">Understanding type annotation in Python</a>
+</li>
+    <li>Pytest <a href="https://docs.pytest.org/en/7.3.x/reference/reference.html" rel="external nofollow noopener" target="_blank">API reference</a>
 </li>
 </ul>
 
@@ -464,25 +540,25 @@ A static method is tied to the class, not to its instance. This may remind you o
   
 
   <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/pytorch-coding/">Pytorch coding</a>
+  </li>
+
+  
+
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/cuda-coding/">Cuda coding</a>
+  </li>
+
+  
+
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/cvcuda-installation/">CVCuda installation</a>
+  </li>
+
+  
+
+  <li class="my-2">
     <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/conda-tutorial/">Conda Tutorial</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/PyPI-your-python-package/">PyPI your python package</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/tritonserver/">Triton server tutorial</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/docker/">What is Docker</a>
   </li>
 
 </div>

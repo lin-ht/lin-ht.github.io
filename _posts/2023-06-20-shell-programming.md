@@ -9,3 +9,5 @@ categories: note-posts
 
 
 <a href="https://bash.cyberciti.biz/guide/Main_Page">Linux Bash Shell Scripting Tutorial</a>
+
+<a href="https://bash.cyberciti.biz/guide/Set_command">Set command</a>

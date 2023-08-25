@@ -1,15 +1,570 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-07-31T20:21:26-07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">blank</title><subtitle>A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
-</subtitle><entry><title type="html">Conda Tutorial</title><link href="http://localhost:4000/blog/2023/conda-tutorial/" rel="alternate" type="text/html" title="Conda Tutorial" /><published>2023-07-31T05:00:00-07:00</published><updated>2023-07-31T05:00:00-07:00</updated><id>http://localhost:4000/blog/2023/conda-tutorial</id><content type="html" xml:base="http://localhost:4000/blog/2023/conda-tutorial/"><![CDATA[<h4 id="python-version-management-tool--conda">Python version management tool – conda</h4>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-08-24T23:17:31-07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">blank</title><subtitle>A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
+</subtitle><entry><title type="html">Pytorch coding</title><link href="http://localhost:4000/blog/2023/pytorch-coding/" rel="alternate" type="text/html" title="Pytorch coding" /><published>2023-08-09T09:50:00-07:00</published><updated>2023-08-09T09:50:00-07:00</updated><id>http://localhost:4000/blog/2023/pytorch-coding</id><content type="html" xml:base="http://localhost:4000/blog/2023/pytorch-coding/"><![CDATA[<h2 id="checkpoints-saving-and-loading">Checkpoints saving and loading</h2>
+
+<p><a href="https://pytorch.org/tutorials/recipes/recipes/saving_and_loading_a_general_checkpoint.html">Saving and loading a general checkpoint in pytorch</a></p>
+
+<h3 id="define-initialize-and-train-a-model">Define, initialize and train a model:</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">torch</span>
+<span class="kn">import</span> <span class="n">torch.nn</span> <span class="k">as</span> <span class="n">nn</span>
+<span class="kn">import</span> <span class="n">torch.optim</span> <span class="k">as</span> <span class="n">optim</span>
+
+<span class="k">class</span> <span class="nc">Net</span><span class="p">(</span><span class="n">nn</span><span class="p">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="nf">super</span><span class="p">(</span><span class="n">Net</span><span class="p">,</span> <span class="n">self</span><span class="p">).</span><span class="nf">__init__</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="nc">Conv2d</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">pool</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="nc">MaxPool2d</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">conv2</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="nc">Conv2d</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">fc1</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="nc">Linear</span><span class="p">(</span><span class="mi">16</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">*</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">120</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">fc2</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="nc">Linear</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span> <span class="mi">84</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">fc3</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="nc">Linear</span><span class="p">(</span><span class="mi">84</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pool</span><span class="p">(</span><span class="n">F</span><span class="p">.</span><span class="nf">relu</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="nf">conv1</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">pool</span><span class="p">(</span><span class="n">F</span><span class="p">.</span><span class="nf">relu</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="nf">conv2</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="nf">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">16</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">*</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="p">.</span><span class="nf">relu</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="nf">fc1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="p">.</span><span class="nf">relu</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="nf">fc2</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">fc3</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span>
+
+<span class="n">net</span> <span class="o">=</span> <span class="nc">Net</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">net</span><span class="p">)</span>
+
+
+<span class="c1"># optimizer
+</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">optim</span><span class="p">.</span><span class="nc">SGD</span><span class="p">(</span><span class="n">net</span><span class="p">.</span><span class="nf">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">momentum</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+
+<span class="c1"># Train
+# ...
+</span>
+</code></pre></div></div>
+
+<h3 id="save-checkpoint">Save checkpoint</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Additional information
+</span><span class="n">EPOCH</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">PATH</span> <span class="o">=</span> <span class="s">"model.pt"</span>
+<span class="n">LOSS</span> <span class="o">=</span> <span class="mf">0.4</span>
+
+<span class="n">torch</span><span class="p">.</span><span class="nf">save</span><span class="p">({</span>
+            <span class="s">'epoch'</span><span class="p">:</span> <span class="n">EPOCH</span><span class="p">,</span>
+            <span class="s">'model_state_dict'</span><span class="p">:</span> <span class="n">net</span><span class="p">.</span><span class="nf">state_dict</span><span class="p">(),</span>
+            <span class="s">'optimizer_state_dict'</span><span class="p">:</span> <span class="n">optimizer</span><span class="p">.</span><span class="nf">state_dict</span><span class="p">(),</span>
+            <span class="s">'loss'</span><span class="p">:</span> <span class="n">LOSS</span><span class="p">,</span>
+            <span class="p">},</span> <span class="n">PATH</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="load-checkpoint">Load checkpoint</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># load the checkpoint
+</span><span class="n">model</span> <span class="o">=</span> <span class="nc">Net</span><span class="p">()</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">optim</span><span class="p">.</span><span class="nc">SGD</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="nf">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">momentum</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+
+<span class="n">checkpoint</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">load</span><span class="p">(</span><span class="n">PATH</span><span class="p">)</span>
+<span class="n">model</span><span class="p">.</span><span class="nf">load_state_dict</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">[</span><span class="s">'model_state_dict'</span><span class="p">])</span>
+<span class="n">optimizer</span><span class="p">.</span><span class="nf">load_state_dict</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">[</span><span class="s">'optimizer_state_dict'</span><span class="p">])</span>
+<span class="n">epoch</span> <span class="o">=</span> <span class="n">checkpoint</span><span class="p">[</span><span class="s">'epoch'</span><span class="p">]</span>
+<span class="n">loss</span> <span class="o">=</span> <span class="n">checkpoint</span><span class="p">[</span><span class="s">'loss'</span><span class="p">]</span>
+
+<span class="c1"># continue to evaluation or training
+</span><span class="n">model</span><span class="p">.</span><span class="nf">eval</span><span class="p">()</span>
+<span class="c1"># - or -
+</span><span class="n">model</span><span class="p">.</span><span class="nf">train</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h2 id="torchscript-tracing-tutorial">TorchScript tracing tutorial</h2>
+<p>Here is an <a href="https://pytorch.org/tutorials/beginner/Intro_to_TorchScript_tutorial.html">introduction tutorial</a> on TorchScript and the documentation (<a href="https://pytorch.org/tutorials/advanced/cpp_export.html">LOADING A TORCHSCRIPT MODEL IN C++</a>) about it.</p>
+
+<h3 id="converting-to-torch-script-via-tracing">Converting to Torch Script via Tracing</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">torch</span>
+<span class="kn">import</span> <span class="n">torchvision</span>
+
+<span class="c1"># An instance of your model.
+</span><span class="n">model</span> <span class="o">=</span> <span class="n">torchvision</span><span class="p">.</span><span class="n">models</span><span class="p">.</span><span class="nf">resnet18</span><span class="p">()</span>
+
+<span class="c1"># An example input you would normally provide to your model's forward() method.
+</span><span class="n">example</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">)</span>
+
+<span class="c1"># Use torch.jit.trace to generate a torch.jit.ScriptModule via tracing.
+</span><span class="n">traced_script_module</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">jit</span><span class="p">.</span><span class="nf">trace</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">example</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="converting-to-torch-script-via-annotation">Converting to Torch Script via Annotation</h3>
+<p>In case your model employs particular forms of control flow (data dependent if-else).</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MyModule</span><span class="p">(</span><span class="n">torch</span><span class="p">.</span><span class="n">nn</span><span class="p">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">M</span><span class="p">):</span>
+        <span class="nf">super</span><span class="p">(</span><span class="n">MyModule</span><span class="p">,</span> <span class="n">self</span><span class="p">).</span><span class="nf">__init__</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">nn</span><span class="p">.</span><span class="nc">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="p">.</span><span class="nf">rand</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">M</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">input</span><span class="p">.</span><span class="nf">sum</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+          <span class="n">output</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">weight</span><span class="p">.</span><span class="nf">mv</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="n">output</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">weight</span> <span class="o">+</span> <span class="nb">input</span>
+        <span class="k">return</span> <span class="n">output</span>
+
+<span class="n">my_module</span> <span class="o">=</span> <span class="nc">MyModule</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">sm</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">jit</span><span class="p">.</span><span class="nf">script</span><span class="p">(</span><span class="n">my_module</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="serializing-your-script-module-to-a-file">Serializing Your Script Module to a File</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">traced_script_module</span><span class="p">.</span><span class="nf">save</span><span class="p">(</span><span class="s">"traced_resnet_model.pt"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="loading-loading-your-script-module-in-c">Loading Loading Your Script Module in C++</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;torch/script.h&gt;</span><span class="c1"> // One-stop header.</span><span class="cp">
+</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;memory&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">argc</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"usage: example-app &lt;path-to-exported-script-module&gt;</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+  <span class="p">}</span>
+
+
+  <span class="n">torch</span><span class="o">::</span><span class="n">jit</span><span class="o">::</span><span class="n">script</span><span class="o">::</span><span class="n">Module</span> <span class="n">module</span><span class="p">;</span>
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="c1">// Deserialize the ScriptModule from a file using torch::jit::load().</span>
+    <span class="n">module</span> <span class="o">=</span> <span class="n">torch</span><span class="o">::</span><span class="n">jit</span><span class="o">::</span><span class="n">load</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+  <span class="p">}</span>
+  <span class="k">catch</span> <span class="p">(</span><span class="k">const</span> <span class="n">c10</span><span class="o">::</span><span class="n">Error</span><span class="o">&amp;</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">"error loading the model</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"ok</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Depending on LibTorch and Building the Application:</p>
+<div class="language-cmake highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cmake_minimum_required</span><span class="p">(</span>VERSION 3.0 FATAL_ERROR<span class="p">)</span>
+<span class="nb">project</span><span class="p">(</span>custom_ops<span class="p">)</span>
+
+<span class="nb">find_package</span><span class="p">(</span>Torch REQUIRED<span class="p">)</span>
+
+<span class="nb">add_executable</span><span class="p">(</span>example-app example-app.cpp<span class="p">)</span>
+<span class="nb">target_link_libraries</span><span class="p">(</span>example-app <span class="s2">"</span><span class="si">${</span><span class="nv">TORCH_LIBRARIES</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">set_property</span><span class="p">(</span>TARGET example-app PROPERTY CXX_STANDARD 14<span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="pytorch-extensions">Pytorch Extensions</h2>
+
+<p><a href="https://pytorch.org/tutorials/advanced/cpp_extension.html">CUSTOM C++ AND CUDA EXTENSIONS</a></p>]]></content><author><name></name></author><summary type="html"><![CDATA[practice]]></summary></entry><entry><title type="html">Cuda coding</title><link href="http://localhost:4000/blog/2023/cuda-coding/" rel="alternate" type="text/html" title="Cuda coding" /><published>2023-08-03T12:30:00-07:00</published><updated>2023-08-03T12:30:00-07:00</updated><id>http://localhost:4000/blog/2023/cuda-coding</id><content type="html" xml:base="http://localhost:4000/blog/2023/cuda-coding/"><![CDATA[<h4 id="cuda-multithreading">Cuda multithreading</h4>
+
+<p><a href="https://developer.nvidia.com/blog/cuda-pro-tip-always-set-current-device-avoid-multithreading-bugs/">CUDA Pro Tip: Always Set the Current Device to Avoid Multithreading Bugs</a></p>
+
+<p>How to select which GPU to execute CUDA calls on? The CUDA runtime API is <b>state-based</b>, and threads should execute <code class="language-plaintext highlighter-rouge">cudaSetDevice()</code> to set the current GPU.</p>
+
+<p>The CUDA runtime API is thread-safe, which means it maintains <b>per-thread state</b> about the current device. This is very important as it allows threads to concurrently submit work to different devices. If current device is not set for the thread, either it will use the default device (device 0) or if it is a reused thread it will reuse its last device setting.</p>
+
+<p>Pro Tip: always call <code class="language-plaintext highlighter-rouge">cudaSetDevice()</code> first when you spawn a new host thread.</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cudaSetDevice</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="n">cudaMalloc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">a</span><span class="p">,</span><span class="n">bytes</span><span class="p">);</span>
+
+<span class="cp">#pragma omp parallel
+</span><span class="p">{</span>
+  <span class="c1">// multiple threads calling the kernel</span>
+  <span class="n">cudaSetDevice</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+  <span class="n">kernel</span><span class="o">&lt;&lt;&lt;</span><span class="n">blocks</span><span class="p">,</span><span class="n">threads</span><span class="o">&gt;&gt;&gt;</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="concurrency-with-streams">Concurrency with streams</h4>
+
+<p><a href="https://developer.nvidia.com/blog/gpu-pro-tip-cuda-7-streams-simplify-concurrency/">GPU Pro Tip: CUDA 7 Streams Simplify Concurrency</a></p>
+
+<p>CUDA Applications manage concurrency by executing asynchronous commands in streams, sequences of commands that execute in order. 
+[See the post <a href="https://developer.nvidia.com/blog/parallelforall/how-overlap-data-transfers-cuda-cc/">How to Overlap Data Transfers in CUDA C/C++</a> for an example.]</p>
+
+<p>When you execute asynchronous CUDA commands without specifying a stream, the runtime uses the default stream.</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">kernel</span><span class="o">&lt;&lt;&lt;</span> <span class="n">blocks</span><span class="p">,</span> <span class="n">threads</span><span class="p">,</span> <span class="n">bytes</span> <span class="o">&gt;&gt;&gt;</span><span class="p">();</span>    <span class="c1">// stream 0 (default)</span>
+  <span class="n">kernel</span><span class="o">&lt;&lt;&lt;</span> <span class="n">blocks</span><span class="p">,</span> <span class="n">threads</span><span class="p">,</span> <span class="n">bytes</span><span class="p">,</span> <span class="mi">0</span> <span class="o">&gt;&gt;&gt;</span><span class="p">();</span> <span class="c1">// stream 0</span>
+</code></pre></div></div>
+
+<p>Before CUDA 7, the default stream is a single <b>per-device</b> default stream which implicitly synchronizes with all other streams on the device.</p>
+
+<p>CUDA 7 introduces an independent <b>per-thread</b> default stream for every host thread, which avoids the serialization of the legacy default stream. These default streams are regular streams. The commands issued to the default streams by different host threads can run concurrently.</p>
+
+<p>To enable per-thread default streams in CUDA 7 and later, you can either compile with the <code class="language-plaintext highlighter-rouge">nvcc</code> command-line option <code class="language-plaintext highlighter-rouge">--default-stream per-thread</code>, or <code class="language-plaintext highlighter-rouge">#define CUDA_API_PER_THREAD_DEFAULT_STREAM</code> preprocessor macro before including CUDA headers (<code class="language-plaintext highlighter-rouge">cuda.h</code> or <code class="language-plaintext highlighter-rouge">cuda_runtime.h</code>).</p>
+
+<h5 id="asynchronous-commands-in-cuda">Asynchronous Commands in CUDA</h5>
+<p>As described by the CUDA C Programming Guide, asynchronous commands return control to the calling host thread before the device has finished the requested task (they are non-blocking). These commands are:</p>
+
+<ul>
+    <li>Kernel launches;</li>
+    <li>Memory copies between two addresses to the same device memory;</li>
+    <li>Memory copies from host to device of a memory block of 64 KB or less;</li>
+    <li>Memory copies performed by functions with the Async suffix;</li>
+    <li>Memory set function calls.</li>
+</ul>
+
+<h5 id="a-multi-threading-example">A Multi-threading Example</h5>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;pthread.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">20</span><span class="p">;</span>
+
+<span class="n">__global__</span> <span class="kt">void</span> <span class="nf">kernel</span><span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">tid</span> <span class="o">=</span> <span class="n">threadIdx</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">blockIdx</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">blockDim</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">tid</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="n">blockDim</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">gridDim</span><span class="p">.</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">pow</span><span class="p">(</span><span class="mf">3.14159</span><span class="p">,</span><span class="n">i</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="o">*</span><span class="nf">launch_kernel</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">dummy</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// Bound thread to device for each thread.</span>
+    <span class="n">cudaSetDevice</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+
+    <span class="kt">float</span> <span class="o">*</span><span class="n">data</span><span class="p">;</span>
+    <span class="n">cudaMalloc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">data</span><span class="p">,</span> <span class="n">N</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">));</span>
+
+    <span class="c1">// Use default stream: per-device or per thread default?</span>
+    <span class="n">kernel</span><span class="o">&lt;&lt;&lt;</span><span class="mi">1</span><span class="p">,</span> <span class="mi">64</span><span class="o">&gt;&gt;&gt;</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
+
+    <span class="c1">// Sync stream 0 within each thread after kernel run.</span>
+    <span class="n">cudaStreamSynchronize</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">num_threads</span> <span class="o">=</span> <span class="mi">8</span><span class="p">;</span>
+
+    <span class="n">pthread_t</span> <span class="n">threads</span><span class="p">[</span><span class="n">num_threads</span><span class="p">];</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num_threads</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">threads</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">launch_kernel</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">"Error creating threadn"</span><span class="p">);</span>
+            <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num_threads</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">pthread_join</span><span class="p">(</span><span class="n">threads</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="nb">NULL</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">"Error joining threadn"</span><span class="p">);</span>
+            <span class="k">return</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">cudaDeviceReset</span><span class="p">();</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>(a) Compile with the legacy default stream will behavior:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nvcc ./pthread_test.cu <span class="nt">-o</span> pthreads_legacy
+</code></pre></div></div>
+<p>When we run this in <code class="language-plaintext highlighter-rouge">nvvp</code>, we see a single stream, the default stream, with all kernel launches serialized.</p>
+
+<p>(b) Compile it with the new per-thread default stream option:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nvcc <span class="nt">--default-stream</span> per-thread ./pthread_test.cu <span class="nt">-o</span> pthreads_per_thread
+</code></pre></div></div>
+<p>Each thread creates a new stream automatically and they do not synchronize, so the kernels from all eight threads run concurrently.</p>]]></content><author><name></name></author><category term="note-posts" /><category term="notes" /><category term="code" /><summary type="html"><![CDATA[Cuda multithreading]]></summary></entry><entry><title type="html">CVCuda installation</title><link href="http://localhost:4000/blog/2023/cvcuda-installation/" rel="alternate" type="text/html" title="CVCuda installation" /><published>2023-08-01T13:00:00-07:00</published><updated>2023-08-01T13:00:00-07:00</updated><id>http://localhost:4000/blog/2023/cvcuda-installation</id><content type="html" xml:base="http://localhost:4000/blog/2023/cvcuda-installation/"><![CDATA[<h4 id="cvcuda-installation-references">CVCUDA Installation references</h4>
+
+<p><a href="https://cvcuda.github.io">cvcuda documentation</a></p>
+
+<p><a href="https://github.com/CVCUDA/CV-CUDA">cvcuda github repo</a></p>
+
+<h4 id="run-samples-in-docker">Run samples in docker</h4>
+
+<p><b>1</b>. Download and install cvcuda samples from <a href="https://github.com/CVCUDA/CV-CUDA/releases/tag/v0.3.1-beta">CVCUDA release</a>. The release files are all based on cuda 12.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># download</span>
+<span class="nb">mkdir</span> <span class="nt">-p</span> ~/tmp
+<span class="nb">cd</span> ~/tmp
+curl <span class="nt">-L</span> https://github.com/CVCUDA/CV-CUDA/releases/download/v0.3.1-beta/cvcuda-samples-0.3.1_beta-cuda12-x86_64-linux.deb <span class="nt">-o</span> cvcuda-samples-0.3.1_beta-cuda12-x86_64-linux.deb
+<span class="c"># install</span>
+dpkg <span class="nt">-i</span> cvcuda-samples-0.3.1_beta-cuda12-x86_64-linux.deb</code></pre></figure>
+
+<p><b>2</b>. Run the docker, this image comes with python 3.8:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># link the sample folder</span>
+docker run <span class="nt">-it</span> <span class="nt">--gpus</span><span class="o">=</span>all <span class="nt">-v</span>  /opt/nvidia/cvcuda0/samples:/samples nvcr.io/nvidia/tensorrt:23.04-py3</code></pre></figure>
+
+<p>Tip: Find the desired base docker image with TenserRT and cuda 12 from <a href="https://docs.nvidia.com/deeplearning/tensorrt/container-release-notes/index.html">tensorrt container release notes page</a>.</p>
+
+<p><b>3</b>. Ensure the scripts are executable: 
+(From step 3 to 6, the cmd are run in the docker container.)</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># copy the samples into the user folder.</span>
+<span class="nb">cp</span> <span class="nt">-rf</span> /opt/nvidia/cvcuda<span class="k">*</span>/samples ~/
+<span class="nb">cd</span> ~/samples
+<span class="nb">chmod </span>a+x scripts/<span class="k">*</span>.sh
+<span class="nb">chmod </span>a+x scripts/<span class="k">*</span>.py</code></pre></figure>
+
+<p><b>4</b>. Install sample dependencies:</p>
+
+<p>Basically, step by step run the script in <code class="language-plaintext highlighter-rouge">./scripts/install_dependencies.sh</code> with the following modification:</p>
+
+<p>a) pip3 package versions</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># Install torch and torchvision for cuda12:</span>
+pip3 <span class="nb">install</span> <span class="nt">--pre</span> torch torchvision torchaudio <span class="nt">--index-url</span> https://download.pytorch.org/whl/nightly/cu121
+<span class="c"># Install pycuda with auto version (latest version installed: 2022.2.2):</span>
+pip3 <span class="nb">install </span><span class="nv">av</span><span class="o">==</span>10.0.0 pycuda <span class="nv">nvtx</span><span class="o">==</span>0.2.5
+<span class="c"># Install onnx</span>
+pip3 <span class="nb">install </span>onnx</code></pre></figure>
+
+<p>In script, we can do the following (replacing line 55):</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">sed</span> <span class="nt">-i</span> <span class="nt">-e</span> <span class="s1">'55s+.*+pip3 install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu121\npip3 install av==10.0.0 pycuda nvtx==0.2.5\npip3 install onnx\n+'</span> scripts/install_dependencies.sh</code></pre></figure>
+
+<p>b) Refine exporting PATH: replace echo “export PATH=$PATH:<some_path>" with "export PATH=\${PATH}:<some_path>"</some_path></some_path></p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">sudo sed</span> <span class="nt">-i</span> <span class="nt">-e</span> <span class="s1">'s+$PATH+\\${PATH}+'</span> scripts/install_dependencies.sh</code></pre></figure>
+
+<p>c) Edit <code class="language-plaintext highlighter-rouge">setup.py</code> for <code class="language-plaintext highlighter-rouge">torchnvjpeg</code> to specify <code class="language-plaintext highlighter-rouge">std:c++17</code> as the compiler to be compatible with <code class="language-plaintext highlighter-rouge">pytorch</code>.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">sudo sed</span> <span class="nt">-i</span> <span class="nt">-e</span> <span class="s1">'s/std=c++14/std=c++17/'</span> torchnvjpeg/setup.py</code></pre></figure>
+
+<p><b>5</b>. Install the CV-CUDA packages in the docker.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># download</span>
+<span class="nb">mkdir</span> <span class="nt">-p</span> /tmp
+<span class="nb">cd</span> /tmp
+curl <span class="nt">-L</span> https://github.com/CVCUDA/CV-CUDA/releases/download/v0.3.1-beta/nvcv-dev-0.3.1_beta-cuda12-x86_64-linux.deb <span class="nt">-o</span> nvcv-dev-0.3.1_beta-cuda12-x86_64-linux.deb
+
+curl <span class="nt">-L</span> https://github.com/CVCUDA/CV-CUDA/releases/download/v0.3.1-beta/nvcv-lib-0.3.1_beta-cuda12-x86_64-linux.deb <span class="nt">-o</span> nvcv-lib-0.3.1_beta-cuda12-x86_64-linux.deb
+
+curl <span class="nt">-L</span> https://github.com/CVCUDA/CV-CUDA/releases/download/v0.3.1-beta/nvcv-python3.8-0.3.1_beta-cuda12-x86_64-linux.deb <span class="nt">-o</span> nvcv-python3.8-0.3.1_beta-cuda12-x86_64-linux.deb
+
+<span class="c"># install</span>
+dpkg <span class="nt">-i</span> nvcv-lib-0.3.1_beta-cuda12-x86_64-linux.deb
+dpkg <span class="nt">-i</span> nvcv-dev-0.3.1_beta-cuda12-x86_64-linux.deb
+dpkg <span class="nt">-i</span> nvcv-python3.8-0.3.1_beta-cuda12-x86_64-linux.deb</code></pre></figure>
+
+<p><b>6</b>. Build and run the samples:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">cd</span> ~/samples 
+./scripts/build_samples.sh
+./scripts/run_samples.sh</code></pre></figure>
+
+<p><b>7</b>. Check the sample run results in the local terminal outside the docker:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># Check the running docker containers and get the container id of the sample run:</span>
+docker ps
+<span class="c"># copy the output file to local machine (example below):</span>
+docker <span class="nb">cp</span> &lt;container_id&gt;:/tmp/out_Weimaraner.jpg ~/out_Weimaraner.jpg</code></pre></figure>
+
+<h4 id="run-segmentation-triton-sample">Run segmentation triton sample</h4>
+
+<p>Triton server docker run the <a href="https://github.com/CVCUDA/CV-CUDA/tree/release_v0.3.x/samples/segmentation_triton">segmentation on triton example</a> with corrections.</p>
+
+<h5 id="set-up-triton-server">Set up triton server</h5>
+
+<p><b>1</b>. Find the right tritonserver release docker image that matches our devbox setup (<a href="https://docs.nvidia.com/deeplearning/triton-inference-server/release-notes/index.html">release note</a>, <a href="https://catalog.ngc.nvidia.com/orgs/nvidia/containers/tritonserver/tags">tags</a>)</p>
+
+<p>I’ll go with <a href="https://docs.nvidia.com/deeplearning/triton-inference-server/release-notes/rel-23-02.html">image 23.02-py3</a>.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Install the libs first as in the last section.
+</code></pre></div></div>
+
+<p><b>2</b>. Start the triton server docker with the cvcuda mounted:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">docker run <span class="nt">--shm-size</span><span class="o">=</span>1g <span class="nt">--ulimit</span> <span class="nv">memlock</span><span class="o">=</span><span class="nt">-1</span> <span class="nt">-p</span> 8000:8000 <span class="nt">-p</span> 8001:8001 <span class="nt">-p</span> 8002:8002 <span class="nt">--ulimit</span> <span class="nv">stack</span><span class="o">=</span>67108864 <span class="nt">-ti</span> <span class="nt">--gpus</span><span class="o">=</span>all <span class="nt">-v</span> /opt/nvidia/cvcuda0:/cvcuda <span class="nt">-w</span> /cvcuda nvcr.io/nvidia/tritonserver:23.02-py3</code></pre></figure>
+
+<p><b>3</b>. Install dependencies on the triton server docker:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">cd</span> /cvcuda/samples/scripts
+<span class="nb">touch </span>my_install_dependencies.sh
+vim my_install_dependencies.sh
+
+<span class="c"># copy the following code into the my_install_dependencies.sh</span></code></pre></figure>
+
+<p>The code to be copied:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">mkdir</span> <span class="nt">-p</span> ~/samples
+<span class="nb">cd</span> /cvcuda
+<span class="nb">cp</span> <span class="nt">-r</span> samples/. ~/samples
+
+<span class="nb">cd</span> ~/samples
+<span class="nb">chmod </span>a+x scripts/<span class="k">*</span>.sh
+<span class="nb">chmod </span>a+x scripts/<span class="k">*</span>.py
+
+<span class="nb">sed</span> <span class="nt">-i</span> <span class="nt">-e</span> <span class="s1">'55s+.*+pip3 install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu121\npip3 install av==10.0.0 pycuda nvtx==0.2.5\npip3 install onnx\n+'</span> scripts/install_dependencies.sh
+
+<span class="nb">sed</span> <span class="nt">-i</span> <span class="nt">-e</span> <span class="s1">'s+$PATH+\\${PATH}+'</span> scripts/install_dependencies.sh
+
+<span class="c"># add new line after torchnvjpeg repo is downloaded</span>
+<span class="nb">sed</span> <span class="nt">-i</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">grep</span> <span class="nt">-n</span> <span class="s1">'scripts/install_dependencies.sh'</span> <span class="nt">-e</span> <span class="s1">'cd torchnvjpeg'</span> | <span class="nb">head</span> <span class="nt">-1</span> | <span class="nb">cut</span> <span class="nt">-f1</span> <span class="nt">-d</span>:<span class="si">)</span><span class="s2">ised -i -e 's/std=c++14/std=c++17/' torchnvjpeg/setup.py"</span> scripts/install_dependencies.sh
+
+<span class="c"># install dependencies. (Q: How to skip user ENTER while running the script?)</span>
+./scripts/install_dependencies.sh</code></pre></figure>
+
+<p>Install dependencies:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">bash my_install_dependencies.sh</code></pre></figure>
+
+<p><b>4</b>. Install cmake that meets the version requirement into <code class="language-plaintext highlighter-rouge">/usr/local/bin</code> which comes before <code class="language-plaintext highlighter-rouge">/usr/bin</code> in system <code class="language-plaintext highlighter-rouge">PATH</code> where the existing cmake is.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">cmake <span class="nt">--version</span>
+which cmake
+
+<span class="nb">cd</span> /opt
+curl <span class="nt">-L</span> https://github.com/Kitware/CMake/releases/download/v3.26.5/cmake-3.26.5-linux-x86_64.sh <span class="nt">--output</span> cmake-3.26.5-linux-x86_64.sh
+<span class="nb">chmod </span>a+x cmake-3.26.5-linux-x86_64.sh
+bash /opt/cmake-3.26.5-linux-x86_64.sh
+
+<span class="nb">ln</span> <span class="nt">-s</span> /opt/cmake-3.26.5-linux-x86_64/bin/<span class="k">*</span> /usr/local/bin
+
+<span class="c"># export CMAKE_ROOT=/opt/cmake-3.26.5-linux-x86_64/share/cmake-3.26</span>
+<span class="c"># Remember to refresh after new cmake is installed</span>
+<span class="nb">hash</span> <span class="nt">-r</span>
+
+cmake <span class="nt">--version</span> </code></pre></figure>
+
+<p><b>5</b>. Build the samples</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">cd</span> ~/samples
+<span class="nb">cp</span> ./scripts/build_samples.sh ./scripts/my_build_samples.sh
+<span class="nb">sed</span> <span class="nt">-i</span> <span class="nt">-e</span> <span class="s1">'s+cmake ..+cmake .. -DCMAKE_PREFIX_PATH=/cvcuda/lib/x86_64-linux-gnu/cmake+'</span> scripts/my_build_samples.sh
+./scripts/my_build_samples.sh</code></pre></figure>
+
+<p><b>6</b>. Start the triton server:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># Add the lib path to the libcvcuda.so.0</span>
+<span class="nb">export </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LD_LIBRARY_PATH</span>:/cvcuda/lib/x86_64-linux-gnu/
+
+<span class="c"># To resolve "ModuleNotFoundError: No module named 'cvcuda'"</span>
+<span class="c"># option 1: go to the folder where the cvcuda.cpython-38-x86_64-linux-gnu.so is installed</span>
+<span class="nb">cd</span> /cvcuda/lib/x86_64-linux-gnu/python
+
+<span class="c"># option 2: create symlink in one of the default sys.path</span>
+<span class="nb">ln</span> <span class="nt">-s</span> /cvcuda/lib/x86_64-linux-gnu/python/<span class="k">*</span> /usr/lib/python3/dist-packages
+
+<span class="c"># Start the triton server</span>
+tritonserver <span class="nt">--model-repository</span> ~/samples/segmentation_triton/python/models </code></pre></figure>
+
+<h5 id="set-up-triton-client">Set up triton client</h5>
+<p><b>1</b>. Start docker to run triton client:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">docker run <span class="nt">-ti</span> <span class="nt">--net</span> host <span class="nt">--gpus</span><span class="o">=</span>all <span class="nt">-v</span> /opt/nvidia/cvcuda0:/cvcuda nvcr.io/nvidia/tritonserver:23.02-py3-sdk <span class="nt">-w</span> /cvcuda /bin/bash</code></pre></figure>
+
+<p><b>2</b>. Install dependencies into the client docker run:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">cd</span> /cvcuda/samples/scripts
+bash my_install_dependencies.sh</code></pre></figure>
+
+<p><b>3</b>. Run the segmentation on folder containing images:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">export </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LD_LIBRARY_PATH</span>:/cvcuda/lib/x86_64-linux-gnu/
+
+<span class="c"># option 1. hack python sys.path to include the lib folder</span>
+<span class="nb">sed</span> <span class="nt">-i</span> <span class="nt">-e</span> <span class="s2">"s+import cvcuda+sys.path.append('/cvcuda/lib/x86_64-linux-gnu/python')</span><span class="se">\n</span><span class="s2">import cvcuda+"</span> ~/samples/segmentation_triton/python/triton_client.py
+
+<span class="c"># option 2. create symlink (Q: How default sys.path is set?)</span>
+<span class="nb">ln</span> <span class="nt">-s</span> /cvcuda/lib/x86_64-linux-gnu/python/<span class="k">*</span> /usr/lib/python3/dist-packages
+
+python3 ~/samples/segmentation_triton/python/triton_client.py <span class="nt">-i</span> ~/samples/assets/images <span class="nt">-b</span> 2
+
+<span class="c"># check the results</span>
+<span class="nb">ls</span> /tmp</code></pre></figure>]]></content><author><name></name></author><category term="note-posts" /><category term="notes" /><summary type="html"><![CDATA[tutorial]]></summary></entry><entry><title type="html">Conda Tutorial</title><link href="http://localhost:4000/blog/2023/conda-tutorial/" rel="alternate" type="text/html" title="Conda Tutorial" /><published>2023-07-31T05:00:00-07:00</published><updated>2023-07-31T05:00:00-07:00</updated><id>http://localhost:4000/blog/2023/conda-tutorial</id><content type="html" xml:base="http://localhost:4000/blog/2023/conda-tutorial/"><![CDATA[<h4 id="python-version-management-tool--conda">Python version management tool – conda</h4>
+
+<h5 id="adding-a-python-package">Adding a python package</h5>
+<p>The default installation path should be <code class="language-plaintext highlighter-rouge">site-packages</code> of <code class="language-plaintext highlighter-rouge">python</code> folder. However, if you’d like to add a python package with customized installation path to the conda env: use command <a href="https://docs.conda.io/projects/conda-build/en/latest/resources/commands/conda-develop.html">conda-develop</a>.</p>
+
+<h5 id="adding-shared-libraries">Adding shared libraries</h5>
+<p>Check <a href="https://docs.conda.io/projects/conda-build/en/latest/resources/use-shared-libraries.html">here</a> for conda shared libraries.</p>
+
+<p>Conda depends primarily on searching directories for matching filenames. It does not currently use side-by-side assemblies.</p>
+
+<p>For now, most DLLs are installed into <code class="language-plaintext highlighter-rouge">(install prefix)\\Library\\bin</code> –Q:what is this path?. This path is added to <code class="language-plaintext highlighter-rouge">os.environ["PATH"]</code> for all Python processes, so that DLLs can be located, regardless of the value of the system’s PATH environment variable.</p>
+
+<h5 id="execution-environment-var-setting-in-conda-env">Execution environment var setting in conda env</h5>
+
+<p>Reference <a href="https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#macos-and-linux">here</a>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> <span class="nv">$CONDA_PREFIX</span>
+
+<span class="c"># edit the var </span>
+vim etc/conda/activate.d/env_vars.sh
+<span class="c"># example content: export MY_KEY='secret-key-value'</span>
+vim etc/conda/deactivate.d/env_vars.sh
+<span class="c"># example content: unset MY_KEY</span>
+
+<span class="c"># Check by the following</span>
+conda activate analytics
+</code></pre></div></div>
 
 <h4 id="references">References</h4>
 <ul>
     <li><a href="https://sachinjose31.medium.com/creating-an-environment-in-anaconda-through-a-yml-file-7e5deeb7676d">Creating an environment in anaconda through a yml file</a>.</li>
-</ul>]]></content><author><name></name></author><category term="note-posts" /><category term="notes" /><summary type="html"><![CDATA[references]]></summary></entry><entry><title type="html">PyPI your python package</title><link href="http://localhost:4000/blog/2023/PyPI-your-python-package/" rel="alternate" type="text/html" title="PyPI your python package" /><published>2023-07-31T05:00:00-07:00</published><updated>2023-07-31T05:00:00-07:00</updated><id>http://localhost:4000/blog/2023/PyPI%20your%20python%20package</id><content type="html" xml:base="http://localhost:4000/blog/2023/PyPI-your-python-package/"><![CDATA[<h4 id="pypi-your-own-python-packages">PyPI your own python packages</h4>
+    <li><a href="https://conda.github.io/conda-pack/">Conda pack</a>.</li>
+</ul>]]></content><author><name></name></author><category term="note-posts" /><category term="notes" /><summary type="html"><![CDATA[references]]></summary></entry><entry><title type="html">PyPI your python package</title><link href="http://localhost:4000/blog/2023/PyPI-your-python-package/" rel="alternate" type="text/html" title="PyPI your python package" /><published>2023-07-31T05:00:00-07:00</published><updated>2023-07-31T05:00:00-07:00</updated><id>http://localhost:4000/blog/2023/PyPI-your-python-package</id><content type="html" xml:base="http://localhost:4000/blog/2023/PyPI-your-python-package/"><![CDATA[<h4 id="how-to-install-download-and-build-python-wheels">How to install, download and build Python wheels</h4>
 
 <p>Python Packaging Index (PyPI) is a repository containing several hundred thousand packages.</p>
 
+<h5 id="install-package">Install package</h5>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">#</span><span class="w"> </span>Install a PyPl indexed package optionally with version v.v
+<span class="gp">pip install &lt;packagename&gt;</span><span class="o">[==</span>v.v]
+<span class="go">
+</span><span class="gp">#</span><span class="w"> </span><span class="nb">test install </span>with dry-run
+<span class="gp">pip install --dry-run &lt;packagename&gt;</span><span class="w">
+</span><span class="go">
+</span><span class="gp">#</span><span class="w"> </span>Upgrade an installed package
+<span class="gp">pip install --upgrade &lt;packagename&gt;</span><span class="w">
+</span><span class="go">
+</span><span class="gp">#</span><span class="w"> </span>Uninstall a package
+<span class="gp">pip uninstall &lt;packagename&gt;</span><span class="w">
+</span><span class="go">
+</span><span class="gp">#</span><span class="w"> </span>Install a package from a repository other than PyPI, such as Github
+<span class="gp">pip install -e git+&lt;https://github.com/myrepo.git#</span><span class="nv">egg</span><span class="o">=</span>packagename&gt;
+<span class="go">
+</span><span class="gp">#</span><span class="w"> </span>Install a package from specific index url
+<span class="gp">pip install &lt;packagename&gt;</span><span class="w"> </span><span class="nt">--index-url</span> https://some.index.url
+<span class="go">
+</span><span class="gp">#</span><span class="w"> </span>Install a package with extra index url
+<span class="gp">pip install &lt;packagename&gt;</span><span class="w"> </span><span class="nt">--extra-index-url</span> https://some.extra.index.url
+<span class="go">
+</span><span class="gp">#</span><span class="w"> </span>Install package from <span class="nb">local</span> .whl file
+<span class="go">pip install /path/to/some/package.whl</span></code></pre></figure>
+
+<h5 id="build-your-own-whl-file">Build your own .whl file</h5>
+
+<h6 id="pure-python-package">Pure python package</h6>
+
+<p>When it comes to Python packaging, if your package consists purely of Python code, you can do the following:</p>
+
+<p><b>1.</b> Make sure Wheel and the latest version of setuptools is installed on your system by running:</p>
+
+<p><code class="language-plaintext highlighter-rouge">python -m pip install -U wheel setuptools</code></p>
+
+<p><b>2.</b> Then run:</p>
+
+<p><code class="language-plaintext highlighter-rouge">python setup.py sdist bdist_wheel</code></p>
+
+<p>This will create both a source distribution (sdist) and a wheel file (bdist_wheel) , along with all of its dependencies. You can now upload your built distributions to PyPI. For more information, see <a href="https://hynek.me/articles/sharing-your-labor-of-love-pypi-quick-and-dirty/">Sharing Your Labor of Love: PyPI Quick and Dirty</a>.</p>
+
+<h6 id="python-package-with-c-libraries">Python package with C libraries</h6>
+
+<p>If your package has linked C libraries, you’ll need to create specific build environments, and then compile your package separately for each target operating system you want to support.</p>
+
+<p><b>1.</b> Wheel naming</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{dist}-{version}(-{build})?-{python.version}-{os_platform}.whl
+# deployment with Python 2.7 on 32 bit Windows example:
+# PyYAML-5.3.1-cp27-cp27m-win32.whl
+</code></pre></div></div>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">#</span><span class="w"> </span>Install a PyPl indexed package optionally with version v.v
+<span class="gp">pip install &lt;packagename&gt;</span><span class="o">[==</span>v.v]</code></pre></figure>
+
 <h4 id="references">References</h4>
 <ul>
+    <li><a href="https://www.activestate.com/resources/quick-reads/python-install-wheel/">How to install, download and build Python wheels</a>.</li>
     <li><a href="https://realpython.com/pypi-publish-python-package/#configuring-your-package">How to Publish an Open-Source Python Package to PyPI</a>.</li>
     <li><a href="https://realpython.com/python-wheels/">What Are Python Wheels and Why Should You Care?</a></li>
 </ul>]]></content><author><name></name></author><category term="note-posts" /><category term="notes" /><summary type="html"><![CDATA[tutorial]]></summary></entry><entry><title type="html">Triton server tutorial</title><link href="http://localhost:4000/blog/2023/tritonserver/" rel="alternate" type="text/html" title="Triton server tutorial" /><published>2023-07-21T10:49:00-07:00</published><updated>2023-07-21T10:49:00-07:00</updated><id>http://localhost:4000/blog/2023/tritonserver</id><content type="html" xml:base="http://localhost:4000/blog/2023/tritonserver/"><![CDATA[<p><a href="https://www.run.ai/guides/machine-learning-engineering/triton-inference-server">Triton Inference Server: The Basics and a Quick Tutorial</a></p>
@@ -19,8 +574,8 @@
 <h4 id="introduction">Introduction</h4>
 
 <p>Specify triton model by providing model repository path:</p>
-
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">tritonserver --model-repository=&lt;repository-path&gt;</span></code></pre></figure>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tritonserver <span class="nt">--model-repository</span><span class="o">=</span>&lt;repository-path&gt;
+</code></pre></div></div>
 
 <p>There can be multiple versions of each model, with each version stored in a numerically-named subdirectory. The subdirectory’s name must be the model’s version number and it should not be 0.</p>
 
@@ -37,122 +592,286 @@ Through GRPC or HTTP requests, to send inputs to Triton and receive outputs.
 Examples could be found <a href="https://github.com/triton-inference-server/server/tree/main/docs/examples/model_repository">here</a>.</p>
 
 <h4 id="install-and-run-triton">Install and Run Triton</h4>
+
 <h5 id="install-triton-docker-image">Install Triton Docker Image</h5>
 
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">docker pull nvcr.io/nvidia/tritonserver:&lt;xx.yy&gt;</span><span class="nt">-py3</span> 
-<span class="gp">#</span>&lt;xx.yy&gt; represents the version of Triton</code></pre></figure>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull nvcr.io/nvidia/tritonserver:&lt;xx.yy&gt;-py3 
+<span class="c">#&lt;xx.yy&gt; represents the version of Triton</span>
+</code></pre></div></div>
 
 <h5 id="create-your-model-repository">Create Your Model Repository</h5>
 
 <h5 id="run-triton">Run Triton</h5>
 
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">docker run --gpus=3 --rm -p8000:8000 -p8001:8001 -p8002:8002 -v/full/path/to/docs/examples/model_repository:/models nvcr.io/nvidia/tritonserver:&lt;xx.yy&gt;</span><span class="nt">-py3</span> tritonserver <span class="nt">--model-repository</span><span class="o">=</span>/models</code></pre></figure>]]></content><author><name></name></author><category term="note-posts" /><category term="notes" /><summary type="html"><![CDATA[Cheatsheet]]></summary></entry><entry><title type="html">What is Docker</title><link href="http://localhost:4000/blog/2023/docker/" rel="alternate" type="text/html" title="What is Docker" /><published>2023-07-21T03:21:00-07:00</published><updated>2023-07-21T03:21:00-07:00</updated><id>http://localhost:4000/blog/2023/docker</id><content type="html" xml:base="http://localhost:4000/blog/2023/docker/"><![CDATA[<p><a href="https://djangostars.com/blog/what-is-docker-and-how-to-use-it-with-python/">What is docker and how to use it</a></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run <span class="nt">--gpus</span><span class="o">=</span>3 <span class="nt">--rm</span> <span class="nt">-p8000</span>:8000 <span class="nt">-p8001</span>:8001 <span class="nt">-p8002</span>:8002 <span class="nt">-v</span>/full/path/to/docs/examples/model_repository:/models nvcr.io/nvidia/tritonserver:&lt;xx.yy&gt;-py3 tritonserver <span class="nt">--model-repository</span><span class="o">=</span>/models
+</code></pre></div></div>]]></content><author><name></name></author><category term="note-posts" /><category term="notes" /><category term="code" /><summary type="html"><![CDATA[Cheatsheet]]></summary></entry><entry><title type="html">What is Docker</title><link href="http://localhost:4000/blog/2023/docker/" rel="alternate" type="text/html" title="What is Docker" /><published>2023-07-21T03:21:00-07:00</published><updated>2023-07-21T03:21:00-07:00</updated><id>http://localhost:4000/blog/2023/docker</id><content type="html" xml:base="http://localhost:4000/blog/2023/docker/"><![CDATA[<h4 id="docker">Docker</h4>
+<p><a href="https://djangostars.com/blog/what-is-docker-and-how-to-use-it-with-python/">What is docker and how to use it</a></p>
+
+<h5 id="a-dockerfile-example">A Dockerfile example:</h5>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FROM ubuntu:latest
+RUN apt-get update
+    <span class="o">&amp;&amp;</span> apt-get <span class="nb">install</span> <span class="nt">--no-install-recommends</span> <span class="nt">--no-install-suggests</span> <span class="nt">-y</span> curl
+    <span class="o">&amp;&amp;</span> <span class="nb">rm</span> <span class="nt">-rf</span> /var/lib/apt/lists/<span class="k">*</span>
+ENV SITE_URL http://example.com/
+WORKDIR /data
+VOLUME /data
+CMD sh <span class="nt">-c</span> <span class="s2">"curl -Lk </span><span class="nv">$SITE_URL</span><span class="s2"> &gt; /data/results"</span>
+</code></pre></div></div>
+
+<h5 id="docker-image-management">Docker image management:</h5>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Build a docker image from a Dockerfile</span>
+docker build ./ <span class="nt">-t</span> &lt;image-name&gt;:&lt;version&gt;
+<span class="c"># option -t sets the name tag to an image</span>
+
+<span class="c"># check docker image list</span>
+docker images
+
+<span class="c"># remove image by image id or image name and tag</span>
+docker rmi &lt;image-id&gt;|&lt;image-name&gt;:&lt;image-tag&gt;
+
+</code></pre></div></div>
+
+<h5 id="docker-container-management">Docker container management:</h5>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># run a docker container</span>
+docker run <span class="nt">--rm</span> <span class="nt">-e</span> <span class="nv">SITE_URL</span><span class="o">=</span>https://facebook.com/ <span class="o">[</span><span class="nt">-d</span><span class="o">]</span> <span class="o">[</span><span class="nt">-p</span> &lt;HOST-PORT&gt;:&lt;CONTAINER-PORT&gt;] <span class="se">\</span>
+<span class="nt">-v</span> <span class="si">$(</span><span class="nb">pwd</span><span class="si">)</span>/vol:/data/:rw &lt;image-name&gt;
+<span class="c"># option --rm will remove the container first if it is running</span>
+<span class="c"># option -v volume mounting &lt;HOST-DIRECTORY&gt;:&lt;CONTAINER-DIRECTORY&gt;</span>
+<span class="c"># option -e sets/overides the env var</span>
+<span class="c"># option -d sets the container to run in the background (daemon mode)</span>
+<span class="c"># option -p is a ports mapping &lt;HOST-PORT&gt;:&lt;CONTAINER-PORT&gt;</span>
+
+<span class="c"># Check the container's log</span>
+docker logs <span class="nt">-f</span> &lt;container-name&gt;
+
+<span class="c"># list the containers</span>
+docker ps <span class="o">[</span><span class="nt">-aq</span><span class="o">]</span>
+<span class="c"># option -a list all active/running and inactive ones</span>
+<span class="c"># option -q to print only container IDs</span>
+
+<span class="c"># start the container</span>
+docker start &lt;container-name&gt;
+
+<span class="c"># stop the container</span>
+docker stop &lt;container-name&gt;
+
+<span class="c"># remove the container</span>
+docker <span class="nb">rm</span> &lt;container-name&gt;
+
+<span class="c"># remove all the containers</span>
+docker <span class="nb">rm</span> <span class="nt">-f</span> <span class="si">$(</span>docker ps <span class="nt">-aq</span><span class="si">)</span>
+<span class="c"># option -f force to stop and remove the container</span>
+</code></pre></div></div>
+
+<h5 id="additional-execution-on-a-running-docker">Additional execution on a running Docker</h5>
+<p>Run <a href="https://docs.docker.com/engine/reference/commandline/exec/">docker exec</a> into a running container:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># First run the container, as an example:</span>
+docker run <span class="nt">--name</span> mycontainer <span class="nt">-d</span> <span class="nt">-i</span> <span class="nt">-t</span> alpine /bin/sh
+</code></pre></div></div>
+
+<p>This creates and starts a container named mycontainer from an alpine image with an sh shell as its main process. The <code class="language-plaintext highlighter-rouge">-d</code> option (shorthand for <code class="language-plaintext highlighter-rouge">--detach</code>) sets the container to run in the background, in detached mode, with a pseudo-TTY attached (<code class="language-plaintext highlighter-rouge">-t</code>). The <code class="language-plaintext highlighter-rouge">-i</code> option is set to keep STDIN attached, which prevents the sh process from exiting immediately.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Then run sh inside mycontainer</span>
+<span class="c"># docker exec [OPTION] CONTAINER COMMAND [ARG...]</span>
+docker <span class="nb">exec</span> <span class="nt">-it</span> mycontainer sh
+</code></pre></div></div>
+
+<h4 id="deployment">Deployment</h4>
 
 <p><a href="https://kubernetes.io/docs/tutorials/kubernetes-basics/">Kubernetes</a></p>
 
-<p>Data communication between dockers?</p>]]></content><author><name></name></author><category term="note-posts" /><category term="notes" /><summary type="html"><![CDATA[Docker tutorial]]></summary></entry><entry><title type="html">Linux Shell Scripting</title><link href="http://localhost:4000/blog/2023/shell-programming/" rel="alternate" type="text/html" title="Linux Shell Scripting" /><published>2023-06-20T06:43:00-07:00</published><updated>2023-06-20T06:43:00-07:00</updated><id>http://localhost:4000/blog/2023/shell-programming</id><content type="html" xml:base="http://localhost:4000/blog/2023/shell-programming/"><![CDATA[<p><a href="https://bash.cyberciti.biz/guide/Main_Page">Linux Bash Shell Scripting Tutorial</a></p>]]></content><author><name></name></author><category term="note-posts" /><category term="notes" /><category term="code" /><summary type="html"><![CDATA[Shell programming]]></summary></entry><entry><title type="html">Git Routine</title><link href="http://localhost:4000/blog/2023/git-routines/" rel="alternate" type="text/html" title="Git Routine" /><published>2023-06-20T03:00:00-07:00</published><updated>2023-06-20T03:00:00-07:00</updated><id>http://localhost:4000/blog/2023/git-routines</id><content type="html" xml:base="http://localhost:4000/blog/2023/git-routines/"><![CDATA[<h4 id="useful-git-commands">Useful git commands</h4>
+<p>Data communication between dockers?</p>]]></content><author><name></name></author><category term="note-posts" /><category term="notes" /><summary type="html"><![CDATA[Docker tutorial]]></summary></entry><entry><title type="html">Linux Shell Scripting</title><link href="http://localhost:4000/blog/2023/shell-programming/" rel="alternate" type="text/html" title="Linux Shell Scripting" /><published>2023-06-20T06:43:00-07:00</published><updated>2023-06-20T06:43:00-07:00</updated><id>http://localhost:4000/blog/2023/shell-programming</id><content type="html" xml:base="http://localhost:4000/blog/2023/shell-programming/"><![CDATA[<p><a href="https://bash.cyberciti.biz/guide/Main_Page">Linux Bash Shell Scripting Tutorial</a></p>
+
+<p><a href="https://bash.cyberciti.biz/guide/Set_command">Set command</a></p>]]></content><author><name></name></author><category term="note-posts" /><category term="notes" /><category term="code" /><summary type="html"><![CDATA[Shell programming]]></summary></entry><entry><title type="html">Git Routine</title><link href="http://localhost:4000/blog/2023/git-routines/" rel="alternate" type="text/html" title="Git Routine" /><published>2023-06-20T03:00:00-07:00</published><updated>2023-06-20T03:00:00-07:00</updated><id>http://localhost:4000/blog/2023/git-routines</id><content type="html" xml:base="http://localhost:4000/blog/2023/git-routines/"><![CDATA[<h4 id="useful-git-commands">Useful git commands</h4>
 
 <h5 id="command-cheatsheet">Command cheatsheet</h5>
-
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">git status
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git status
 git diff
-</span><span class="gp">git diff &lt;filename&gt;</span><span class="w">
-</span><span class="gp">git add --all #</span><span class="w"> </span>Stage all files
-<span class="gp">git add &lt;filename&gt;</span><span class="w">	</span><span class="c"># Stage a file, ready to commit</span>
-<span class="gp">git reset #</span><span class="w"> </span>Unstage all files
-<span class="gp">git reset &lt;filename&gt;</span><span class="w"> </span><span class="c"># Unstage one file</span>
-<span class="gp">git restore &lt;filename&gt;</span><span class="w"> </span><span class="c"># Discard changes of the file</span>
-<span class="go">
-git commit -m "Post update" 
-</span><span class="gp">git push -u origin &lt;your-branch&gt;</span><span class="w"> </span></code></pre></figure>
+git diff &lt;filename&gt;
+git add <span class="nt">--all</span> <span class="c"># Stage all files</span>
+git add &lt;filename&gt;	<span class="c"># Stage a file, ready to commit</span>
+git reset <span class="c"># Unstage all files</span>
+git reset &lt;filename&gt; <span class="c"># Unstage one file</span>
+git restore &lt;filename&gt; <span class="c"># Discard changes of the file</span>
+
+git commit <span class="nt">-m</span> <span class="s2">"Post update"</span> 
+git push <span class="nt">-u</span> origin &lt;your-branch&gt; 
+</code></pre></div></div>
 
 <p><a href="#">Git Tools - Branch</a></p>
-
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">git checkout -b &lt;your-branch&gt;</span><span class="w"> </span><span class="c"># new local branch</span>
-<span class="gp">git branch -d &lt;your-branch&gt;</span><span class="w">   </span><span class="c"># delete the branch</span></code></pre></figure>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout <span class="nt">-b</span> &lt;your-branch&gt; <span class="c"># new local branch</span>
+git branch <span class="nt">-d</span> &lt;your-branch&gt;   <span class="c"># delete the branch</span>
+</code></pre></div></div>
 
 <p><a href="https://git-scm.com/book/en/v2/Git-Tools-Interactive-Staging">Git Tools - Interactive staging</a></p>
 
 <p>We can stage patches under interactive staging mode.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add <span class="nt">-i</span> <span class="c"># Interactive Staging</span>
+git add <span class="nt">-p</span> <span class="c"># or --patch to start partial staging</span>
+git reset <span class="nt">-p</span>
+</code></pre></div></div>
 
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">git add -i #</span><span class="w"> </span>Interactive Staging
-<span class="gp">git add -p #</span><span class="w"> </span>or <span class="nt">--patch</span> to start partial staging
-<span class="go">git reset -p</span></code></pre></figure>
+<p><a href="https://git-scm.com/docs/git-merge">Git Tools - Merge</a>
+Caution: before merging, make sure there is no non-trivial uncommitted changes.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Example:</span>
+<span class="c">#       A---B---C topic</span>
+<span class="c">#      /</span>
+<span class="c"># D---E---F---G master</span>
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout master
+git merge topic
+
+<span class="c"># Result:</span>
+<span class="c">#       A---B---C topic</span>
+<span class="c">#      /         \</span>
+<span class="c"># D---E---F---G---H master</span>
+</code></pre></div></div>
+
+<p>Better practice:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git merge <span class="nt">--no-commit</span> <span class="o">[</span><span class="nt">-s</span> ort] topic
+<span class="c"># --no-commit: permform merge but stop before creating a merge commit.</span>
+<span class="c"># -s: merge strategy option. By default, its `ort`.</span>
+
+git commit <span class="nt">-m</span> <span class="s2">"msg"</span>
+<span class="c"># -m: message about the merge</span>
+</code></pre></div></div>
+
+<p>What should we do if we run into conflicts:</p>
+
+<ol>
+  <li>
+    <p>Abort the merge to start over again?</p>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="c"># Abort the merge process and *try* to reconstruct the pre-merge state:</span>
+ git merge <span class="nt">--abort</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Resolve the conflicts with tools</p>
+
+    <p>Use your favorate editor to resolve the changes.</p>
+
+    <p><code class="language-plaintext highlighter-rouge">HEAD</code>: current branch head</p>
+
+    <p><code class="language-plaintext highlighter-rouge">MERGED_HEAD</code>: other branch head</p>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="c"># Option 1: use graphical mergetool</span>
+ git mergetool
+
+ <span class="c"># Option 2: highlight diff</span>
+ git diff
+
+ git log <span class="nt">--merge</span> <span class="nt">-p</span> &lt;path&gt; <span class="c"># show diffs first for the HEAD version and then MERGED_HEAD version</span>
+
+ git show :1:&lt;filename&gt; <span class="c"># show the common ancestor</span>
+ git show :2:&lt;filename&gt; <span class="c"># show the HEAD version of the file</span>
+ git show :3:&lt;filename&gt; <span class="c"># show the MERGED_HEAD version</span>
+
+</code></pre></div>    </div>
+  </li>
+</ol>
 
 <p><a href="https://www.cloudbees.com/blog/git-undo-commit">Git Tools - Time Travel</a></p>
 
 <p>Better undoing mistakes before commit:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git stash
+git checkout <span class="nt">--</span> &lt;filename&gt; <span class="c"># Discard file changes permanently</span>
+git reset <span class="nt">--hard</span> <span class="c"># Discard all changes permanently</span>
+</code></pre></div></div>
 
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">git stash
-</span><span class="gp">git checkout -- &lt;filename&gt;</span><span class="w"> </span><span class="c"># Discard file changes permanently</span>
-<span class="gp">git reset --hard #</span><span class="w"> </span>Discard all changes permanently</code></pre></figure>
+<p>Undo <code class="language-plaintext highlighter-rouge">git add</code> files:</p>
+
+<p>Concepts:</p>
+<ul>
+  <li>Working directory: where you make changes to your code;</li>
+  <li>Staging area: intermedia step where you prepare changes for commit.</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># option 1:</span>
+git reset &lt;file&gt; <span class="c"># remove a single file from staging area, i.e. undo git add</span>
+git reset <span class="c"># remove all files from staging area, changes are still in working directory</span>
+
+<span class="c"># option 2:</span>
+git <span class="nb">rm</span> <span class="nt">--cached</span> &lt;file&gt; <span class="c"># remove a single file from the staging area</span>
+
+<span class="c"># Caution:</span>
+git <span class="nb">rm</span> &lt;file&gt; <span class="c"># remove the changes from both working directory and staging area.</span>
+</code></pre></div></div>
 
 <p>Undo Committed changes:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git reflog <span class="c"># To check the commit id.</span>
+git reset <span class="nt">--hard</span> &lt;commit-id&gt; <span class="c"># Discard all changes permanently</span>
 
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">git reflog #</span><span class="w"> </span>To check the commit id.
-<span class="gp">git reset --hard &lt;commit-id&gt;</span><span class="w"> </span><span class="c"># Discard all changes permanently</span>
-<span class="go">
-</span><span class="gp">git rm -rf --cached . #</span><span class="w"> </span>remove the cache
-<span class="gp">git reset --hard HEAD #</span><span class="w"> </span>reset to the latest commit of the current branch</code></pre></figure>
+git <span class="nb">rm</span> <span class="nt">-rf</span> <span class="nt">--cached</span> <span class="nb">.</span> <span class="c"># remove the cache</span>
+git reset <span class="nt">--hard</span> HEAD <span class="c"># reset to the latest commit of the current branch</span>
+</code></pre></div></div>
 
 <p>Undoing changes in a shared repo:</p>
-
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">git revert &lt;commit-id&gt;</span><span class="w"> </span><span class="c"># A new commit that reverts the changes of commit-id.</span></code></pre></figure>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git revert &lt;commit-id&gt; <span class="c"># A new commit that reverts the changes of commit-id.</span>
+</code></pre></div></div>
 
 <p><a href="https://git-scm.com/book/en/v2/Git-Tools-Submodules">Git Tools - Submodules</a></p>
-
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">git clone --recurse-submodules -j8  target_git@github.com</span></code></pre></figure>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone <span class="nt">--recurse-submodules</span> <span class="nt">-j8</span>  target_git@github.com
+</code></pre></div></div>
 
 <p>If we cloned the repo without recursively pull submodules, try the following:</p>
-
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">cd &lt;repo-dir&gt;</span><span class="w">
-</span><span class="go">git submodule update --init --recursive</span></code></pre></figure>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> &lt;repo-dir&gt;
+git submodule update <span class="nt">--init</span> <span class="nt">--recursive</span>
+</code></pre></div></div>
 
 <p>To individually update a specific submodule:</p>
-
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">cd &lt;submodule-dir&gt;</span><span class="w">
-</span><span class="go">git pull --recurse-submodules</span></code></pre></figure>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> &lt;submodule-dir&gt;
+git pull <span class="nt">--recurse-submodules</span>
+</code></pre></div></div>
 
 <p><a href="https://linuxhint.com/pull-git-submodules-after-cloning-project-from-github/">Submodule can be added</a> to your current repo by:</p>
-
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">cd &lt;repo-dir&gt;</span><span class="w">
-</span><span class="gp">git submodule add &lt;git_url_to_the_submodule&gt;</span><span class="w"> </span>&lt;submodule_folder_name&gt;</code></pre></figure>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> &lt;repo-dir&gt;
+git submodule add &lt;git_url_to_the_submodule&gt; &lt;submodule_folder_name&gt;
+</code></pre></div></div>
 
 <p><a href="https://stackoverflow.com/questions/11168141/find-which-commit-is-currently-checked-out-in-git">Git Tools - commit information</a></p>
 
 <p>variations:</p>
-
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">git show [--outline -s]
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git show <span class="o">[</span><span class="nt">--outline</span> <span class="nt">-s</span><span class="o">]</span>
 git reflog 
-</span><span class="gp">git log -1 [--outline] #</span><span class="w"> </span>show the last commit info
-<span class="go">git status</span></code></pre></figure>
+git log <span class="nt">-1</span> <span class="o">[</span><span class="nt">--outline</span><span class="o">]</span> <span class="c"># show the last commit info</span>
+git status
+</code></pre></div></div>
 
 <p>Launch gitk graphic display:</p>
-
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">git bisect visualize
-</span><span class="gp">git bisect view  #</span><span class="w"> </span>shorter, means same thing</code></pre></figure>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git bisect visualize
+git bisect view  <span class="c"># shorter, means same thing</span>
+</code></pre></div></div>
 
 <p><a href="https://www.codeblocq.com/2016/02/Stash-your-changes-before-switching-branch/">Git Tools - Stash</a>:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git stash save <span class="s2">"changes on the current-branch"</span>
+git stash pop <span class="c"># unstash the changes of the top stash</span>
+git stash list <span class="c"># list the stash stack</span>
+git stash pop <span class="s2">"stash@{1}"</span> <span class="c"># unstash a specific stash</span>
+git stash apply <span class="c"># apply the top stash</span>
+git stash drop <span class="c"># drop the top stash</span>
+git stash show <span class="c"># Show the files in the most recent stash</span>
+git stash show <span class="nt">-p</span> <span class="c"># show the changes in the most recent stash</span>
+git stash show <span class="nt">-p</span> stash@<span class="o">{</span>1<span class="o">}</span> <span class="c"># show the changes of the specified stash</span>
+git stash show <span class="nt">-p</span> 1 <span class="c"># simplified version of the above comment</span>
+</code></pre></div></div>
 
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">git stash save "changes on the current-branch"
-</span><span class="gp">git stash pop #</span><span class="w"> </span>unstash the changes of the top stash
-<span class="gp">git stash list #</span><span class="w"> </span>list the stash stack
-<span class="gp">git stash pop "stash@{1}" #</span><span class="w"> </span>unstash a specific stash
-<span class="gp">git stash apply #</span><span class="w"> </span>apply the top stash
-<span class="gp">git stash drop #</span><span class="w"> </span>drop the top stash
-<span class="gp">git stash show #</span><span class="w"> </span>Show the files <span class="k">in </span>the most recent stash
-<span class="gp">git stash show -p #</span><span class="w"> </span>show the changes <span class="k">in </span>the most recent stash
-<span class="gp">git stash show -p stash@{1} #</span><span class="w"> </span>show the changes of the specified stash
-<span class="gp">git stash show -p 1 #</span><span class="w"> </span>simplified version of the above comment</code></pre></figure>
+<p><a href="#">Git Tools - working tree</a>
+TODO…</p>
 
 <p><a href="https://docs.github.com/en/get-started/getting-started-with-git/configuring-git-to-handle-line-endings?platform=linux">Git Tools - Eol configuration</a></p>
 
 <p>Global settings for line endings:</p>
 
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">git config --global core.autocrlf input
-</span><span class="gp">#</span><span class="w"> </span>Configure Git to ensure line endings <span class="k">in </span>files you checkout are correct <span class="k">for </span>Linux
-<span class="go">
-</span><span class="gp">git config --get core.autocrlf #</span><span class="w"> </span>Check the value</code></pre></figure>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config <span class="nt">--global</span> core.autocrlf input
+<span class="c"># Configure Git to ensure line endings in files you checkout are correct for Linux</span>
+
+git config <span class="nt">--get</span> core.autocrlf <span class="c"># Check the value</span>
+</code></pre></div></div>
 
 <p>Per-repository settings:</p>
 
@@ -193,165 +912,25 @@ git reflog
 <h5 id="2-aitemplate">2. AITemplate</h5>
 <p><a href="https://facebookincubator.github.io/AITemplate/index.html">AITemplate</a>(AIT) is a Python framework that transforms deep neural networks into CUDA (NVIDIA GPU) / HIP (AMD GPU) C++ code for lightning-fast inference serving.</p>
 
-<h5 id="3-tensor-comprehensions">3. Tensor Comprehensions</h5>
+<h5 id="3-torchscript">3. TorchScript</h5>
+<p><a href="https://pytorch.org/tutorials/beginner/Intro_to_TorchScript_tutorial.html">TorchScript</a> is an intermediate representation of a PyTorch model (subclass of nn.Module) that can then be run in a high-performance environment such as C++.</p>
+
+<p>Here is an <a href="https://pytorch.org/tutorials/beginner/Intro_to_TorchScript_tutorial.html">introduction tutorial</a> on TorchScript and the <a href="https://pytorch.org/tutorials/advanced/cpp_export.html">documentation</a> about it.</p>
+
+<h5 id="4-tensor-comprehensions">4. Tensor Comprehensions</h5>
 <p><a href="https://facebookresearch.github.io/TensorComprehensions/">
  Tensor Comprehensions </a>(<a href="https://github.com/facebookresearch/TensorComprehensions/">TC</a>)
 is a notation based on generalized Einstein notation for computing on multi-dimensional arrays. TC greatly simplifies ML framework implementations by providing a concise and powerful syntax which can be efficiently translated to high-performance computation kernels, automatically.</p>
 
-<h5 id="4-apache-tvm">4. Apache TVM</h5>
+<h5 id="5-apache-tvm">5. Apache TVM</h5>
 <p><a href="https://tvm.apache.org/">Apache TVM</a> is an End to End Machine Learning Compiler Framework for CPUs, GPUs and accelerators. It aims to enable machine learning engineers to optimize and run computations efficiently on any hardware backend.</p>
 
-<h5 id="5-openai-triton">5. OpenAI Triton</h5>
+<h5 id="6-openai-triton">6. OpenAI Triton</h5>
 <p><a href="https://openai.com/research/triton">Triton</a> is an open-source Python-like programming language which enables researchers with no CUDA experience to write highly efficient GPU code—most of the time on par with what an expert would be able to produce.</p>
+
+<h5 id="6-onnx">6. ONNX</h5>
+<p><a href="https://onnx.ai/">ONNX</a> is an open format built to represent machine learning models. ONNX defines a common set of operators - the building blocks of machine learning and deep learning models - and a common file format to enable AI developers to use models with a variety of frameworks, tools, runtimes, and compilers.</p>
 
 <h4 id="profiling-tools">Profiling tools:</h4>
 <h5 id="1-nvidia-nsight-systems">1. NVIDIA NSight Systems</h5>
-<p><a href="https://developer.nvidia.com/nsight-systems">NVIDIA Nsight™ Systems</a> is a system-wide performance analysis tool designed to visualize an application’s algorithms, help you identify the largest opportunities to optimize, and tune to scale efficiently across any quantity or size of CPUs and GPUs, from large servers to our smallest system on a chip (SoC).</p>]]></content><author><name></name></author><category term="note-posts" /><category term="notes" /><summary type="html"><![CDATA[frameworks and tools]]></summary></entry><entry><title type="html">Conda Environment configuration for Apple Silicon M1 Mac</title><link href="http://localhost:4000/blog/2023/conda-m1/" rel="alternate" type="text/html" title="Conda Environment configuration for Apple Silicon M1 Mac" /><published>2023-05-22T10:30:00-07:00</published><updated>2023-05-22T10:30:00-07:00</updated><id>http://localhost:4000/blog/2023/conda-m1</id><content type="html" xml:base="http://localhost:4000/blog/2023/conda-m1/"><![CDATA[<h4 id="python-version-management-tool--conda">Python version management tool – conda</h4>
-
-<h5 id="1-installation">1. Installation</h5>
-<p><a href="https://github.com/conda-forge/miniforge">Miniforge</a> a minimal installer for Conda specific to conda-forge.</p>
-
-<p>Keep package imcompatibility in mind:
-some package developers haven’t support ARM64 yet.</p>
-
-<p>Short term workaround: create conda environments with x86 architecture on an Apple Silicon Mac.</p>
-
-<h5 id="2-check-enviroment-list-may-skip">2. Check enviroment list (may skip)</h5>
-
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">conda env list</span></code></pre></figure>
-
-<h5 id="3-create-an-enviroment-and-activate-it">3. Create an enviroment and activate it</h5>
-<p>Instead of directly creating an enviroment like the following:</p>
-
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">conda create -n myenv python=3.9
-conda activate myenv</span></code></pre></figure>
-
-<p>Put those commands into shell function first (add this to ~/.zshrc or ~/.bashrc if you’re using Bash):</p>
-
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">create_x86_conda_environment () {
-</span><span class="gp">  #</span><span class="w"> </span>create a conda environment using x86 architecture
-<span class="gp">  #</span><span class="w"> </span>first argument is environment name, all subsequent arguments will be passed to <span class="sb">`</span>conda create<span class="sb">`</span>
-<span class="gp">  #</span><span class="w"> </span>example usage: create_x86_conda_environment myenv_x86 <span class="nv">python</span><span class="o">=</span>3.9
-<span class="gp">  CONDA_SUBDIR=osx-64 conda create -n $</span>@
-<span class="gp">  conda activate $</span>1
-<span class="go">  conda config --env --set subdir osx-64
-}
-
-create_arm_conda_environment () {
-</span><span class="gp">  #</span><span class="w"> </span>example usage: create_arm_conda_environment myenv_arm <span class="nv">python</span><span class="o">=</span>3.9
-<span class="gp">  CONDA_SUBDIR=osx-arm64 conda create -n $</span>@
-<span class="gp">  conda activate $</span>1
-<span class="go">  conda config --env --set subdir osx-arm64
-}</span></code></pre></figure>
-
-<p>Then create the desired enviroment as:</p>
-
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">create_x86_conda_environment myenv_x86 python=3.9</span></code></pre></figure>
-
-<blockquote>
-<p style="font-size:16px">One of the features of <a href="https://github.com/conda-forge/miniforge">Miniforge3</a> is the ability to define processor specific sub-directories for specific Python environments. For example, by setting CONDA_SUBDIR=osx-64, conda will be instructed to install packages from x86_64 (osx-64) specific sub-directories.
-
-This will enable users to create an environment that installs arm64 or x86_64 (osx-64) Python packages depending on the value defined by CONDA_SUBDIR.
-</p>
-</blockquote>
-
-<h5 id="4-package-management-in-an-enviroment">4. Package management in an enviroment</h5>
-
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">conda install xxx</span></code></pre></figure>
-
-<p>For packages that are not available through conda, you’ll need</p>
-
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">pip install xxx</span></code></pre></figure>
-
-<div class="row mt-3">
-    <div class="col-sm mt-3 mt-md-0">
-        <figure>
-
-  <picture>
-    
-    <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/assets/img/posts/python-ldap-480.webp" />
-    <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/assets/img/posts/python-ldap-800.webp" />
-    <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/assets/img/posts/python-ldap-1400.webp" />
-    
-
-    <!-- Fallback to the original file -->
-    <img src="/assets/img/posts/python-ldap.jpg" class="img-fluid rounded z-depth-1" width="auto" height="auto" data-zoomable="" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
-
-  </picture>
-
-</figure>
-
-    </div>
-</div>
-
-<div class="caption">
-    Figure. Example output of package installation from subdirectory osx-64.
-</div>
-
-<h4 id="references">References</h4>
-<ul>
-    <li><a href="https://towardsdatascience.com/how-to-manage-conda-environments-on-an-apple-silicon-m1-mac-1e29cb3bad12">How to Manage Conda Environments on an Apple Silicon M1 Mac</a>.</li>
-    <li><a href="https://towardsdatascience.com/python-conda-environments-for-both-arm64-and-x86-64-on-m1-apple-silicon-147b943ffa55">Python Conda Environments for Both arm64 and x86_64 on M1 Apple Silicon</a>.</li>
-</ul>]]></content><author><name></name></author><category term="note-posts" /><category term="notes" /><summary type="html"><![CDATA[Arm64 and x86 Python environments management]]></summary></entry><entry><title type="html">Stable diffusion</title><link href="http://localhost:4000/blog/2023/stable-diffusion-notes/" rel="alternate" type="text/html" title="Stable diffusion" /><published>2023-05-18T02:30:00-07:00</published><updated>2023-05-18T02:30:00-07:00</updated><id>http://localhost:4000/blog/2023/stable-diffusion-notes</id><content type="html" xml:base="http://localhost:4000/blog/2023/stable-diffusion-notes/"><![CDATA[<h4 id="stable-diffusion-explained">Stable diffusion explained</h4>
-
-<p><a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/">What are diffusion models</a>.</p>
-
-<p><a href="https://yang-song.net/blog/2021/score/">
-Generative Modeling by Estimating Gradients of the Data Distribution</a>.</p>
-
-<div class="row mt-3">
-    <div class="col-sm mt-3 mt-md-0">
-        <figure>
-
-  <picture>
-    
-    <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/assets/img/posts/unet_architecture-480.webp" />
-    <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/assets/img/posts/unet_architecture-800.webp" />
-    <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/assets/img/posts/unet_architecture-1400.webp" />
-    
-
-    <!-- Fallback to the original file -->
-    <img src="/assets/img/posts/unet_architecture.jpeg" class="img-fluid rounded z-depth-1" width="auto" height="auto" data-zoomable="" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
-
-  </picture>
-
-</figure>
-
-    </div>
-</div>
-
-<div class="caption">
-    Figure. UNet architecutre with residual connections.
-</div>
-
-<h4 id="stable-diffusion-practice">Stable diffusion practice</h4>
-<p>The <a href="https://huggingface.co/blog/annotated-diffusion"> Annotated Diffusion Model </a>.</p>
-
-<p>Github of <a href="https://github.com/lucidrains/denoising-diffusion-pytorch"> pytorch denoising diffusion </a> by <a href="https://github.com/lucidrains?tab=repositories">lucidrains</a>.</p>
-
-<p>OpenAI <a href="https://github.com/openai/guided-diffusion">guided-diffusion</a>.</p>
-
-<h4 id="references">References</h4>
-
-<ul>
-    <li>Concept of variational lower bound (also called ELBO) in <a href="https://arxiv.org/abs/1312.6114">variational auto-encoder (VAE)</a> introduced by Kingma et al., 2013.</li>
-    <li><a href="https://arxiv.org/abs/1505.04597">U-Net</a> introduced by Ronneberger et al., 2015.</li>
-    <li><a href="http://karpathy.github.io/2019/04/25/recipe/">A Recipe for Training Neural Networks</a></li>
-</ul>]]></content><author><name></name></author><category term="note-posts" /><category term="notes" /><category term="math" /><summary type="html"><![CDATA[Stable diffusion explained]]></summary></entry><entry><title type="html">Transformer</title><link href="http://localhost:4000/blog/2023/transformer-notes/" rel="alternate" type="text/html" title="Transformer" /><published>2023-05-15T07:28:00-07:00</published><updated>2023-05-15T07:28:00-07:00</updated><id>http://localhost:4000/blog/2023/transformer-notes</id><content type="html" xml:base="http://localhost:4000/blog/2023/transformer-notes/"><![CDATA[<h4 id="transformer-explained">Transformer explained</h4>
-<p>Check out the great illustration of  <a href="https://jalammar.github.io/illustrated-transformer/">transformer</a>.</p>
-
-<h4 id="cost-formulation-background">Cost formulation background</h4>
-<ul>
-    <li><a href="https://colah.github.io/posts/2015-09-Visual-Information/">Entropy</a>: coding length as a system intrinsic. $$ H(p)=\sum_{x}p(x)\log_2(\frac{1}{p(x)}) $$</li>
-    <li><p><a href="https://colah.github.io/posts/2015-09-Visual-Information/">Cross entropy</a>: coding length for a message (sample) p as if it is drawn from distribution q. $$H_q(p)=\sum_{x}p(x)\log_2(\frac{1}{q(x)})$$</p></li>
-    <li><a href="https://www.countbayesie.com/blog/2017/5/9/kullback-leibler-divergence-explained">Lullback-Lerbler divergence</a>: coding efficiency difference based on true message (sample) distribution p (Zero-rebased cross entropy). $$D_q(p)=H_q(p) - H(p) = \sum_{x}p(x)\log_2(\frac{p(x)}{q(x)})$$</li>
-</ul>
-
-<hr />
-
-<h4 id="transformer-practice">Transformer practice</h4>
-<p>Pytorch version <a href="http://nlp.seas.harvard.edu/annotated-transformer/">The Annotated Transformer</a>.</p>
-
-<p>Open <a href="https://colab.research.google.com/github/lin-ht/annotated-transformer/blob/master/AnnotatedTransformer.ipynb"> my forked playground in colab.</a></p>
-
-<p>Github of <a href="https://github.com/lucidrains/x-transformers"> x-transformers </a> by <a href="https://github.com/lucidrains?tab=repositories">lucidrains</a>.</p>]]></content><author><name></name></author><category term="note-posts" /><category term="notes" /><category term="math" /><summary type="html"><![CDATA[Transformer explained]]></summary></entry></feed>
+<p><a href="https://developer.nvidia.com/nsight-systems">NVIDIA Nsight™ Systems</a> is a system-wide performance analysis tool designed to visualize an application’s algorithms, help you identify the largest opportunities to optimize, and tune to scale efficiently across any quantity or size of CPUs and GPUs, from large servers to our smallest system on a chip (SoC).</p>]]></content><author><name></name></author><category term="note-posts" /><category term="notes" /><summary type="html"><![CDATA[frameworks and tools]]></summary></entry></feed>

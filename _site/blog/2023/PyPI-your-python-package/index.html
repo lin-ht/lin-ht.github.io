@@ -139,12 +139,69 @@
   <article class="post-content">
 <!--      -->
     <div id="markdown-content">
-      <h4 id="pypi-your-own-python-packages">PyPI your own python packages</h4>
+      <h4 id="how-to-install-download-and-build-python-wheels">How to install, download and build Python wheels</h4>
 
 <p>Python Packaging Index (PyPI) is a repository containing several hundred thousand packages.</p>
 
+<h5 id="install-package">Install package</h5>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">#</span><span class="w"> </span>Install a PyPl indexed package optionally with version v.v
+<span class="gp">pip install &lt;packagename&gt;</span><span class="o">[==</span>v.v]
+<span class="go">
+</span><span class="gp">#</span><span class="w"> </span><span class="nb">test install </span>with dry-run
+<span class="gp">pip install --dry-run &lt;packagename&gt;</span><span class="w">
+</span><span class="go">
+</span><span class="gp">#</span><span class="w"> </span>Upgrade an installed package
+<span class="gp">pip install --upgrade &lt;packagename&gt;</span><span class="w">
+</span><span class="go">
+</span><span class="gp">#</span><span class="w"> </span>Uninstall a package
+<span class="gp">pip uninstall &lt;packagename&gt;</span><span class="w">
+</span><span class="go">
+</span><span class="gp">#</span><span class="w"> </span>Install a package from a repository other than PyPI, such as Github
+<span class="gp">pip install -e git+&lt;https://github.com/myrepo.git#</span><span class="nv">egg</span><span class="o">=</span>packagename&gt;
+<span class="go">
+</span><span class="gp">#</span><span class="w"> </span>Install a package from specific index url
+<span class="gp">pip install &lt;packagename&gt;</span><span class="w"> </span><span class="nt">--index-url</span> https://some.index.url
+<span class="go">
+</span><span class="gp">#</span><span class="w"> </span>Install a package with extra index url
+<span class="gp">pip install &lt;packagename&gt;</span><span class="w"> </span><span class="nt">--extra-index-url</span> https://some.extra.index.url
+<span class="go">
+</span><span class="gp">#</span><span class="w"> </span>Install package from <span class="nb">local</span> .whl file
+<span class="go">pip install /path/to/some/package.whl</span></code></pre></figure>
+
+<h5 id="build-your-own-whl-file">Build your own .whl file</h5>
+
+<h6 id="pure-python-package">Pure python package</h6>
+
+<p>When it comes to Python packaging, if your package consists purely of Python code, you can do the following:</p>
+
+<p><b>1.</b> Make sure Wheel and the latest version of setuptools is installed on your system by running:</p>
+
+<p><code class="language-plaintext highlighter-rouge">python -m pip install -U wheel setuptools</code></p>
+
+<p><b>2.</b> Then run:</p>
+
+<p><code class="language-plaintext highlighter-rouge">python setup.py sdist bdist_wheel</code></p>
+
+<p>This will create both a source distribution (sdist) and a wheel file (bdist_wheel) , along with all of its dependencies. You can now upload your built distributions to PyPI. For more information, see <a href="https://hynek.me/articles/sharing-your-labor-of-love-pypi-quick-and-dirty/" rel="external nofollow noopener" target="_blank">Sharing Your Labor of Love: PyPI Quick and Dirty</a>.</p>
+
+<h6 id="python-package-with-c-libraries">Python package with C libraries</h6>
+
+<p>If your package has linked C libraries, you’ll need to create specific build environments, and then compile your package separately for each target operating system you want to support.</p>
+
+<p><b>1.</b> Wheel naming</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{dist}-{version}(-{build})?-{python.version}-{os_platform}.whl
+# deployment with Python 2.7 on 32 bit Windows example:
+# PyYAML-5.3.1-cp27-cp27m-win32.whl
+</code></pre></div></div>
+
+<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">#</span><span class="w"> </span>Install a PyPl indexed package optionally with version v.v
+<span class="gp">pip install &lt;packagename&gt;</span><span class="o">[==</span>v.v]</code></pre></figure>
+
 <h4 id="references">References</h4>
 <ul>
+    <li>
+<a href="https://www.activestate.com/resources/quick-reads/python-install-wheel/" rel="external nofollow noopener" target="_blank">How to install, download and build Python wheels</a>.</li>
     <li>
 <a href="https://realpython.com/pypi-publish-python-package/#configuring-your-package" rel="external nofollow noopener" target="_blank">How to Publish an Open-Source Python Package to PyPI</a>.</li>
     <li><a href="https://realpython.com/python-wheels/" rel="external nofollow noopener" target="_blank">What Are Python Wheels and Why Should You Care?</a></li>
@@ -173,25 +230,25 @@
   
 
   <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/pytorch-coding/">Pytorch coding</a>
+  </li>
+
+  
+
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/cuda-coding/">Cuda coding</a>
+  </li>
+
+  
+
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/cvcuda-installation/">CVCuda installation</a>
+  </li>
+
+  
+
+  <li class="my-2">
     <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/conda-tutorial/">Conda Tutorial</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/tritonserver/">Triton server tutorial</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/docker/">What is Docker</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/shell-programming/">Linux Shell Scripting</a>
   </li>
 
 </div>

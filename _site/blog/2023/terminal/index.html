@@ -145,20 +145,20 @@
 
 <p><a href="https://linuxize.com/post/chmod-recursive/" rel="external nofollow noopener" target="_blank">Change permisson</a>:</p>
 
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">#</span><span class="w"> </span>Make the script files executable
-<span class="go">chmod a+x scripts/*.sh
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># Make the script files executable</span>
+<span class="nb">chmod </span>a+x scripts/<span class="k">*</span>.sh
 
-</span><span class="gp">#</span><span class="w"> </span>recursively option <span class="nt">-R</span> or <span class="nt">--recursive</span>
-<span class="go">chmod -R 755 /path/to/directory
+<span class="c"># recursively option -R or --recursive</span>
+<span class="nb">chmod</span> <span class="nt">-R</span> 755 /path/to/directory
 
-</span><span class="gp">#</span><span class="w"> </span>To change all the directories to 755 <span class="o">(</span>drwxr-xr-x<span class="o">)</span>:
-<span class="gp">find /path/to/directory -type d -exec chmod 755 {} \;</span><span class="w">
-</span><span class="gp">#</span><span class="w"> </span>To change all the files to 644 <span class="o">(</span><span class="nt">-rw-r--r--</span><span class="o">)</span>:
-<span class="gp">find /path/to/directory -type f -exec chmod 644 {} \;</span><span class="w">
-</span><span class="go">
-</span><span class="gp">#</span><span class="w"> </span>Use the xargs <span class="nb">command </span>to pass multiple entries at once
-<span class="go">sudo find /path/to/directory -type d -print0 | xargs -0 sudo chmod 755
-sudo find /path/to/directory -type f -print0 | xargs -0 sudo chmod 644</span></code></pre></figure>
+<span class="c"># To change all the directories to 755 (drwxr-xr-x):</span>
+find /path/to/directory <span class="nt">-type</span> d <span class="nt">-exec</span> <span class="nb">chmod </span>755 <span class="o">{}</span> <span class="se">\;</span>
+<span class="c"># To change all the files to 644 (-rw-r--r--):</span>
+find /path/to/directory <span class="nt">-type</span> f <span class="nt">-exec</span> <span class="nb">chmod </span>644 <span class="o">{}</span> <span class="se">\;</span>
+
+<span class="c"># Use the xargs command to pass multiple entries at once</span>
+<span class="nb">sudo </span>find /path/to/directory <span class="nt">-type</span> d <span class="nt">-print0</span> | xargs <span class="nt">-0</span> <span class="nb">sudo chmod </span>755
+<span class="nb">sudo </span>find /path/to/directory <span class="nt">-type</span> f <span class="nt">-print0</span> | xargs <span class="nt">-0</span> <span class="nb">sudo chmod </span>644</code></pre></figure>
 
 <p><code class="language-plaintext highlighter-rouge">chmod 755 {}</code> specifies the command that will be executed by find for each directory</p>
 
@@ -172,32 +172,52 @@ sudo find /path/to/directory -type f -print0 | xargs -0 sudo chmod 644</span></c
 
 <p><a href="https://www.howtogeek.com/444596/how-to-change-the-default-shell-to-bash-in-macos-catalina/" rel="external nofollow noopener" target="_blank">Change default shell on macOS</a>:</p>
 
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">cat /etc/shells #</span><span class="w"> </span>List the included shells on the system
-<span class="gp">chsh -s /bin/bash #</span><span class="w"> </span>Change default terminal to bash
-<span class="gp">chsh -s /bin/zsh #</span><span class="w"> </span>Change default terminal to zsh</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">cat</span> /etc/shells <span class="c"># List the included shells on the system</span>
+chsh <span class="nt">-s</span> /bin/bash <span class="c"># Change default terminal to bash</span>
+chsh <span class="nt">-s</span> /bin/zsh <span class="c"># Change default terminal to zsh</span></code></pre></figure>
 
 <p><a href="https://linuxize.com/post/how-get-size-of-file-directory-linux/" rel="external nofollow noopener" target="_blank">Query the size (disk usage) of a directory</a>:</p>
 
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">du -sh [--apparent-size] &lt;dir&gt;</span><span class="w"> </span><span class="c"># the total (-s) size of the directory in (-h) human readable format</span>
-<span class="gp">du -h --max-depth=1 &lt;dir&gt;</span><span class="w"> </span><span class="c"># disk usage of the first-level subdirectories</span>
-<span class="gp">sudo du -h &lt;dir&gt;</span><span class="w"> </span>| <span class="nb">sort</span> <span class="nt">-rh</span> | <span class="nb">head</span> <span class="nt">-5</span> <span class="c"># print the 5 largest directories within the dir directory</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">du</span> <span class="nt">-sh</span> <span class="o">[</span><span class="nt">--apparent-size</span><span class="o">]</span> &lt;<span class="nb">dir</span><span class="o">&gt;</span> <span class="c"># the total (-s) size of the directory in (-h) human readable format</span>
+<span class="nb">du</span> <span class="nt">-h</span> <span class="nt">--max-depth</span><span class="o">=</span>1 &lt;<span class="nb">dir</span><span class="o">&gt;</span> <span class="c"># disk usage of the first-level subdirectories</span>
+<span class="nb">sudo du</span> <span class="nt">-h</span> &lt;<span class="nb">dir</span><span class="o">&gt;</span> | <span class="nb">sort</span> <span class="nt">-rh</span> | <span class="nb">head</span> <span class="nt">-5</span> <span class="c"># print the 5 largest directories within the dir directory</span></code></pre></figure>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">df</span> <span class="nt">-h</span>
+</code></pre></div></div>
+
+<p><a href="#">Zip</a> and <a href="https://linuxize.com/post/how-to-extract-unzip-tar-gz-file" rel="external nofollow noopener" target="_blank">unzip</a>:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># List the content</span>
+<span class="nb">tar</span> <span class="nt">-tf</span> archive.tar.gz
+
+<span class="c"># Extract the content</span>
+<span class="nb">tar</span> <span class="nt">-xvf</span> archive.tar.gz <span class="o">[</span><span class="nt">-C</span> /path/of/destination]
+<span class="c"># option -x: extraction</span>
+<span class="c">#        -v: verbose</span>
+
+<span class="c"># Extract certain files or diretories</span>
+<span class="nb">tar</span> <span class="nt">-xf</span> archive.tar.gz /path/to/file1 /path/to/file2
+<span class="nb">tar</span> <span class="nt">-xf</span> archive.tar.gz dir1 dir2
+
+<span class="c"># Extract files of certian pattern</span>
+<span class="nb">tar</span> <span class="nt">-xf</span> archive.tar.gz <span class="nt">--wildcards</span> <span class="s1">'*.jpg'</span>
+</code></pre></div></div>
 
 <p><a href="#">Pattern search</a>:</p>
 
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">grep -rnw '/path/to/somewhere/' -e "pattern"
-grep --include=\*.{c,h} -rnw '/path/to/somewhere/' -e "pattern"
-grep --exclude=\*.o -rnw '/path/to/somewhere/' -e "pattern"
-grep --exclude-dir={dir1,dir2,*.dst} -rnw '/path/to/search/' -e "pattern"
-</span><span class="gp">#</span><span class="w"> </span>output the line number only
-<span class="go">grep -n '/path/to/somefile' -e "pattern" | cut -f1 -d:
-</span><span class="gp">#</span><span class="w"> </span>output the two words separated by the delimiter :
-<span class="go">grep -n '/path/to/somefile' -e "pattern" | cut -f1,2 -d:
-</span><span class="gp">#</span><span class="w"> </span>loop over the returned result
-<span class="gp">for i in $</span><span class="o">(</span><span class="nb">grep</span> <span class="nt">-n</span> <span class="s1">'/path/to/somefile'</span> <span class="nt">-e</span> <span class="s2">"pattern"</span> | <span class="nb">cut</span> <span class="nt">-f1</span> <span class="nt">-d</span>:<span class="o">)</span><span class="p">;</span> <span class="k">do</span> 
-<span class="gp">    echo "$</span>i<span class="s2">"
-</span><span class="go">done
-</span><span class="gp">#</span><span class="w"> </span><span class="k">return </span>only the first result
-<span class="go">grep -n '/path/to/somefile' -e "pattern" | head -1</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">grep</span> <span class="nt">-rnw</span> <span class="s1">'/path/to/somewhere/'</span> <span class="nt">-e</span> <span class="s2">"pattern"</span>
+<span class="nb">grep</span> <span class="nt">--include</span><span class="o">=</span><span class="se">\*</span>.<span class="o">{</span>c,h<span class="o">}</span> <span class="nt">-rnw</span> <span class="s1">'/path/to/somewhere/'</span> <span class="nt">-e</span> <span class="s2">"pattern"</span>
+<span class="nb">grep</span> <span class="nt">--exclude</span><span class="o">=</span><span class="se">\*</span>.o <span class="nt">-rnw</span> <span class="s1">'/path/to/somewhere/'</span> <span class="nt">-e</span> <span class="s2">"pattern"</span>
+<span class="nb">grep</span> <span class="nt">--exclude-dir</span><span class="o">={</span>dir1,dir2,<span class="k">*</span>.dst<span class="o">}</span> <span class="nt">-rnw</span> <span class="s1">'/path/to/search/'</span> <span class="nt">-e</span> <span class="s2">"pattern"</span>
+<span class="c"># output the line number only</span>
+<span class="nb">grep</span> <span class="nt">-n</span> <span class="s1">'/path/to/somefile'</span> <span class="nt">-e</span> <span class="s2">"pattern"</span> | <span class="nb">cut</span> <span class="nt">-f1</span> <span class="nt">-d</span>:
+<span class="c"># output the two words separated by the delimiter :</span>
+<span class="nb">grep</span> <span class="nt">-n</span> <span class="s1">'/path/to/somefile'</span> <span class="nt">-e</span> <span class="s2">"pattern"</span> | <span class="nb">cut</span> <span class="nt">-f1</span>,2 <span class="nt">-d</span>:
+<span class="c"># loop over the returned result</span>
+<span class="k">for </span>i <span class="k">in</span> <span class="si">$(</span><span class="nb">grep</span> <span class="nt">-n</span> <span class="s1">'/path/to/somefile'</span> <span class="nt">-e</span> <span class="s2">"pattern"</span> | <span class="nb">cut</span> <span class="nt">-f1</span> <span class="nt">-d</span>:<span class="si">)</span><span class="p">;</span> <span class="k">do 
+    </span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$i</span><span class="s2">"</span>
+<span class="k">done</span>
+<span class="c"># return only the first result</span>
+<span class="nb">grep</span> <span class="nt">-n</span> <span class="s1">'/path/to/somefile'</span> <span class="nt">-e</span> <span class="s2">"pattern"</span> | <span class="nb">head</span> <span class="nt">-1</span></code></pre></figure>
 
 <table>
   <thead>
@@ -234,48 +254,73 @@ grep --exclude-dir={dir1,dir2,*.dst} -rnw '/path/to/search/' -e "pattern"
 
 <p><a href="https://www.cyberciti.biz/faq/how-to-use-sed-to-find-and-replace-text-in-files-in-linux-unix-shell/" rel="external nofollow noopener" target="_blank">Sed command for replacing text or data</a> and <a href="https://stackoverflow.com/questions/11145270/how-to-replace-an-entire-line-in-a-text-file-by-line-number" rel="external nofollow noopener" target="_blank"> entire line replacement </a></p>
 
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">find="foo"
-replace="bar"
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">find</span><span class="o">=</span><span class="s2">"foo"</span>
+<span class="nv">replace</span><span class="o">=</span><span class="s2">"bar"</span>
 
-</span><span class="gp">#</span><span class="w"> </span>find <span class="nv">$find</span> and replace with <span class="nv">$replace</span> using <span class="nb">sed</span> 
-<span class="gp">#</span><span class="w"> </span>ending <span class="s2">"/g"</span> means globally replace all occurences
-<span class="gp">sed -i 's/$</span>find/<span class="nv">$replace</span>/g<span class="s1">' input.txt
-</span><span class="gp">#</span><span class="w"> </span><span class="s1">editing result saved to a new file
-</span><span class="gp">sed 's/$</span><span class="s1">find/$replace/g'</span> input.txt <span class="o">&gt;</span> output.txt
-<span class="go">
-</span><span class="gp">#</span><span class="w"> </span>ending <span class="s2">"I"</span> means <span class="k">case</span> insensitive search
-<span class="go">sed -i 's/word1/word2/gI' input
+<span class="c"># find $find and replace with $replace using sed </span>
+<span class="c"># ending "/g" means globally replace all occurences</span>
+<span class="nb">sed</span> <span class="nt">-i</span> <span class="s1">'s/$find/$replace/g'</span> input.txt
+<span class="c"># editing result saved to a new file</span>
+<span class="nb">sed</span> <span class="s1">'s/$find/$replace/g'</span> input.txt <span class="o">&gt;</span> output.txt
 
-</span><span class="gp">#</span><span class="w"> </span>you can change the delimiter to keep syntax simple
-<span class="go">sed -i 's+word1+word2+g' input
-sed -i 's_word1_word2_g' input
+<span class="c"># ending "I" means case insensitive search</span>
+<span class="nb">sed</span> <span class="nt">-i</span> <span class="s1">'s/word1/word2/gI'</span> input
 
-</span><span class="gp">#</span><span class="w"> </span>only find word1 and replace it with word2 <span class="k">if </span>line has a specific string such as FOO
-<span class="go">sed -i -e '/FOO/s/word1/word2/' input.txt
+<span class="c"># you can change the delimiter to keep syntax simple</span>
+<span class="nb">sed</span> <span class="nt">-i</span> <span class="s1">'s+word1+word2+g'</span> input
+<span class="nb">sed</span> <span class="nt">-i</span> <span class="s1">'s_word1_word2_g'</span> input
 
-</span><span class="gp">#</span><span class="w"> </span>replace entire line 7 by line number
-<span class="go">sed -i -e '7s/.*/line_replacement/' input.txt
-</span><span class="gp">#</span><span class="w"> </span><span class="nb">sed </span>uses symbol <span class="nv">$ </span>as the address of the last line
-<span class="gp">sed -i -e '$</span>s/.<span class="k">*</span>/line_replacement/<span class="s1">' input.txt</span></code></pre></figure>
+<span class="c"># only find word1 and replace it with word2 if line has a specific string such as FOO</span>
+<span class="nb">sed</span> <span class="nt">-i</span> <span class="nt">-e</span> <span class="s1">'/FOO/s/word1/word2/'</span> input.txt
+
+<span class="c"># replace entire line 7 by line number</span>
+<span class="nb">sed</span> <span class="nt">-i</span> <span class="nt">-e</span> <span class="s1">'7s/.*/line_replacement/'</span> input.txt
+<span class="c"># sed uses symbol $ as the address of the last line</span>
+<span class="nb">sed</span> <span class="nt">-i</span> <span class="nt">-e</span> <span class="s1">'$s/.*/line_replacement/'</span> input.txt
+
+<span class="c"># insert a new line at line 3</span>
+<span class="nb">sed</span> <span class="nt">-i</span> <span class="s2">"3inew line content"</span> input.txt
+<span class="c"># insert a new line at the line of the first matched pattern</span>
+<span class="nb">sed</span> <span class="nt">-i</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">grep</span> <span class="nt">-n</span> <span class="s1">'&lt;input-filepath&gt;'</span> <span class="nt">-e</span> <span class="s1">'pattern'</span> | <span class="nb">head</span> <span class="nt">-1</span> | <span class="nb">cut</span> <span class="nt">-f1</span> <span class="nt">-d</span>:<span class="si">)</span><span class="s2">inew line content"</span> input.txt</code></pre></figure>
+
+<p>Correct our md file:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># correct our md file</span>
+<span class="nb">sed</span> <span class="nt">-i</span> <span class="s1">'s/% highlight terminal %}/% highlight bash %}/'</span> <span class="s2">"*.md"</span></code></pre></figure>
+
+<h5 id="file-management">File management</h5>
+
+<p><a href="https://www.plesk.com/blog/various/find-files-in-linux-via-command-line/" rel="external nofollow noopener" target="_blank">How To Find a File In Linux From the Command Line</a></p>
+
+<p>Search for a file</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># find the files with the name_pattern in all the folders below your directory</span>
+find /your/directory <span class="nt">-name</span> &lt;name_pattern&gt; <span class="c"># *.jpg</span></code></pre></figure>
+
+<h5 id="data-management">Data management</h5>
+<p>Copy the content of folder:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># "-a" reserves file attributes, "-r" for recursive copy</span>
+<span class="nb">cp</span> <span class="nt">-ar</span> /source/. /dest/</code></pre></figure>
 
 <h5 id="network-related">Network related</h5>
 <p><a href="https://stackoverflow.com/questions/12397175/how-do-i-close-an-open-port-from-the-terminal-on-the-mac" rel="external nofollow noopener" target="_blank">Close an open port</a>
 <a href="https://www.cyberciti.biz/faq/unix-linux-check-if-port-is-in-use-command/" rel="external nofollow noopener" target="_blank">How to check if port is in use on Linux or Unix</a></p>
 
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">#</span><span class="w"> </span>List the user processes of the port
-<span class="go">sudo lsof -i -P -n | grep LISTEN
-</span><span class="gp">sudo lsof -i :&lt;port-number&gt;</span><span class="w">
-</span><span class="go">
-sudo netstat -tulpn | grep LISTEN
-sudo ss -tulpn | grep LISTEN
-sudo nmap -sTU -O IP-address-Here
-</span><span class="gp">#</span><span class="w"> </span>Kill the process that occopying the port with its PID
-<span class="gp">sudo kill -9 &lt;PID-occupying-the-port&gt;</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># List the user processes of the port</span>
+<span class="nb">sudo </span>lsof <span class="nt">-i</span> <span class="nt">-P</span> <span class="nt">-n</span> | <span class="nb">grep </span>LISTEN
+<span class="nb">sudo </span>lsof <span class="nt">-i</span> :&lt;port-number&gt;
+
+<span class="nb">sudo </span>netstat <span class="nt">-tulpn</span> | <span class="nb">grep </span>LISTEN
+<span class="nb">sudo </span>ss <span class="nt">-tulpn</span> | <span class="nb">grep </span>LISTEN
+<span class="nb">sudo </span>nmap <span class="nt">-sTU</span> <span class="nt">-O</span> IP-address-Here
+<span class="c"># Kill the process that occopying the port with its PID</span>
+<span class="nb">sudo kill</span> <span class="nt">-9</span> &lt;PID-occupying-the-port&gt;</code></pre></figure>
 
 <p>Curl does not follow HTTP redirections by default, you need to tell curl to do so using the <code class="language-plaintext highlighter-rouge">-L/--location</code> option:</p>
 
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">#</span><span class="w"> </span>Download file using curl
-<span class="go">curl -L http://some.url --output some.file</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># Download file using curl</span>
+curl <span class="nt">-L</span> http://some.url <span class="nt">--output</span> some.file</code></pre></figure>
 
 <h4 id="command-cheatsheet">Command cheatsheet</h4>
 <h5 id="shortcuts">SHORTCUTS</h5>
@@ -540,7 +585,7 @@ sudo nmap -sTU -O IP-address-Here
   </tbody>
 </table>
 
-<h5 id="file-management">FILE MANAGEMENT</h5>
+<h5 id="file-management-1">FILE MANAGEMENT</h5>
 
 <table>
   <thead>
@@ -606,8 +651,8 @@ sudo nmap -sTU -O IP-address-Here
       <td>Copy file to directory</td>
     </tr>
     <tr>
-      <td>mv [file] [new filename]</td>
-      <td>Move/Rename, e.g. <code class="language-plaintext highlighter-rouge">mv file1.ad /tmp</code>
+      <td>mv -f [file] [new filename]</td>
+      <td>Move/Rename, force overwrite with -f. E.g. <code class="language-plaintext highlighter-rouge">mv file1.ad /tmp</code>
 </td>
     </tr>
     <tr>
@@ -780,25 +825,25 @@ sudo nmap -sTU -O IP-address-Here
   
 
   <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/pytorch-coding/">Pytorch coding</a>
+  </li>
+
+  
+
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/cuda-coding/">Cuda coding</a>
+  </li>
+
+  
+
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/cvcuda-installation/">CVCuda installation</a>
+  </li>
+
+  
+
+  <li class="my-2">
     <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/conda-tutorial/">Conda Tutorial</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/PyPI-your-python-package/">PyPI your python package</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/tritonserver/">Triton server tutorial</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/docker/">What is Docker</a>
   </li>
 
 </div>

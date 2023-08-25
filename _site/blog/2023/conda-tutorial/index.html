@@ -141,10 +141,38 @@
     <div id="markdown-content">
       <h4 id="python-version-management-tool--conda">Python version management tool – conda</h4>
 
+<h5 id="adding-a-python-package">Adding a python package</h5>
+<p>The default installation path should be <code class="language-plaintext highlighter-rouge">site-packages</code> of <code class="language-plaintext highlighter-rouge">python</code> folder. However, if you’d like to add a python package with customized installation path to the conda env: use command <a href="https://docs.conda.io/projects/conda-build/en/latest/resources/commands/conda-develop.html" rel="external nofollow noopener" target="_blank">conda-develop</a>.</p>
+
+<h5 id="adding-shared-libraries">Adding shared libraries</h5>
+<p>Check <a href="https://docs.conda.io/projects/conda-build/en/latest/resources/use-shared-libraries.html" rel="external nofollow noopener" target="_blank">here</a> for conda shared libraries.</p>
+
+<p>Conda depends primarily on searching directories for matching filenames. It does not currently use side-by-side assemblies.</p>
+
+<p>For now, most DLLs are installed into <code class="language-plaintext highlighter-rouge">(install prefix)\\Library\\bin</code> –Q:what is this path?. This path is added to <code class="language-plaintext highlighter-rouge">os.environ["PATH"]</code> for all Python processes, so that DLLs can be located, regardless of the value of the system’s PATH environment variable.</p>
+
+<h5 id="execution-environment-var-setting-in-conda-env">Execution environment var setting in conda env</h5>
+
+<p>Reference <a href="https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#macos-and-linux" rel="external nofollow noopener" target="_blank">here</a>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> <span class="nv">$CONDA_PREFIX</span>
+
+<span class="c"># edit the var </span>
+vim etc/conda/activate.d/env_vars.sh
+<span class="c"># example content: export MY_KEY='secret-key-value'</span>
+vim etc/conda/deactivate.d/env_vars.sh
+<span class="c"># example content: unset MY_KEY</span>
+
+<span class="c"># Check by the following</span>
+conda activate analytics
+</code></pre></div></div>
+
 <h4 id="references">References</h4>
 <ul>
     <li>
 <a href="https://sachinjose31.medium.com/creating-an-environment-in-anaconda-through-a-yml-file-7e5deeb7676d" rel="external nofollow noopener" target="_blank">Creating an environment in anaconda through a yml file</a>.</li>
+    <li>
+<a href="https://conda.github.io/conda-pack/" rel="external nofollow noopener" target="_blank">Conda pack</a>.</li>
 </ul>
 
     </div>
@@ -170,25 +198,25 @@
   
 
   <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/pytorch-coding/">Pytorch coding</a>
+  </li>
+
+  
+
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/cuda-coding/">Cuda coding</a>
+  </li>
+
+  
+
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/cvcuda-installation/">CVCuda installation</a>
+  </li>
+
+  
+
+  <li class="my-2">
     <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/PyPI-your-python-package/">PyPI your python package</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/tritonserver/">Triton server tutorial</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/docker/">What is Docker</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/shell-programming/">Linux Shell Scripting</a>
   </li>
 
 </div>
