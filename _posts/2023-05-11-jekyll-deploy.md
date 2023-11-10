@@ -8,7 +8,7 @@ categories: note-posts
 ---
 #### Installation cheatsheet
 Install chruby:
-{% highlight bash %}
+```bash
 which ruby # Old ruby
 
 brew install chruby
@@ -26,46 +26,46 @@ brew services start openssl-osx-ca
 
 # Caveat: restart raggi/ale/openssl-osx-ca after an upgrade
 brew services restart raggi/ale/openssl-osx-ca
-{% endhighlight %}
+```
 
 Install Ruby:
-{% highlight bash %}
+```bash
 curl --remote-name https://cache.ruby-lang.org/pub/ruby/3.2/ruby-3.2.0.tar.xz
 tar -xJvf ruby-3.2.0.tar.xz
 cd ruby-3.2.0
 ./configure --prefix="$HOME/.rubies/ruby-3.2.0" --with-opt-dir="$(brew --prefix openssl):$(brew --prefix readline):$(brew --prefix libyaml):$(brew --prefix gdbm):$(brew --prefix libffi)"
 make -j4
 make install
-{% endhighlight %}
+```
 
 Switch Ruby:
-{% highlight bash %}
+```bash
 chruby # List ruby
 chruby 3.2.0 # Select ruby
-{% endhighlight %}
+```
 
 Update gem:
-{% highlight bash %}
+```bash
 gem update --system 3.4.13
-{% endhighlight %}
+```
 
 Install Imagemagick:
-{% highlight bash %}
+```bash
 brew install imagemagick
-{% endhighlight %}
+```
 
 Configure:
-{% highlight bash %}
+```bash
 # To solve openssl ssl error:
 export SSL_CERT_DIR=/Users/halin/mambaforge/ssl
 export SSL_CERT_FILE=/Users/halin/mambaforge/ssl/cacert.pem
 
 # Set repository
 export PAGES_REPO_NWO="lin-ht/lin-ht.github.io"
-{% endhighlight %}
+```
 
 Personal github page set up:
-{% highlight bash %}
+```bash
 cd <path-to-the-repo-lin-ht.github.io>
 
 # deploy the page
@@ -74,7 +74,7 @@ bin/deploy --user
 # start local server
 bundle install
 bundle exec jekyll serve
-{% endhighlight %}
+```
 
 To resolve <a href="">baseurl error while deployed on github</a>, use empty string `baseurl: ''` in `_config.yml`.
 
@@ -82,7 +82,7 @@ To resolve <a href="">baseurl error while deployed on github</a>, use empty stri
 #### New terminal configuration cheatsheet
 
 When open a new terminal, remember to chruby:
-{% highlight bash %}
+```bash
 chruby # List ruby
 chruby 3.2.0 # Switch ruby
 ruby -v # check the current ruby version
@@ -93,28 +93,28 @@ export SSL_CERT_FILE=/Users/halin/mambaforge/ssl/cacert.pem
 export PAGES_REPO_NWO="lin-ht/lin-ht.github.io"
 
 bundle exec jekyll serve
-{% endhighlight %}
+```
 
 #### Command cheatsheet
 
-{% highlight bash %}
+```bash
 git diff
 git add --all 
 git commit -m "Post update" 
 git push -u origin customized 
 bin/deploy --user
 bundle exec jekyll serve --lsi
-{% endhighlight %}
+```
 
 #### git commands
 
-{% highlight bash %}
+```bash
 git branch # List local branches 
 git branch -r # List remote branches 
 git branch -a # List local and remote branches
 
 git checkout my-branch-name
-{% endhighlight %}
+```
 
 
 #### References
