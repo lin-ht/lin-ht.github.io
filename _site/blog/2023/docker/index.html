@@ -155,7 +155,7 @@ CMD sh <span class="nt">-c</span> <span class="s2">"curl -Lk </span><span class=
 
 <h5 id="docker-image-management">Docker image management:</h5>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Build a docker image from a Dockerfile</span>
-docker build ./ <span class="nt">-t</span> &lt;image-name&gt;:&lt;version&gt;
+docker build ./ <span class="nt">-t</span> &lt;image-name&gt;:&lt;version&gt; <span class="o">[</span><span class="nt">-f</span> &lt;path/to/the/Dockerfile&gt;]
 <span class="c"># option -t sets the name tag to an image</span>
 
 <span class="c"># check docker image list</span>
@@ -196,6 +196,9 @@ docker <span class="nb">rm</span> &lt;container-name&gt;
 <span class="c"># remove all the containers</span>
 docker <span class="nb">rm</span> <span class="nt">-f</span> <span class="si">$(</span>docker ps <span class="nt">-aq</span><span class="si">)</span>
 <span class="c"># option -f force to stop and remove the container</span>
+
+<span class="c"># inspect docker container settings</span>
+docker inspect &lt;container-name&gt;
 </code></pre></div></div>
 
 <h5 id="additional-execution-on-a-running-docker">Additional execution on a running Docker</h5>
@@ -241,6 +244,12 @@ docker <span class="nb">exec</span> <span class="nt">-it</span> mycontainer sh
   
 
   <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/terminal-debug/">Terminal debugging</a>
+  </li>
+
+  
+
+  <li class="my-2">
     <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/pytorch-coding/">Pytorch coding</a>
   </li>
 
@@ -254,12 +263,6 @@ docker <span class="nb">exec</span> <span class="nt">-it</span> mycontainer sh
 
   <li class="my-2">
     <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/cvcuda-installation/">CVCuda installation</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/conda-tutorial/">Conda Tutorial</a>
   </li>
 
 </div>

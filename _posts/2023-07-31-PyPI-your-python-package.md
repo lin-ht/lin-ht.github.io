@@ -36,6 +36,10 @@ pip install <packagename> --extra-index-url https://some.extra.index.url
 
 # Install package from local .whl file
 pip install /path/to/some/package.whl
+
+pip install --find-links /path/to/the/wheel/file/ <package-name>
+
+pip wheel [--no-deps] -w /path/to/the/wheel/files/
 {% endhighlight %}
 
 
@@ -59,22 +63,100 @@ This will create both a source distribution (sdist) and a wheel file (bdist_whee
 
 If your package has linked C libraries, you’ll need to create specific build environments, and then compile your package separately for each target operating system you want to support. 
 
-<b>1.</b> Wheel naming
+An example of wheel building:
+```bash
+# file structure:
+setup.py
+src/
+    mypkg/
+        __init__.py
+        module.py
+        data/
+            tables.dat
+            spoons.dat
+            forks.dat 
+```
+Content of `setup.py`:
+
+```python
+from setuptools import setup
+
+setup(name='foo',
+      version='1.0',
+      description='Python Distribution Example',
+      author='lin',
+      packages=['mypkg'],
+      package_dir={'mypkg': 'src/mypkg'},
+      package_data={'mypkg': ['data/*.dat']},
+      )
+```
+
+Another `setup.py` for importing prebuilt external lib dependencies through a dummy package:
+```bash
+# file structure:
+setup.py
+cvcuda_lib/
+    libcvcuda.so.0.3.1
+    libcvcuda.so.0
+    libcvcuda.so
+    libnvcv_types.so.0.3.1
+    libnvcv_types.so.0
+    libnvcv_types.so
+    cvcuda.cpython-38-x86_64-linux-gnu.so
+    nvcv.cpython-38-x86_64-linux-gnu.so
+```
+
+```python
+from setuptools import setup
+
+setup(
+    name='cvcuda_import',
+    version='0.3.1',
+    description='proxy wheel to bring in cvcuda Library',
+    data_files=[('lib', ['cvcuda_lib/libcvcuda.so.0.3.1',
+                         'cvcuda_lib/libcvcuda.so.0',
+                         'cvcuda_lib/libcvcuda.so',
+                         'cvcuda_lib/libnvcv_types.so.0.3.1',
+                         'cvcuda_lib/libnvcv_types.so.0',
+                         'cvcuda_lib/libnvcv_types.so']),
+                ('lib/python3.8/site-packages',['cvcuda_lib/cvcuda.cpython-38-x86_64-linux-gnu.so',
+                                                'cvcuda_lib/nvcv.cpython-38-x86_64-linux-gnu.so'])],
+
+    install_requires=["numpy"],
+ )
+```
+
+
+###### Upload your package to PyPI
+
+<b>1.</b> Wheel naming is automatically generated from the wheel building
 ```
 {dist}-{version}(-{build})?-{python.version}-{os_platform}.whl
 # deployment with Python 2.7 on 32 bit Windows example:
 # PyYAML-5.3.1-cp27-cp27m-win32.whl
 ```
 
-{% highlight terminal %}
-# Install a PyPl indexed package optionally with version v.v
-pip install <packagename>[==v.v]
+<b>2.</b> Test local installation
+```bash
+pip install --find-links /path/to/the/wheel/file/ <package-name>
+```
 
-{% endhighlight %}
+<b>3.</b> Upload to the index server
+
+Get the publishing tool <a href="https://pypi.org/project/twine/">twine</a>  for this:
+```bash
+pip install -U twine
+# Since both sdist and bdist_wheel output to dist/ by default, you can safely tell twine to upload everything under dist/ using a shell wildcard (dist/*).
+twine upload dist/* [--repository-url https://$USER:$API_TOKEN@url.to.the.artifactory]
+# if no url is provided, the default index server will be PyPI.
+```
+
 
 #### References
 <ul>
     <li><a href="https://www.activestate.com/resources/quick-reads/python-install-wheel/">How to install, download and build Python wheels</a>.</li>
     <li><a href="https://realpython.com/pypi-publish-python-package/#configuring-your-package">How to Publish an Open-Source Python Package to PyPI</a>.</li>
     <li><a href="https://realpython.com/python-wheels/">What Are Python Wheels and Why Should You Care?</a></li>
+    <li><a href="https://docs.python.org/3/distutils/setupscript.html#other-options">Writing the Setup Script</a> with <a href="https://docs.python.org/3/distutils/apiref.html">API</a></li>
+    <li><a href="https://packaging.python.org/en/latest/tutorials/packaging-projects/">Packaging Python Projects</a></li>
 </ul>

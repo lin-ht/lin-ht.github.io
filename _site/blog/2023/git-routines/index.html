@@ -144,17 +144,29 @@
       <h4 id="useful-git-commands">Useful git commands</h4>
 
 <h5 id="command-cheatsheet">Command cheatsheet</h5>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git status
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone <span class="nt">--recurse-submodules</span> <span class="nt">-j8</span> git@github.com:example/target-repo.git
+git status
 git diff
 git diff &lt;filename&gt;
 git add <span class="nt">--all</span> <span class="c"># Stage all files</span>
 git add &lt;filename&gt;	<span class="c"># Stage a file, ready to commit</span>
 git reset <span class="c"># Unstage all files</span>
 git reset &lt;filename&gt; <span class="c"># Unstage one file</span>
+git reset HEAD &lt;submodule-name&gt; <span class="c"># Reset the submodule head</span>
 git restore &lt;filename&gt; <span class="c"># Discard changes of the file</span>
 
 git commit <span class="nt">-m</span> <span class="s2">"Post update"</span> 
 git push <span class="nt">-u</span> origin &lt;your-branch&gt; 
+</code></pre></div></div>
+
+<p>Discard local changes and force to pull the remote branch:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Really the ideal way to do this is to not use pull at all, but instead fetch and reset:</span>
+git fetch origin &lt;master-branch&gt;
+<span class="c"># force the state of the working directory to a state matching that of a particular commit. </span>
+git reset <span class="nt">--hard</span> FETCH_HEAD
+<span class="c"># removes files which are not tracked by git</span>
+<span class="c"># the -df flags tell it to remove directories (-d) and actually do the removal (-f)</span>
+git clean <span class="nt">-df</span>
 </code></pre></div></div>
 
 <p><a href="#">Git Tools - Branch</a></p>
@@ -380,6 +392,12 @@ git config <span class="nt">--get</span> core.autocrlf <span class="c"># Check t
   
 
   <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/terminal-debug/">Terminal debugging</a>
+  </li>
+
+  
+
+  <li class="my-2">
     <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/pytorch-coding/">Pytorch coding</a>
   </li>
 
@@ -393,12 +411,6 @@ git config <span class="nt">--get</span> core.autocrlf <span class="c"># Check t
 
   <li class="my-2">
     <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/cvcuda-installation/">CVCuda installation</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/conda-tutorial/">Conda Tutorial</a>
   </li>
 
 </div>

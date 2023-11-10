@@ -10,6 +10,7 @@ categories: note-posts
 
 ##### Command cheatsheet
 ```bash
+git clone --recurse-submodules -j8 git@github.com:example/target-repo.git
 git status
 git diff
 git diff <filename>
@@ -17,10 +18,22 @@ git add --all # Stage all files
 git add <filename>	# Stage a file, ready to commit
 git reset # Unstage all files
 git reset <filename> # Unstage one file
+git reset HEAD <submodule-name> # Reset the submodule head
 git restore <filename> # Discard changes of the file
 
 git commit -m "Post update" 
 git push -u origin <your-branch> 
+```
+
+Discard local changes and force to pull the remote branch:
+```bash
+# Really the ideal way to do this is to not use pull at all, but instead fetch and reset:
+git fetch origin <master-branch>
+# force the state of the working directory to a state matching that of a particular commit. 
+git reset --hard FETCH_HEAD
+# removes files which are not tracked by git
+# the -df flags tell it to remove directories (-d) and actually do the removal (-f)
+git clean -df
 ```
 
 <a href="#">Git Tools - Branch</a>

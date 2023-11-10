@@ -320,14 +320,14 @@
 </code></pre></div></div>
 
 <p>Depending on LibTorch and Building the Application:</p>
-<div class="language-cmake highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cmake_minimum_required</span><span class="p">(</span>VERSION 3.0 FATAL_ERROR<span class="p">)</span>
-<span class="nb">project</span><span class="p">(</span>custom_ops<span class="p">)</span>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cmake_minimum_required<span class="o">(</span>VERSION 3.0 FATAL_ERROR<span class="o">)</span>
+project<span class="o">(</span>custom_ops<span class="o">)</span>
 
-<span class="nb">find_package</span><span class="p">(</span>Torch REQUIRED<span class="p">)</span>
+find_package<span class="o">(</span>Torch REQUIRED<span class="o">)</span>
 
-<span class="nb">add_executable</span><span class="p">(</span>example-app example-app.cpp<span class="p">)</span>
-<span class="nb">target_link_libraries</span><span class="p">(</span>example-app <span class="s2">"</span><span class="si">${</span><span class="nv">TORCH_LIBRARIES</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<span class="nb">set_property</span><span class="p">(</span>TARGET example-app PROPERTY CXX_STANDARD 14<span class="p">)</span>
+add_executable<span class="o">(</span>example-app example-app.cpp<span class="o">)</span>
+target_link_libraries<span class="o">(</span>example-app <span class="s2">"</span><span class="k">${</span><span class="nv">TORCH_LIBRARIES</span><span class="k">}</span><span class="s2">"</span><span class="o">)</span>
+set_property<span class="o">(</span>TARGET example-app PROPERTY CXX_STANDARD 14<span class="o">)</span>
 </code></pre></div></div>
 
 <h2 id="pytorch-extensions">Pytorch Extensions</h2>

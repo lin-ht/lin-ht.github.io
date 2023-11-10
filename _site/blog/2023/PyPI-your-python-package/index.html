@@ -167,7 +167,11 @@
 <span class="gp">pip install &lt;packagename&gt;</span><span class="w"> </span><span class="nt">--extra-index-url</span> https://some.extra.index.url
 <span class="go">
 </span><span class="gp">#</span><span class="w"> </span>Install package from <span class="nb">local</span> .whl file
-<span class="go">pip install /path/to/some/package.whl</span></code></pre></figure>
+<span class="go">pip install /path/to/some/package.whl
+
+</span><span class="gp">pip install --find-links /path/to/the/wheel/file/ &lt;package-name&gt;</span><span class="w">
+</span><span class="go">
+pip wheel [--no-deps] -w /path/to/the/wheel/files/</span></code></pre></figure>
 
 <h5 id="build-your-own-whl-file">Build your own .whl file</h5>
 
@@ -189,14 +193,85 @@
 
 <p>If your package has linked C libraries, you’ll need to create specific build environments, and then compile your package separately for each target operating system you want to support.</p>
 
-<p><b>1.</b> Wheel naming</p>
+<p>An example of wheel building:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># file structure:</span>
+setup.py
+src/
+    mypkg/
+        __init__.py
+        module.py
+        data/
+            tables.dat
+            spoons.dat
+            forks.dat 
+</code></pre></div></div>
+<p>Content of <code class="language-plaintext highlighter-rouge">setup.py</code>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">setuptools</span> <span class="kn">import</span> <span class="n">setup</span>
+
+<span class="nf">setup</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">'foo'</span><span class="p">,</span>
+      <span class="n">version</span><span class="o">=</span><span class="s">'1.0'</span><span class="p">,</span>
+      <span class="n">description</span><span class="o">=</span><span class="s">'Python Distribution Example'</span><span class="p">,</span>
+      <span class="n">author</span><span class="o">=</span><span class="s">'lin'</span><span class="p">,</span>
+      <span class="n">packages</span><span class="o">=</span><span class="p">[</span><span class="s">'mypkg'</span><span class="p">],</span>
+      <span class="n">package_dir</span><span class="o">=</span><span class="p">{</span><span class="s">'mypkg'</span><span class="p">:</span> <span class="s">'src/mypkg'</span><span class="p">},</span>
+      <span class="n">package_data</span><span class="o">=</span><span class="p">{</span><span class="s">'mypkg'</span><span class="p">:</span> <span class="p">[</span><span class="s">'data/*.dat'</span><span class="p">]},</span>
+      <span class="p">)</span>
+</code></pre></div></div>
+
+<p>Another <code class="language-plaintext highlighter-rouge">setup.py</code> for importing prebuilt external lib dependencies through a dummy package:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># file structure:</span>
+setup.py
+cvcuda_lib/
+    libcvcuda.so.0.3.1
+    libcvcuda.so.0
+    libcvcuda.so
+    libnvcv_types.so.0.3.1
+    libnvcv_types.so.0
+    libnvcv_types.so
+    cvcuda.cpython-38-x86_64-linux-gnu.so
+    nvcv.cpython-38-x86_64-linux-gnu.so
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">setuptools</span> <span class="kn">import</span> <span class="n">setup</span>
+
+<span class="nf">setup</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s">'cvcuda_import'</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="s">'0.3.1'</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s">'proxy wheel to bring in cvcuda Library'</span><span class="p">,</span>
+    <span class="n">data_files</span><span class="o">=</span><span class="p">[(</span><span class="s">'lib'</span><span class="p">,</span> <span class="p">[</span><span class="s">'cvcuda_lib/libcvcuda.so.0.3.1'</span><span class="p">,</span>
+                         <span class="s">'cvcuda_lib/libcvcuda.so.0'</span><span class="p">,</span>
+                         <span class="s">'cvcuda_lib/libcvcuda.so'</span><span class="p">,</span>
+                         <span class="s">'cvcuda_lib/libnvcv_types.so.0.3.1'</span><span class="p">,</span>
+                         <span class="s">'cvcuda_lib/libnvcv_types.so.0'</span><span class="p">,</span>
+                         <span class="s">'cvcuda_lib/libnvcv_types.so'</span><span class="p">]),</span>
+                <span class="p">(</span><span class="s">'lib/python3.8/site-packages'</span><span class="p">,[</span><span class="s">'cvcuda_lib/cvcuda.cpython-38-x86_64-linux-gnu.so'</span><span class="p">,</span>
+                                                <span class="s">'cvcuda_lib/nvcv.cpython-38-x86_64-linux-gnu.so'</span><span class="p">])],</span>
+
+    <span class="n">install_requires</span><span class="o">=</span><span class="p">[</span><span class="s">"numpy"</span><span class="p">],</span>
+ <span class="p">)</span>
+</code></pre></div></div>
+
+<h6 id="upload-your-package-to-pypi">Upload your package to PyPI</h6>
+
+<p><b>1.</b> Wheel naming is automatically generated from the wheel building</p>
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{dist}-{version}(-{build})?-{python.version}-{os_platform}.whl
 # deployment with Python 2.7 on 32 bit Windows example:
 # PyYAML-5.3.1-cp27-cp27m-win32.whl
 </code></pre></div></div>
 
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">#</span><span class="w"> </span>Install a PyPl indexed package optionally with version v.v
-<span class="gp">pip install &lt;packagename&gt;</span><span class="o">[==</span>v.v]</code></pre></figure>
+<p><b>2.</b> Test local installation</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip <span class="nb">install</span> <span class="nt">--find-links</span> /path/to/the/wheel/file/ &lt;package-name&gt;
+</code></pre></div></div>
+
+<p><b>3.</b> Upload to the index server</p>
+
+<p>Get the publishing tool <a href="https://pypi.org/project/twine/" rel="external nofollow noopener" target="_blank">twine</a>  for this:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip <span class="nb">install</span> <span class="nt">-U</span> twine
+<span class="c"># Since both sdist and bdist_wheel output to dist/ by default, you can safely tell twine to upload everything under dist/ using a shell wildcard (dist/*).</span>
+twine upload dist/<span class="k">*</span> <span class="o">[</span><span class="nt">--repository-url</span> https://<span class="nv">$USER</span>:<span class="nv">$API_TOKEN</span>@url.to.the.artifactory]
+<span class="c"># if no url is provided, the default index server will be PyPI.</span>
+</code></pre></div></div>
 
 <h4 id="references">References</h4>
 <ul>
@@ -205,6 +280,10 @@
     <li>
 <a href="https://realpython.com/pypi-publish-python-package/#configuring-your-package" rel="external nofollow noopener" target="_blank">How to Publish an Open-Source Python Package to PyPI</a>.</li>
     <li><a href="https://realpython.com/python-wheels/" rel="external nofollow noopener" target="_blank">What Are Python Wheels and Why Should You Care?</a></li>
+    <li>
+<a href="https://docs.python.org/3/distutils/setupscript.html#other-options" rel="external nofollow noopener" target="_blank">Writing the Setup Script</a> with <a href="https://docs.python.org/3/distutils/apiref.html" rel="external nofollow noopener" target="_blank">API</a>
+</li>
+    <li><a href="https://packaging.python.org/en/latest/tutorials/packaging-projects/" rel="external nofollow noopener" target="_blank">Packaging Python Projects</a></li>
 </ul>
 
     </div>
@@ -230,6 +309,12 @@
   
 
   <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/terminal-debug/">Terminal debugging</a>
+  </li>
+
+  
+
+  <li class="my-2">
     <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/pytorch-coding/">Pytorch coding</a>
   </li>
 
@@ -243,12 +328,6 @@
 
   <li class="my-2">
     <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/cvcuda-installation/">CVCuda installation</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/conda-tutorial/">Conda Tutorial</a>
   </li>
 
 </div>

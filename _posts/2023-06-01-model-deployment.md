@@ -14,6 +14,8 @@ Note: the order doesn't indicate its popularity.
 ##### 2. Nvidia Triton
 <a href="https://developer.nvidia.com/triton-inference-server">Nvidia Triton</a> an open-source inference serving software, standardizes AI model deployment and execution and delivers fast and scalable AI in production. 
 
+##### 3. Truss
+<a href="https://github.com/basetenlabs/truss">Truss</a>: the simplest way to serve AI/ML models in production.
 
 #### Model conversion or coding languages
 
@@ -43,7 +45,11 @@ is a notation based on generalized Einstein notation for computing on multi-dime
 ##### 6. ONNX
 <a href="https://onnx.ai/">ONNX</a> is an open format built to represent machine learning models. ONNX defines a common set of operators - the building blocks of machine learning and deep learning models - and a common file format to enable AI developers to use models with a variety of frameworks, tools, runtimes, and compilers.
 
+##### 7. Pytorch Lightning
+<a href="https://lightning.ai/docs/app/stable/">Lightning</a> is a hyper-minimalistic framework used to build machine learning components that can plug into existing ML workflows.
 
+##### 8. Torch.compile
+<a href="https://pytorch.org/tutorials/intermediate/torch_compile_tutorial.html">Torch.compile</a> makes PyTorch code run faster by JIT-compiling PyTorch code into optimized kernels, all while requiring minimal code changes.
 
 #### Profiling tools:
 ##### 1. NVIDIA NSight Systems

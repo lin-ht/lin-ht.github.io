@@ -151,6 +151,13 @@
 
 <p>For now, most DLLs are installed into <code class="language-plaintext highlighter-rouge">(install prefix)\\Library\\bin</code> –Q:what is this path?. This path is added to <code class="language-plaintext highlighter-rouge">os.environ["PATH"]</code> for all Python processes, so that DLLs can be located, regardless of the value of the system’s PATH environment variable.</p>
 
+<p>Check the list of the installed packages:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>conda list
+
+<span class="c"># or show only pip packages</span>
+pip list
+</code></pre></div></div>
+
 <h5 id="execution-environment-var-setting-in-conda-env">Execution environment var setting in conda env</h5>
 
 <p>Reference <a href="https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#macos-and-linux" rel="external nofollow noopener" target="_blank">here</a>.</p>
@@ -167,12 +174,93 @@ vim etc/conda/deactivate.d/env_vars.sh
 conda activate analytics
 </code></pre></div></div>
 
+<p>Another option to <a href="https://datacomy.com/python/anaconda/add_folder_to_path/" rel="external nofollow noopener" target="_blank">add a Python packages folder to conda path</a>:
+(Not verified yet)</p>
+
+<p>To permanently include packages or folder into the <code class="language-plaintext highlighter-rouge">PYTHONPATH</code> of an conda environment, use <a href="https://docs.conda.io/projects/conda-build/en/latest/resources/commands/conda-develop.html" rel="external nofollow noopener" target="_blank">conda develop</a>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>conda activate &lt;your-env&gt;
+
+conda develop /PATH/TO/YOUR/FOLDER/OF/MODULES
+</code></pre></div></div>
+
+<p>This command will create file named <code class="language-plaintext highlighter-rouge">conda.pth</code> file in the site-packages folder of your environment, e.g. <code class="language-plaintext highlighter-rouge">~/YOUR_ENV/lib/pythonX.X/site-packages</code>.</p>
+
+<p>As an alternative, you can just add a <code class="language-plaintext highlighter-rouge">conda.pth</code> file in <code class="language-plaintext highlighter-rouge">~/YOUR_ENV/lib/pythonX.X/site-packages</code> with the folder that you want to include in your <code class="language-plaintext highlighter-rouge">PYTHONPATH</code>. The filename can be different as long as it has the <code class="language-plaintext highlighter-rouge">.pth</code> extension. Every line of the file can contain a folder.</p>
+
+<p><a href="https://conda.io/projects/conda/en/latest/user-guide/configuration/use-condarc.html" rel="external nofollow noopener" target="_blank">Using the .condarc conda configuration file</a></p>
+
+<p>The <code class="language-plaintext highlighter-rouge">.condarc</code> file can change many parameters, including:</p>
+<ul>
+    <li>Where conda looks for packages.</li>
+    <li>If and how conda uses a proxy server.</li>
+    <li>Where conda lists known environments.</li>
+    <li>Whether to update the Bash prompt with the currently activated environment name.</li>
+    <li>Whether user-built packages should be uploaded to Anaconda.org.</li>
+    <li>What default packages or features to include in new environments.</li>
+</ul>
+
+<p>Creating and editing the <code class="language-plaintext highlighter-rouge">.condarc</code> with <code class="language-plaintext highlighter-rouge">conda config</code> <a href="https://conda.io/projects/conda/en/latest/commands/config.html" rel="external nofollow noopener" target="_blank">commads</a>. Example:</p>
+<pre><code class="language-base">conda config --add channels conda-forge
+conda config --set auto_update_conda False
+</code></pre>
+
+<p>Conda looks in the following locations for a <code class="language-plaintext highlighter-rouge">.condarc</code> file:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="n">on_win</span><span class="p">:</span>
+    <span class="n">SEARCH_PATH</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s">"C:/ProgramData/conda/.condarc"</span><span class="p">,</span>
+        <span class="s">"C:/ProgramData/conda/condarc"</span><span class="p">,</span>
+        <span class="s">"C:/ProgramData/conda/condarc.d"</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">SEARCH_PATH</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s">"/etc/conda/.condarc"</span><span class="p">,</span>
+        <span class="s">"/etc/conda/condarc"</span><span class="p">,</span>
+        <span class="s">"/etc/conda/condarc.d/"</span><span class="p">,</span>
+        <span class="s">"/var/lib/conda/.condarc"</span><span class="p">,</span>
+        <span class="s">"/var/lib/conda/condarc"</span><span class="p">,</span>
+        <span class="s">"/var/lib/conda/condarc.d/"</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<span class="n">SEARCH_PATH</span> <span class="o">+=</span> <span class="p">(</span>
+    <span class="s">"$CONDA_ROOT/.condarc"</span><span class="p">,</span>
+    <span class="s">"$CONDA_ROOT/condarc"</span><span class="p">,</span>
+    <span class="s">"$CONDA_ROOT/condarc.d/"</span><span class="p">,</span>
+    <span class="s">"$XDG_CONFIG_HOME/conda/.condarc"</span><span class="p">,</span>
+    <span class="s">"$XDG_CONFIG_HOME/conda/condarc"</span><span class="p">,</span>
+    <span class="s">"$XDG_CONFIG_HOME/conda/condarc.d/"</span><span class="p">,</span>
+    <span class="s">"~/.config/conda/.condarc"</span><span class="p">,</span>
+    <span class="s">"~/.config/conda/condarc"</span><span class="p">,</span>
+    <span class="s">"~/.config/conda/condarc.d/"</span><span class="p">,</span>
+    <span class="s">"~/.conda/.condarc"</span><span class="p">,</span>
+    <span class="s">"~/.conda/condarc"</span><span class="p">,</span>
+    <span class="s">"~/.conda/condarc.d/"</span><span class="p">,</span>
+    <span class="s">"~/.condarc"</span><span class="p">,</span>
+    <span class="s">"$CONDA_PREFIX/.condarc"</span><span class="p">,</span>
+    <span class="s">"$CONDA_PREFIX/condarc"</span><span class="p">,</span>
+    <span class="s">"$CONDA_PREFIX/condarc.d/"</span><span class="p">,</span>
+    <span class="s">"$CONDARC"</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<h5 id="conda-env-creation-using-a-yml-file">Conda env creation using a yml file</h5>
+
+<p>TODO</p>
+
+<p>Update conda environment:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>conda <span class="nb">env export</span> <span class="o">&gt;</span> environment.yml
+<span class="c"># Tip: backup your env before update</span>
+<span class="c"># --prune option removes any packages from the environment that are not listed in the .yml.</span>
+conda <span class="nb">env </span>update <span class="nt">--file</span> environment.yml <span class="nt">--prune</span>
+</code></pre></div></div>
+
 <h4 id="references">References</h4>
 <ul>
     <li>
 <a href="https://sachinjose31.medium.com/creating-an-environment-in-anaconda-through-a-yml-file-7e5deeb7676d" rel="external nofollow noopener" target="_blank">Creating an environment in anaconda through a yml file</a>.</li>
     <li>
 <a href="https://conda.github.io/conda-pack/" rel="external nofollow noopener" target="_blank">Conda pack</a>.</li>
+    <li><a href="https://saturncloud.io/blog/updating-an-existing-conda-environment-with-a-yml-file-a-guide/" rel="external nofollow noopener" target="_blank">Updating an Existing Conda Environment with a .yml File: A Guide</a></li>
 </ul>
 
     </div>
@@ -198,6 +286,12 @@ conda activate analytics
   
 
   <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/terminal-debug/">Terminal debugging</a>
+  </li>
+
+  
+
+  <li class="my-2">
     <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/pytorch-coding/">Pytorch coding</a>
   </li>
 
@@ -211,12 +305,6 @@ conda activate analytics
 
   <li class="my-2">
     <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/cvcuda-installation/">CVCuda installation</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/PyPI-your-python-package/">PyPI your python package</a>
   </li>
 
 </div>

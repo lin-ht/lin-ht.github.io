@@ -163,7 +163,7 @@ int main(int argc, const char* argv[]) {
 ```
 
 Depending on LibTorch and Building the Application:
-```cmake
+```bash
 cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
 project(custom_ops)
 
