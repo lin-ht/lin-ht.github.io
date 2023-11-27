@@ -51,6 +51,41 @@ git add -p # or --patch to start partial staging
 git reset -p
 ```
 
+<a href="https://git-scm.com/docs/git-cherry-pick">Git Tools - Cherry pick</a>
+
+Example to pick commit A from first branch to the second branch.
+Before:
+```bash
+# Example:
+#       [A]---B---C first branch
+#      /
+# D---E---F---G second branch
+```
+After:
+```bash
+# Example:
+#       [A]---B---C first branch
+#      /
+# D---E---F---G---[A] second branch
+```
+
+```bash
+git checkout <branch-of-cherry>
+# Get git reference log, keeping track of recent actions made
+git reflog
+# Copy the log and copy the commit hash to pick
+
+git checkout <working-branch>
+
+# Use -x flag when you want to append a line that remarks the original commit it was cherry-picked from.
+# Use -n to just stage the picked change without commit
+git cherry-pick [-x] [-n] <commit hash>
+
+# To unstage the staged changes
+git reset
+
+```
+
 <a href="https://git-scm.com/docs/git-merge">Git Tools - Merge</a>
 Caution: before merging, make sure there is no non-trivial uncommitted changes.
 

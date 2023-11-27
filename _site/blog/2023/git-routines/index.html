@@ -182,6 +182,38 @@ git add <span class="nt">-p</span> <span class="c"># or --patch to start partial
 git reset <span class="nt">-p</span>
 </code></pre></div></div>
 
+<p><a href="https://git-scm.com/docs/git-cherry-pick" rel="external nofollow noopener" target="_blank">Git Tools - Cherry pick</a></p>
+
+<p>Example to pick commit A from first branch to the second branch.
+Before:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Example:</span>
+<span class="c">#       [A]---B---C first branch</span>
+<span class="c">#      /</span>
+<span class="c"># D---E---F---G second branch</span>
+</code></pre></div></div>
+<p>After:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Example:</span>
+<span class="c">#       [A]---B---C first branch</span>
+<span class="c">#      /</span>
+<span class="c"># D---E---F---G---[A] second branch</span>
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout &lt;branch-of-cherry&gt;
+<span class="c"># Get git reference log, keeping track of recent actions made</span>
+git reflog
+<span class="c"># Copy the log and copy the commit hash to pick</span>
+
+git checkout &lt;working-branch&gt;
+
+<span class="c"># Use -x flag when you want to append a line that remarks the original commit it was cherry-picked from.</span>
+<span class="c"># Use -n to just stage the picked change without commit</span>
+git cherry-pick <span class="o">[</span><span class="nt">-x</span><span class="o">]</span> <span class="o">[</span><span class="nt">-n</span><span class="o">]</span> &lt;commit <span class="nb">hash</span><span class="o">&gt;</span>
+
+<span class="c"># To unstage the staged changes</span>
+git reset
+
+</code></pre></div></div>
+
 <p><a href="https://git-scm.com/docs/git-merge" rel="external nofollow noopener" target="_blank">Git Tools - Merge</a>
 Caution: before merging, make sure there is no non-trivial uncommitted changes.</p>
 

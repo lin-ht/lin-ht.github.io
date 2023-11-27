@@ -254,7 +254,7 @@ chsh <span class="nt">-s</span> /bin/zsh <span class="c"># Change default termin
 
 <p><a href="https://www.cyberciti.biz/faq/how-to-use-sed-to-find-and-replace-text-in-files-in-linux-unix-shell/" rel="external nofollow noopener" target="_blank">Sed command for replacing text or data</a> and <a href="https://stackoverflow.com/questions/11145270/how-to-replace-an-entire-line-in-a-text-file-by-line-number" rel="external nofollow noopener" target="_blank"> entire line replacement </a></p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">find</span><span class="o">=</span><span class="s2">"foo"</span>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">find</span><span class="o">=</span><span class="s2">"foo"</span>
 <span class="nv">replace</span><span class="o">=</span><span class="s2">"bar"</span>
 
 <span class="c"># find $find and replace with $replace using sed </span>
@@ -281,12 +281,13 @@ chsh <span class="nt">-s</span> /bin/zsh <span class="c"># Change default termin
 <span class="c"># insert a new line at line 3</span>
 <span class="nb">sed</span> <span class="nt">-i</span> <span class="s2">"3inew line content"</span> input.txt
 <span class="c"># insert a new line at the line of the first matched pattern</span>
-<span class="nb">sed</span> <span class="nt">-i</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">grep</span> <span class="nt">-n</span> <span class="s1">'&lt;input-filepath&gt;'</span> <span class="nt">-e</span> <span class="s1">'pattern'</span> | <span class="nb">head</span> <span class="nt">-1</span> | <span class="nb">cut</span> <span class="nt">-f1</span> <span class="nt">-d</span>:<span class="si">)</span><span class="s2">inew line content"</span> input.txt</code></pre></figure>
+<span class="nb">sed</span> <span class="nt">-i</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">grep</span> <span class="nt">-n</span> <span class="s1">'&lt;input-filepath&gt;'</span> <span class="nt">-e</span> <span class="s1">'pattern'</span> | <span class="nb">head</span> <span class="nt">-1</span> | <span class="nb">cut</span> <span class="nt">-f1</span> <span class="nt">-d</span>:<span class="si">)</span><span class="s2">inew line content"</span> input.txt
+</code></pre></div></div>
 
 <p>Correct our md file:</p>
-
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># correct our md file</span>
-<span class="nb">sed</span> <span class="nt">-i</span> <span class="s1">'s/% highlight terminal %}/% highlight bash %}/'</span> <span class="s2">"*.md"</span></code></pre></figure>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># correct our md file</span>
+<span class="nb">sed</span> <span class="nt">-i</span> <span class="s1">'s/% highlight terminal %}/% highlight bash %}/'</span> <span class="s2">"*.md"</span>
+</code></pre></div></div>
 
 <h5 id="file-management">File management</h5>
 
@@ -294,8 +295,11 @@ chsh <span class="nt">-s</span> /bin/zsh <span class="c"># Change default termin
 
 <p>Search for a file</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># find the files with the name_pattern in all the folders below your directory</span>
-find /your/directory <span class="nt">-name</span> &lt;name_pattern&gt; <span class="c"># *.jpg</span></code></pre></figure>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># find the files with the name_pattern in all the folders below your directory</span>
+find /your/directory <span class="nt">-iname</span> &lt;name_pattern&gt; <span class="c"># *.jpg</span>
+</code></pre></div></div>
+
+<p>See more options from the <a href="https://alvinalexander.com/blog/post/linux-unix/case-insensitive-file-searching-unix-linux-mac-osx" rel="external nofollow noopener" target="_blank">post</a>.</p>
 
 <h5 id="data-management">Data management</h5>
 <p>Copy the content of folder:</p>
