@@ -1,0 +1,192 @@
+<!DOCTYPE html> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <title>Git Routine | Haiting Lin</title> <meta name="author" content="Haiting Lin"> <meta name="description" content="Routine git commands"> <meta name="keywords" content="haiting, Adobe"> <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-DF7Zhf293AJxJNTmh5zhoYYIMs2oXitRfBjY+9L//AY=" crossorigin="anonymous"> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/css/mdb.min.css" integrity="sha256-jpjYvU3G3N6nrrBwXJoVEYI/0zw8htfFnhT9ljN3JJw=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.21.3/dist/bootstrap-table.min.css"> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous"> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.1/css/academicons.min.css" integrity="sha256-i1+4qU2G2860dGGIOJscdC30s9beBXjFfzjWLjBRsBg=" crossorigin="anonymous"> <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700%7CRoboto+Slab:100,300,400,500,700%7CMaterial+Icons"> <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jwarby/jekyll-pygments-themes@master/github.css" media="" id="highlight_theme_light"> <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;"> <link rel="stylesheet" href="/assets/css/main.css"> <link rel="canonical" href="https://lin-ht.github.io/blog/2023/git-routines/"> <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jwarby/jekyll-pygments-themes@master/native.css" media="none" id="highlight_theme_dark"> <script src="/assets/js/theme.js"></script> <script src="/assets/js/dark_mode.js"></script> </head> <body class="fixed-top-nav "> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top"> <div class="container"> <a class="navbar-brand title font-weight-lighter" href="/"><span class="font-weight-bold">Haiting </span>Lin</a> <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse text-right" id="navbarNav"> <ul class="navbar-nav ml-auto flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/">about</a> </li> <li class="nav-item "> <a class="nav-link" href="/publications/">Publications</a> </li> <li class="nav-item "> <a class="nav-link" href="/projects/">Projects</a> </li> <li class="nav-item "> <a class="nav-link" href="/cv/">cv</a> </li> <li class="nav-item active"> <a class="nav-link" href="/blog/">blog<span class="sr-only">(current)</span></a> </li> <li class="toggle-container"> <button id="light-toggle" title="Change theme"> <i class="fas fa-moon"></i> <i class="fas fa-sun"></i> </button> </li> </ul> </div> </div> </nav> <progress id="progress" value="0"> <div class="progress-container"> <span class="progress-bar"></span> </div> </progress> </header> <div class="container mt-5"> <div class="post"> <header class="post-header"> <h1 class="post-title">Git Routine</h1> <p class="post-meta">June 20, 2023</p> <p class="post-tags"> <a href="/blog/2023"> <i class="fas fa-calendar fa-sm"></i> 2023 </a>   ·   <a href="/blog/tag/notes"> <i class="fas fa-hashtag fa-sm"></i> notes</a>   <a href="/blog/tag/code"> <i class="fas fa-hashtag fa-sm"></i> code</a>     ·   <a href="/blog/category/note-posts"> <i class="fas fa-tag fa-sm"></i> note-posts</a>   </p> </header> <article class="post-content"> <div id="markdown-content"> <h4 id="useful-git-commands">Useful git commands</h4> <h5 id="command-cheatsheet">Command cheatsheet</h5> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone <span class="nt">--recurse-submodules</span> <span class="nt">-j8</span> git@github.com:example/target-repo.git
+git status
+git diff
+git diff &lt;filename&gt;
+git diff &lt;filename&gt; <span class="o">&gt;</span> foo.diff <span class="c"># output git diff to file foo.diff with coloring.</span>
+git add <span class="nt">--all</span> <span class="c"># Stage all files</span>
+git add &lt;filename&gt;	<span class="c"># Stage a file, ready to commit</span>
+git reset <span class="c"># Unstage all files</span>
+git reset &lt;filename&gt; <span class="c"># Unstage one file</span>
+git reset HEAD &lt;submodule-name&gt; <span class="c"># Reset the submodule head</span>
+git restore &lt;filename&gt; <span class="c"># Discard changes of the file</span>
+
+git commit <span class="nt">-m</span> <span class="s2">"Post update"</span> 
+git push <span class="nt">-u</span> origin &lt;your-branch&gt; 
+
+<span class="c"># run once - change origin</span>
+git remote set-url origin git@github.com:Adobe-Firefly/colligo.git
+<span class="c"># run once, optional: keep the old corp url as backup</span>
+git remote add legacy-corp git@git.corp.adobe.com:colligo/colligo.git
+
+</code></pre></div></div> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Switch to a remote branch</span>
+git fetch origin
+git branch <span class="nt">-v</span> <span class="nt">-a</span>
+
+<span class="c"># with -c to create a new local branch</span>
+git switch <span class="nt">-c</span> halin-remove-gb-cuda origin/halin-remove-gb-cuda 
+</code></pre></div></div> <p>Github compare url example:</p> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://github.com/&lt;repo-dir&gt;/compare/&lt;branch-name&gt;?expand<span class="o">=</span>1
+</code></pre></div></div> <p>You have divergent branches (remote vs local) and need to specify how to reconcile them. You can do so by running one of the following commands sometime before hint: your next pull:</p> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config pull.rebase <span class="nb">false</span>  <span class="c"># merge (the default strategy)</span>
+git config pull.rebase <span class="nb">true</span>   <span class="c"># rebase</span>
+git config pull.ff only       <span class="c"># fast-forward only</span>
+</code></pre></div></div> <p><a href="https://stackoverflow.com/questions/40987847/unable-to-find-current-origin-master-revision-in-submodule-path" rel="external nofollow noopener" target="_blank">Pull with Submodule</a> May need to manually clean up the local .git/modules records (‘rm -rf </p> <dir>') before running the submodule update to have a clean clone: Remove the folder of the submodule itself and its folder record inside the .git/modules`.</dir> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git pull <span class="nt">--recurse-submodules</span>
+git submodule foreach <span class="nt">--recursive</span> git pull
+git submodule update <span class="nt">--remote</span> <span class="c"># will only update the branch registered in the .gitmodule</span>
+</code></pre></div></div> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git submodule <span class="nb">sync</span> <span class="c"># sync to the remote</span>
+git submodule update <span class="nt">--remote</span> <span class="nt">--init</span> <span class="c"># first initialize the submodule recorded in .gitmodule</span>
+git submodule update <span class="nt">--remote</span> <span class="nt">--rebase</span>
+</code></pre></div></div> <p>Discard local changes and force to pull the remote branch:</p> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Really the ideal way to do this is to not use pull at all, but instead fetch and reset:</span>
+git fetch origin &lt;master-branch&gt;
+<span class="c"># force the state of the working directory to a state matching that of a particular commit. </span>
+git reset <span class="nt">--hard</span> FETCH_HEAD
+<span class="c"># removes files which are not tracked by git</span>
+<span class="c"># the -df flags tell it to remove directories (-d) and actually do the removal (-f)</span>
+git clean <span class="nt">-df</span>
+</code></pre></div></div> <p>Revert the current repo to a previous commit (this applies to submodule too): (Note: <code class="language-plaintext highlighter-rouge">git pull</code> is nothing more than <code class="language-plaintext highlighter-rouge">git fetch</code> followed by <code class="language-plaintext highlighter-rouge">git merge</code>)</p> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git fetch origin &lt;branch&gt;
+git checkout &lt;commit-id&gt;
+</code></pre></div></div> <p><a href="#">Git Tools - Branch</a></p> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout <span class="nt">-b</span> &lt;your-branch&gt; <span class="c"># new local branch</span>
+git branch <span class="nt">-d</span> &lt;your-branch&gt;   <span class="c"># delete the branch</span>
+</code></pre></div></div> <p><a href="https://git-scm.com/book/en/v2/Git-Tools-Interactive-Staging" rel="external nofollow noopener" target="_blank">Git Tools - Interactive staging</a></p> <p>We can stage patches under interactive staging mode.</p> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add <span class="nt">-i</span> <span class="c"># Interactive Staging</span>
+git add <span class="nt">-p</span> <span class="c"># or --patch to start partial staging</span>
+git reset <span class="nt">-p</span>
+</code></pre></div></div> <p><a href="https://git-scm.com/docs/git-cherry-pick" rel="external nofollow noopener" target="_blank">Git Tools - Cherry pick</a></p> <p>Example to pick commit A from first branch to the second branch. Before:</p> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Example:</span>
+<span class="c">#       [A]---B---C first branch</span>
+<span class="c">#      /</span>
+<span class="c"># D---E---F---G second branch</span>
+</code></pre></div></div> <p>After:</p> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Example:</span>
+<span class="c">#       [A]---B---C first branch</span>
+<span class="c">#      /</span>
+<span class="c"># D---E---F---G---[A] second branch</span>
+</code></pre></div></div> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout &lt;branch-of-cherry&gt;
+<span class="c"># Get git reference log, keeping track of recent actions made</span>
+git reflog
+<span class="c"># Copy the log and copy the commit hash to pick</span>
+
+git checkout &lt;working-branch&gt;
+
+<span class="c"># Use -x flag when you want to append a line that remarks the original commit it was cherry-picked from.</span>
+<span class="c"># Use -n to just stage the picked change without commit</span>
+git cherry-pick <span class="o">[</span><span class="nt">-x</span><span class="o">]</span> <span class="o">[</span><span class="nt">-n</span><span class="o">]</span> &lt;commit <span class="nb">hash</span><span class="o">&gt;</span>
+
+<span class="c"># To unstage the staged changes</span>
+git reset
+
+</code></pre></div></div> <p><a href="https://git-scm.com/docs/git-merge" rel="external nofollow noopener" target="_blank">Git Tools - Merge</a> Caution: before merging, make sure there is no non-trivial uncommitted changes.</p> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Example:</span>
+<span class="c">#       A---B---C topic</span>
+<span class="c">#      /</span>
+<span class="c"># D---E---F---G master</span>
+</code></pre></div></div> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout master
+git merge topic
+
+<span class="c"># Result:</span>
+<span class="c">#       A---B---C topic</span>
+<span class="c">#      /         \</span>
+<span class="c"># D---E---F---G---H master</span>
+</code></pre></div></div> <p>Better practice:</p> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git merge <span class="nt">--no-commit</span> <span class="o">[</span><span class="nt">-s</span> ort] topic
+<span class="c"># --no-commit: permform merge but stop before creating a merge commit.</span>
+<span class="c"># -s: merge strategy option. By default, its `ort`.</span>
+
+git commit <span class="nt">-m</span> <span class="s2">"msg"</span>
+<span class="c"># -m: message about the merge</span>
+</code></pre></div></div> <p>What should we do if we run into conflicts:</p> <ol> <li> <p>Abort the merge to start over again?</p> <div class="language-bash highlighter-rouge"> <div class="highlight"><pre class="highlight"><code> <span class="c"># Abort the merge process and *try* to reconstruct the pre-merge state:</span>
+ git merge <span class="nt">--abort</span>
+</code></pre></div> </div> </li> <li> <p>Resolve the conflicts with tools</p> <p>Use your favorate editor to resolve the changes.</p> <p><code class="language-plaintext highlighter-rouge">HEAD</code>: current branch head</p> <p><code class="language-plaintext highlighter-rouge">MERGED_HEAD</code>: other branch head</p> <div class="language-bash highlighter-rouge"> <div class="highlight"><pre class="highlight"><code> <span class="c"># Option 1: use graphical mergetool</span>
+ git mergetool
+
+ <span class="c"># Option 2: highlight diff</span>
+ git diff
+
+ git log <span class="nt">--merge</span> <span class="nt">-p</span> &lt;path&gt; <span class="c"># show diffs first for the HEAD version and then MERGED_HEAD version</span>
+
+ git show :1:&lt;filename&gt; <span class="c"># show the common ancestor</span>
+ git show :2:&lt;filename&gt; <span class="c"># show the HEAD version of the file</span>
+ git show :3:&lt;filename&gt; <span class="c"># show the MERGED_HEAD version</span>
+
+</code></pre></div> </div> </li> </ol> <p><a href="https://www.cloudbees.com/blog/git-undo-commit" rel="external nofollow noopener" target="_blank">Git Tools - Time Travel</a></p> <p>Better undoing mistakes before commit:</p> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git stash
+git checkout <span class="nt">--</span> &lt;filename&gt; <span class="c"># Discard file changes permanently</span>
+git checkout &lt;branch-name&gt; <span class="nt">--</span> &lt;filename&gt; <span class="c"># Checkout file from other branch</span>
+git reset <span class="nt">--hard</span> <span class="c"># Discard all changes permanently</span>
+</code></pre></div></div> <p>Undo <code class="language-plaintext highlighter-rouge">git add</code> files:</p> <p>Concepts:</p> <ul> <li>Working directory: where you make changes to your code;</li> <li>Staging area: intermedia step where you prepare changes for commit.</li> </ul> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># option 1:</span>
+git reset &lt;file&gt; <span class="c"># remove a single file from staging area, i.e. undo git add</span>
+git reset <span class="c"># remove all files from staging area, changes are still in working directory</span>
+
+<span class="c"># option 2:</span>
+git <span class="nb">rm</span> <span class="nt">--cached</span> &lt;file&gt; <span class="c"># remove a single file from the staging area</span>
+
+<span class="c"># Caution:</span>
+git <span class="nb">rm</span> &lt;file&gt; <span class="c"># remove the changes from both working directory and staging area.</span>
+</code></pre></div></div> <p>Undo Committed changes:</p> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git reflog <span class="c"># To check the commit id.</span>
+git reset <span class="nt">--hard</span> &lt;commit-id&gt; <span class="c"># Discard all changes permanently</span>
+
+git <span class="nb">rm</span> <span class="nt">-rf</span> <span class="nt">--cached</span> <span class="nb">.</span> <span class="c"># remove the cache</span>
+git reset <span class="nt">--hard</span> HEAD <span class="c"># reset to the latest commit of the current branch</span>
+</code></pre></div></div> <p>Undoing changes in a shared repo:</p> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git revert <span class="o">[</span><span class="nt">--no-commit</span><span class="o">]</span> &lt;commit-id&gt; <span class="c"># A new commit that reverts the changes of commit-id.</span>
+</code></pre></div></div> <p><a href="https://git-scm.com/book/en/v2/Git-Tools-Submodules" rel="external nofollow noopener" target="_blank">Git Tools - Submodules</a></p> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone <span class="nt">--recurse-submodules</span> <span class="nt">-j8</span>  target_git@github.com
+</code></pre></div></div> <p>If we cloned the repo without recursively pull submodules, try the following:</p> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> &lt;repo-dir&gt;
+git submodule update <span class="nt">--init</span> <span class="nt">--recursive</span>
+</code></pre></div></div> <p>To individually update a specific submodule:</p> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> &lt;submodule-dir&gt;
+git pull <span class="nt">--recurse-submodules</span>
+</code></pre></div></div> <p><a href="https://linuxhint.com/pull-git-submodules-after-cloning-project-from-github/" rel="external nofollow noopener" target="_blank">Submodule can be added</a> to your current repo by:</p> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> &lt;repo-dir&gt;
+git submodule add &lt;git_url_to_the_submodule&gt; &lt;submodule_folder_name&gt;
+</code></pre></div></div> <p><a href="https://stackoverflow.com/questions/11168141/find-which-commit-is-currently-checked-out-in-git" rel="external nofollow noopener" target="_blank">Git Tools - commit information</a></p> <p>variations:</p> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git show <span class="o">[</span><span class="nt">--outline</span> <span class="nt">-s</span><span class="o">]</span>
+git reflog 
+git log <span class="nt">-1</span> <span class="o">[</span><span class="nt">--outline</span><span class="o">]</span> <span class="c"># show the last commit info</span>
+git log <span class="nt">--full-history</span> <span class="nt">--</span> file_name <span class="c"># show all logs related to a file</span>
+git status
+</code></pre></div></div> <p>Launch gitk graphic display:</p> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git bisect visualize
+git bisect view  <span class="c"># shorter, means same thing</span>
+</code></pre></div></div> <p><a href="https://www.codeblocq.com/2016/02/Stash-your-changes-before-switching-branch/" rel="external nofollow noopener" target="_blank">Git Tools - Stash</a>:</p> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git stash save <span class="s2">"changes on the current-branch"</span>
+git stash pop <span class="c"># unstash the changes of the top stash</span>
+git stash list <span class="c"># list the stash stack</span>
+git stash pop <span class="s2">"stash@{1}"</span> <span class="c"># unstash a specific stash</span>
+git stash apply <span class="c"># apply the top stash</span>
+git stash drop <span class="c"># drop the top stash</span>
+git stash show <span class="c"># Show the files in the most recent stash</span>
+git stash show <span class="nt">-p</span> <span class="c"># show the changes in the most recent stash</span>
+git stash show <span class="nt">-p</span> stash@<span class="o">{</span>1<span class="o">}</span> <span class="c"># show the changes of the specified stash</span>
+git stash show <span class="nt">-p</span> 1 <span class="c"># simplified version of the above comment</span>
+</code></pre></div></div> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># You have divergent branches and need to specify how to reconcile them.</span>
+<span class="c"># You can do so by running one of the following commands sometime before</span>
+<span class="c"># your next pull:</span>
+ 
+git config pull.rebase <span class="nb">false</span>  <span class="c"># merge (the default strategy)</span>
+git config pull.rebase <span class="nb">true</span>   <span class="c"># rebase</span>
+git config pull.ff only       <span class="c"># fast-forward only</span>
+
+<span class="c"># You can replace "git config" with "git config --global" to set a default</span>
+<span class="c"># preference for all repositories. You can also pass --rebase, --no-rebase,</span>
+<span class="c"># or --ff-only on the command line to override the configured default per</span>
+<span class="c"># invocation.</span>
+</code></pre></div></div> <p><a href="#">Git Tools - working tree</a> TODO…</p> <p><a href="https://dillionmegida.com/p/delete-outdated-branches/" rel="external nofollow noopener" target="_blank">Prune git option</a> Pruning only deletes the references in refs/remotes/ that do not point to an active branch on the remote. It works like this so that you do not delete your local changes.</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># recommended command
+git fetch --prune
+
+# To set the global config on fetch: perform prune when fetch
+git config --global fetch.prune true
+
+</code></pre></div></div> <p>However, if you want to delete merged branches automatically, here are some commands you can use.</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout master # or "main" if that's what you use
+# List all the branches that has been merged:
+git branch --merged 
+
+# Skip certain branches
+git branch --merged | egrep -v "master|dev|main|staging|[any-other-branch-you-want-to-skip]"
+
+# Auto deletion:
+git branch --merged | egrep -v "master|dev|main|staging" | xargs git branch -d
+</code></pre></div></div> <p><a href="https://docs.github.com/en/get-started/getting-started-with-git/configuring-git-to-handle-line-endings?platform=linux" rel="external nofollow noopener" target="_blank">Git Tools - Eol configuration</a></p> <p>Global settings for line endings:</p> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config <span class="nt">--global</span> core.autocrlf input
+<span class="c"># Configure Git to ensure line endings in files you checkout are correct for Linux</span>
+
+git config <span class="nt">--get</span> core.autocrlf <span class="c"># Check the value</span>
+</code></pre></div></div> <p>Per-repository settings:</p> <p>You can configure a <code class="language-plaintext highlighter-rouge">.gitattributes</code> file to manage how Git reads line endings in a specific repository. The <code class="language-plaintext highlighter-rouge">.gitattributes</code> file must be created in the root of the repository and committed like any other file.</p> <p>An example of the <code class="language-plaintext highlighter-rouge">.gitattributes</code> file content:</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Set the default behavior, in case people don't have core.autocrlf set.
+* text=auto
+
+# Explicitly declare text files you want to always be normalized and converted
+# to native line endings on checkout.
+*.c text
+*.h text
+
+# Declare files that will always have CRLF line endings on checkout.
+*.sln text eol=crlf
+
+# Denote all files that are truly binary and should not be modified.
+*.png binary
+*.jpg binary
+</code></pre></div></div> <p>Reference: <a href="https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration" rel="external nofollow noopener" target="_blank">Customizing your git configuration</a></p> </div> </article> <br> <hr> <br> <ul class="list-disc pl-8"></ul> <h2 class="text-3xl font-semibold mb-4 mt-12">Enjoy Reading This Article?</h2> <p class="mb-2">Here are some more articles you might like to read next:</p> <li class="my-2"> <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/terminal/">Terminal</a> </li> <li class="my-2"> <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/host-remote/">host and remote</a> </li> <li class="my-2"> <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/jekyll-deploy/">Deploy jekyll github homepage</a> </li> <li class="my-2"> <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/conda-tutorial/">Conda Tutorial</a> </li> <li class="my-2"> <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/docker/">What is Docker</a> </li> </div> </div> <footer class="fixed-bottom"> <div class="container mt-0"> © Copyright 2024 Haiting Lin. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. Photos from <a href="https://unsplash.com" target="_blank" rel="external nofollow noopener">Unsplash</a>. </div> </footer> <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha256-fgLAgv7fyCGopR/gBNq2iW3ZKIdqIcyshnUULC4vex8=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/js/mdb.min.js" integrity="sha256-NdbiivsvWt7VYCt6hYNT3h/th9vSTL4EDWeGs5SN3DA=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@4/imagesloaded.pkgd.min.js"></script> <script defer src="/assets/js/masonry.js" type="text/javascript"></script> <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.8/dist/medium-zoom.min.js" integrity="sha256-7PhEpEWEW0XXQ0k6kQrPKwuoIomz8R8IYyuU1Qew4P8=" crossorigin="anonymous"></script> <script defer src="/assets/js/zoom.js"></script> <script defer src="https://unpkg.com/bootstrap-table@1.21.3/dist/bootstrap-table.min.js"></script> <script src="/assets/js/no_defer.js"></script> <script defer src="/assets/js/common.js"></script> <script defer src="/assets/js/copy_code.js" type="text/javascript"></script> <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script> <script async src="https://badge.dimensions.ai/badge.js"></script> <script type="text/javascript">window.MathJax={tex:{tags:"ams"}};</script> <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js"></script> <script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script> <script type="text/javascript">function progressBarSetup(){"max"in document.createElement("progress")?(initializeProgressElement(),$(document).on("scroll",function(){progressBar.attr({value:getCurrentScrollPosition()})}),$(window).on("resize",initializeProgressElement)):(resizeProgressBar(),$(document).on("scroll",resizeProgressBar),$(window).on("resize",resizeProgressBar))}function getCurrentScrollPosition(){return $(window).scrollTop()}function initializeProgressElement(){let e=$("#navbar").outerHeight(!0);$("body").css({"padding-top":e}),$("progress-container").css({"padding-top":e}),progressBar.css({top:e}),progressBar.attr({max:getDistanceToScroll(),value:getCurrentScrollPosition()})}function getDistanceToScroll(){return $(document).height()-$(window).height()}function resizeProgressBar(){progressBar.css({width:getWidthPercentage()+"%"})}function getWidthPercentage(){return getCurrentScrollPosition()/getDistanceToScroll()*100}const progressBar=$("#progress");window.onload=function(){setTimeout(progressBarSetup,50)};</script> </body> </html>
