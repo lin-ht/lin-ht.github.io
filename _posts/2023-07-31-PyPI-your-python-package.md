@@ -12,7 +12,7 @@ Python Packaging Index (PyPI) is a repository containing several hundred thousan
 
 ##### Install package
 
-{% highlight terminal %}
+```bash
 # Install a PyPl indexed package optionally with version v.v
 pip install <packagename>[==v.v]
 
@@ -40,7 +40,7 @@ pip install /path/to/some/package.whl
 pip install --find-links /path/to/the/wheel/file/ <package-name>
 
 pip wheel [--no-deps] -w /path/to/the/wheel/files/
-{% endhighlight %}
+```
 
 
 ##### Build your own .whl file

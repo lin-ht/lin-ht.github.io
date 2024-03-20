@@ -14,6 +14,7 @@ git clone --recurse-submodules -j8 git@github.com:example/target-repo.git
 git status
 git diff
 git diff <filename>
+git diff <filename> > foo.diff # output git diff to file foo.diff with coloring.
 git add --all # Stage all files
 git add <filename>	# Stage a file, ready to commit
 git reset # Unstage all files
@@ -23,6 +24,51 @@ git restore <filename> # Discard changes of the file
 
 git commit -m "Post update" 
 git push -u origin <your-branch> 
+
+# run once - change origin
+git remote set-url origin git@github.com:Adobe-Firefly/colligo.git
+# run once, optional: keep the old corp url as backup
+git remote add legacy-corp git@git.corp.adobe.com:colligo/colligo.git
+
+```
+
+```bash
+# Switch to a remote branch
+git fetch origin
+git branch -v -a
+
+# with -c to create a new local branch
+git switch -c halin-remove-gb-cuda origin/halin-remove-gb-cuda 
+```
+
+Github compare url example:
+```bash
+https://github.com/<repo-dir>/compare/<branch-name>?expand=1
+```
+
+You have divergent branches (remote vs local) and need to specify how to reconcile them.
+You can do so by running one of the following commands sometime before
+hint: your next pull:
+```bash
+git config pull.rebase false  # merge (the default strategy)
+git config pull.rebase true   # rebase
+git config pull.ff only       # fast-forward only
+```
+
+<a href="https://stackoverflow.com/questions/40987847/unable-to-find-current-origin-master-revision-in-submodule-path">Pull with Submodule</a>
+May need to manually clean up the local .git/modules records ('rm -rf <dir>') before running the submodule update to have a clean clone: 
+Remove the folder of the submodule itself and its folder record inside the .git/modules`.
+
+```bash
+git pull --recurse-submodules
+git submodule foreach --recursive git pull
+git submodule update --remote # will only update the branch registered in the .gitmodule
+```
+
+```bash
+git submodule sync # sync to the remote
+git submodule update --remote --init # first initialize the submodule recorded in .gitmodule
+git submodule update --remote --rebase
 ```
 
 Discard local changes and force to pull the remote branch:
@@ -35,6 +81,14 @@ git reset --hard FETCH_HEAD
 # the -df flags tell it to remove directories (-d) and actually do the removal (-f)
 git clean -df
 ```
+
+Revert the current repo to a previous commit (this applies to submodule too):
+(Note: `git pull` is nothing more than `git fetch` followed by `git merge`)
+```bash
+git fetch origin <branch>
+git checkout <commit-id>
+```
+
 
 <a href="#">Git Tools - Branch</a>
 ```bash
@@ -156,6 +210,7 @@ Better undoing mistakes before commit:
 ```bash
 git stash
 git checkout -- <filename> # Discard file changes permanently
+git checkout <branch-name> -- <filename> # Checkout file from other branch
 git reset --hard # Discard all changes permanently
 ```
 
@@ -188,7 +243,7 @@ git reset --hard HEAD # reset to the latest commit of the current branch
 
 Undoing changes in a shared repo:
 ```bash
-git revert <commit-id> # A new commit that reverts the changes of commit-id.
+git revert [--no-commit] <commit-id> # A new commit that reverts the changes of commit-id.
 ```
 
 <a href="https://git-scm.com/book/en/v2/Git-Tools-Submodules">Git Tools - Submodules</a>
@@ -221,6 +276,7 @@ variations:
 git show [--outline -s]
 git reflog 
 git log -1 [--outline] # show the last commit info
+git log --full-history -- file_name # show all logs related to a file
 git status
 ```
 
@@ -244,8 +300,51 @@ git stash show -p stash@{1} # show the changes of the specified stash
 git stash show -p 1 # simplified version of the above comment
 ```
 
+
+```bash
+# You have divergent branches and need to specify how to reconcile them.
+# You can do so by running one of the following commands sometime before
+# your next pull:
+ 
+git config pull.rebase false  # merge (the default strategy)
+git config pull.rebase true   # rebase
+git config pull.ff only       # fast-forward only
+
+# You can replace "git config" with "git config --global" to set a default
+# preference for all repositories. You can also pass --rebase, --no-rebase,
+# or --ff-only on the command line to override the configured default per
+# invocation.
+```
+
 <a href="#">Git Tools - working tree</a>
 TODO...
+
+
+<a href="https://dillionmegida.com/p/delete-outdated-branches/">Prune git option</a>
+Pruning only deletes the references in refs/remotes/ that do not point to an active branch on the remote. It works like this so that you do not delete your local changes.
+
+```
+# recommended command
+git fetch --prune
+
+# To set the global config on fetch: perform prune when fetch
+git config --global fetch.prune true
+
+```
+
+However, if you want to delete merged branches automatically, here are some commands you can use.
+```
+git checkout master # or "main" if that's what you use
+# List all the branches that has been merged:
+git branch --merged 
+
+# Skip certain branches
+git branch --merged | egrep -v "master|dev|main|staging|[any-other-branch-you-want-to-skip]"
+
+# Auto deletion:
+git branch --merged | egrep -v "master|dev|main|staging" | xargs git branch -d
+```
+
 
 <a href="https://docs.github.com/en/get-started/getting-started-with-git/configuring-git-to-handle-line-endings?platform=linux">Git Tools - Eol configuration</a>
 

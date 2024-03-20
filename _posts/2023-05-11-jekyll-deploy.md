@@ -116,6 +116,22 @@ git branch -a # List local and remote branches
 git checkout my-branch-name
 ```
 
+Trouble shooting of pushing updates onto origin (<a href="https://stackoverflow.com/questions/14762034/push-to-github-without-a-password-using-ssh-key">reference</a>):
+
+If it is asking you for a username and password, your origin remote is pointing at the HTTPS URL rather than the SSH URL. Change it to ssh.
+
+For example, a GitHub project like Git will have an HTTPS URL and an SSH one:
+```bash
+# https
+https://github.com/<Username>/<Project>.git
+# ssh
+git@github.com:<Username>/<Project>.git
+```
+
+You can change the url from HTTPS to SSH by:
+```bash
+git remote set-url origin git@github.com:<Username>/<Project>.git
+```
 
 #### References
 <ul>

@@ -374,6 +374,143 @@ def test_eval(test_input, expected):
     assert eval(test_input) == expected
 ```
 
+#### Module import
+
+Module import using importlib and pkgutil.extend_path to 
+handle separate source file folders under a same package/module name:
+```python
+# Examine the current imported modules and paths
+import sys
+import importlib
+sys.modules
+sys.path_importer_cache
+```
+
+1) Manual import workaround:
+```python
+import sys
+import importlib
+
+pkgname = 'clio'
+
+for key,finder in sys.path_importer_cache.items():
+  if isinstance(finder, importlib.machinery.FileFinder):
+    spec = finder.find_spec(pkgname)
+
+    if spec is not None:
+      print(f'Adding spec {spec} and exec module')
+      modl = importlib.util.module_from_spec(spec)
+
+      loader = importlib.util.LazyLoader(spec.loader)
+      spec.loader = loader
+      spec.loader.exec_module(modl)
+
+      if not pkgname in sys.modules:
+        sys.modules[pkgname] = modl
+      else:
+        sys.modules[pkgname].__path__ += spec.submodule_search_locations
+
+
+print(f'sys.modules[{pkgname}] = {sys.modules[pkgname]}')
+print(f'sys.modules[{pkgname}].__path__ = {sys.modules[pkgname].__path__}')
+
+subpkgname = 'core_models'
+subpkgfullname = pkgname + "." + subpkgname
+
+print(f'Pre-Import is key {subpkgfullname} in sys.modules: {subpkgfullname in sys.modules}')
+
+for pth in sys.modules[pkgname].__path__:
+  finder = importlib.machinery.FileFinder(pth)
+  spec = finder.find_spec(subpkgfullname)
+
+  if spec is not None:
+      print(f'Adding spec {spec} and exec module')
+      modl = importlib.util.module_from_spec(spec)
+
+      assert spec.loader is not None, "loader can't be None"
+      loader = importlib.util.LazyLoader(spec.loader)
+      spec.loader = loader
+      spec.loader.exec_module(modl)
+
+      if not subpkgfullname in sys.modules:
+        sys.modules[subpkgfullname] = modl
+      else:
+        sys.modules[subpkgfullname].__path__ += spec.submodule_search_locations
+
+# importlib.import_module doesn't deal with multiple locations
+# submodl = importlib.import_module(subpkgfullname)
+
+# print(submodl)
+# print(f"dir(submodl of {submodl.__name__})={dir(submodl)}")
+
+print(f'PostImport sys.modules[{subpkgfullname}].__path__ = {sys.modules[subpkgfullname].__path__}')
+
+# now import what we need
+# import clio.ait_models.unets
+# import clio.core_models.unets
+import clio.export.aitemplate_export
+```
+
+2) Recommended solution:
+In order to let python be aware of the situation (identical package name with different file paths), use `pkguitl.extend_path` in the first imported module __init__.py to configure the python import behavior.
+
+Put the following code in the __init__.py of the package folder that will be the first to load under the same parent package name:
+```python
+from pkgutil import extend_path
+# Extend path to include all module paths with an identical parent package name
+__path__ = extend_path(__path__, __name__)
+```
+For example, we put the above code in the following files:
+1. cliocore/ait_models/unets/src/clio/__init__.py
+2. cliocore/core_models/autoencoders/src/clio/core_models/__init__.py
+
+Then the __path__ for the loaded module will be the list of all the modules under the same name.
+
+
+#### AsyncRunner
+```python
+import asyncio
+import threading
+from collections.abc import Coroutine
+from typing import Any
+
+import gevent
+
+class AsyncRunner:
+    loop: asyncio.AbstractEventLoop = asyncio.new_event_loop()
+    lock: threading.Lock = threading.Lock()
+    # Dedicated thread to handle even loop.
+    thread: threading.Thread | None = None
+
+    @classmethod
+    def start_event_loop(cls) -> None:
+        with cls.lock:
+            if cls.thread is None:
+                cls.thread = threading.Thread(target=cls.loop.run_forever, daemon=True)
+                cls.thread.start()
+
+    @classmethod
+    def stop_event_loop(cls) -> None:
+        with cls.lock:
+            if cls.thread is not None:
+                cls.loop.call_soon_threadsafe(cls.loop.stop)
+                cls.thread.join()
+                cls.thread = None
+
+    @classmethod
+    def run(cls, coro: Coroutine[Any, Any, Any]) -> Any:
+        assert cls.thread is not None
+        
+        fu = asyncio.run_coroutine_threadsafe(coro, cls.loop)
+
+        ev = gevent.event.Event()
+        fu.add_done_callback(lambda _: ev.set())
+        ev.wait()
+
+        return fu.result()
+```
+
+
 #### MISC
 
 Ruff extension for VSCode as a quick linter:
@@ -394,6 +531,8 @@ Print Env var `LD_LIBRARY_PATH` in python:
 import os, sys
 print(os.environ['LD_LIBRARY_PATH'])
 ```
+
+
 #### References
 <ul>
 	<li><a href="https://peps.python.org/pep-0318/">PEP 318 – Decorators for Functions and Methods</a></li>
