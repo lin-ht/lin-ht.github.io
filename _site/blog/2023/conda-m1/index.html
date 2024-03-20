@@ -150,36 +150,36 @@ some package developers haven’t support ARM64 yet.</p>
 <p>Short term workaround: create conda environments with x86 architecture on an Apple Silicon Mac.</p>
 
 <h5 id="2-check-enviroment-list-may-skip">2. Check enviroment list (may skip)</h5>
-
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">conda env list</span></code></pre></figure>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>conda <span class="nb">env </span>list
+</code></pre></div></div>
 
 <h5 id="3-create-an-enviroment-and-activate-it">3. Create an enviroment and activate it</h5>
 <p>Instead of directly creating an enviroment like the following:</p>
-
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">conda create -n myenv python=3.9
-conda activate myenv</span></code></pre></figure>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>conda create <span class="nt">-n</span> myenv <span class="nv">python</span><span class="o">=</span>3.9
+conda activate myenv
+</code></pre></div></div>
 
 <p>Put those commands into shell function first (add this to ~/.zshrc or ~/.bashrc if you’re using Bash):</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>create_x86_conda_environment <span class="o">()</span> <span class="o">{</span>
+  <span class="c"># create a conda environment using x86 architecture</span>
+  <span class="c"># first argument is environment name, all subsequent arguments will be passed to `conda create`</span>
+  <span class="c"># example usage: create_x86_conda_environment myenv_x86 python=3.9</span>
+  <span class="nv">CONDA_SUBDIR</span><span class="o">=</span>osx-64 conda create <span class="nt">-n</span> <span class="nv">$@</span>
+  conda activate <span class="nv">$1</span>
+  conda config <span class="nt">--env</span> <span class="nt">--set</span> subdir osx-64
+<span class="o">}</span>
 
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">create_x86_conda_environment () {
-</span><span class="gp">  #</span><span class="w"> </span>create a conda environment using x86 architecture
-<span class="gp">  #</span><span class="w"> </span>first argument is environment name, all subsequent arguments will be passed to <span class="sb">`</span>conda create<span class="sb">`</span>
-<span class="gp">  #</span><span class="w"> </span>example usage: create_x86_conda_environment myenv_x86 <span class="nv">python</span><span class="o">=</span>3.9
-<span class="gp">  CONDA_SUBDIR=osx-64 conda create -n $</span>@
-<span class="gp">  conda activate $</span>1
-<span class="go">  conda config --env --set subdir osx-64
-}
-
-create_arm_conda_environment () {
-</span><span class="gp">  #</span><span class="w"> </span>example usage: create_arm_conda_environment myenv_arm <span class="nv">python</span><span class="o">=</span>3.9
-<span class="gp">  CONDA_SUBDIR=osx-arm64 conda create -n $</span>@
-<span class="gp">  conda activate $</span>1
-<span class="go">  conda config --env --set subdir osx-arm64
-}</span></code></pre></figure>
+create_arm_conda_environment <span class="o">()</span> <span class="o">{</span>
+  <span class="c"># example usage: create_arm_conda_environment myenv_arm python=3.9</span>
+  <span class="nv">CONDA_SUBDIR</span><span class="o">=</span>osx-arm64 conda create <span class="nt">-n</span> <span class="nv">$@</span>
+  conda activate <span class="nv">$1</span>
+  conda config <span class="nt">--env</span> <span class="nt">--set</span> subdir osx-arm64
+<span class="o">}</span>
+</code></pre></div></div>
 
 <p>Then create the desired enviroment as:</p>
-
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">create_x86_conda_environment myenv_x86 python=3.9</span></code></pre></figure>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>create_x86_conda_environment myenv_x86 <span class="nv">python</span><span class="o">=</span>3.9
+</code></pre></div></div>
 
 <blockquote>
 <p style="font-size:16px">One of the features of <a href="https://github.com/conda-forge/miniforge" rel="external nofollow noopener" target="_blank">Miniforge3</a> is the ability to define processor specific sub-directories for specific Python environments. For example, by setting CONDA_SUBDIR=osx-64, conda will be instructed to install packages from x86_64 (osx-64) specific sub-directories.
@@ -188,13 +188,60 @@ This will enable users to create an environment that installs arm64 or x86_64 (o
 </p>
 </blockquote>
 
-<h5 id="4-package-management-in-an-enviroment">4. Package management in an enviroment</h5>
+<h5 id="4-check-conda-and-its-enviroment-information">4. Check conda and its enviroment information</h5>
 
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">conda install xxx</span></code></pre></figure>
+<p>Check the conda config</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>conda config <span class="nt">--show-sources</span>
+<span class="c"># List the channels the conda could access</span>
+</code></pre></div></div>
+
+<p>Check the current env:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>conda info
+</code></pre></div></div>
+<p>Sample output:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>     active environment : base
+    active <span class="nb">env </span>location : /home/joshua/anaconda3
+            shell level : 1
+       user config file : /home/joshua/.condarc
+ populated config files : /home/joshua/.condarc
+          conda version : 4.9.2
+    conda-build version : 3.20.5
+         python version : 3.8.5.final.0
+       virtual packages : <span class="nv">__cuda</span><span class="o">=</span>11.0<span class="o">=</span>0
+                          <span class="nv">__glibc</span><span class="o">=</span>2.31<span class="o">=</span>0
+                          <span class="nv">__unix</span><span class="o">=</span><span class="nv">0</span><span class="o">=</span>0
+                          <span class="nv">__archspec</span><span class="o">=</span><span class="nv">1</span><span class="o">=</span>x86_64
+       base environment : /home/joshua/anaconda3  <span class="o">(</span>writable<span class="o">)</span>
+           channel URLs : https://conda.anaconda.org/conda-forge/linux-64
+                          https://conda.anaconda.org/conda-forge/noarch
+                          https://repo.anaconda.com/pkgs/main/linux-64
+                          https://repo.anaconda.com/pkgs/main/noarch
+                          https://repo.anaconda.com/pkgs/r/linux-64
+                          https://repo.anaconda.com/pkgs/r/noarch
+          package cache : /home/joshua/anaconda3/pkgs
+                          /home/joshua/.conda/pkgs
+       envs directories : /home/joshua/anaconda3/envs
+                          /home/joshua/.conda/envs
+               platform : linux-64
+             user-agent : conda/4.9.2 requests/2.24.0 CPython/3.8.5 Linux/5.4.0-58-generic ubuntu/20.04.1 glibc/2.31
+                UID:GID : 1000:1000
+             netrc file : None
+           offline mode : False
+</code></pre></div></div>
+
+<h5 id="5-package-management-in-an-enviroment">5. Package management in an enviroment</h5>
+
+<p>List installed packages:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>conda list <span class="nt">--show-channel-urls</span>
+</code></pre></div></div>
+
+<p>Two options to install new packages:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>conda <span class="nb">install </span>xxx
+</code></pre></div></div>
 
 <p>For packages that are not available through conda, you’ll need</p>
-
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="go">pip install xxx</span></code></pre></figure>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip <span class="nb">install </span>xxx
+</code></pre></div></div>
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
@@ -221,25 +268,26 @@ This will enable users to create an environment that installs arm64 or x86_64 (o
     Figure. Example output of package installation from subdirectory osx-64.
 </div>
 
-<h5 id="5-moving-conda-environment">5. Moving conda environment</h5>
+<h5 id="6-moving-conda-environment">6. Moving conda environment</h5>
 <p><a href="https://www.anaconda.com/blog/moving-conda-environments" rel="external nofollow noopener" target="_blank">Moving Conda Environments</a></p>
 
 <p>Install conda-pack</p>
-
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># Through conda-forge</span>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Through conda-forge</span>
 conda <span class="nb">install</span> <span class="nt">-c</span> conda-forge conda-pack
 
 <span class="c"># Through PyPI</span>
-pip <span class="nb">install </span>conda-pack</code></pre></figure>
+pip <span class="nb">install </span>conda-pack
+</code></pre></div></div>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># Pack environment my_env into my_env.tar.gz</span>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Pack environment my_env into my_env.tar.gz</span>
 conda pack <span class="nt">-n</span> my_env
 
 <span class="c"># Pack environment my_env into out_name.tar.gz</span>
 conda pack <span class="nt">-n</span> my_env <span class="nt">-o</span> out_name.tar.gz
 
 <span class="c"># Pack environment located at an explicit path into my_env.tar.gz</span>
-conda pack <span class="nt">-p</span> /explicit/path/to/my_env</code></pre></figure>
+conda pack <span class="nt">-p</span> /explicit/path/to/my_env
+</code></pre></div></div>
 
 <h4 id="references">References</h4>
 <ul>
@@ -301,7 +349,7 @@ conda pack <span class="nt">-p</span> /explicit/path/to/my_env</code></pre></fig
     <!-- Footer -->    
     <footer class="fixed-bottom">
       <div class="container mt-0">
-        © Copyright 2023 Haiting  Lin. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. Photos from <a href="https://unsplash.com" target="_blank" rel="external nofollow noopener">Unsplash</a>.
+        © Copyright 2024 Haiting  Lin. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. Photos from <a href="https://unsplash.com" target="_blank" rel="external nofollow noopener">Unsplash</a>.
 
       </div>
     </footer>

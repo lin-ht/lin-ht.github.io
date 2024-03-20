@@ -487,6 +487,139 @@ pytest <span class="nt">-v</span> test_file.py::test_case
     <span class="k">assert</span> <span class="nf">eval</span><span class="p">(</span><span class="n">test_input</span><span class="p">)</span> <span class="o">==</span> <span class="n">expected</span>
 </code></pre></div></div>
 
+<h4 id="module-import">Module import</h4>
+
+<p>Module import using importlib and pkgutil.extend_path to 
+handle separate source file folders under a same package/module name:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Examine the current imported modules and paths
+</span><span class="kn">import</span> <span class="n">sys</span>
+<span class="kn">import</span> <span class="n">importlib</span>
+<span class="n">sys</span><span class="p">.</span><span class="n">modules</span>
+<span class="n">sys</span><span class="p">.</span><span class="n">path_importer_cache</span>
+</code></pre></div></div>
+
+<p>1) Manual import workaround:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">sys</span>
+<span class="kn">import</span> <span class="n">importlib</span>
+
+<span class="n">pkgname</span> <span class="o">=</span> <span class="s">'clio'</span>
+
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">finder</span> <span class="ow">in</span> <span class="n">sys</span><span class="p">.</span><span class="n">path_importer_cache</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+  <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">finder</span><span class="p">,</span> <span class="n">importlib</span><span class="p">.</span><span class="n">machinery</span><span class="p">.</span><span class="n">FileFinder</span><span class="p">):</span>
+    <span class="n">spec</span> <span class="o">=</span> <span class="n">finder</span><span class="p">.</span><span class="nf">find_spec</span><span class="p">(</span><span class="n">pkgname</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">spec</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+      <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'Adding spec </span><span class="si">{</span><span class="n">spec</span><span class="si">}</span><span class="s"> and exec module'</span><span class="p">)</span>
+      <span class="n">modl</span> <span class="o">=</span> <span class="n">importlib</span><span class="p">.</span><span class="n">util</span><span class="p">.</span><span class="nf">module_from_spec</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+
+      <span class="n">loader</span> <span class="o">=</span> <span class="n">importlib</span><span class="p">.</span><span class="n">util</span><span class="p">.</span><span class="nc">LazyLoader</span><span class="p">(</span><span class="n">spec</span><span class="p">.</span><span class="n">loader</span><span class="p">)</span>
+      <span class="n">spec</span><span class="p">.</span><span class="n">loader</span> <span class="o">=</span> <span class="n">loader</span>
+      <span class="n">spec</span><span class="p">.</span><span class="n">loader</span><span class="p">.</span><span class="nf">exec_module</span><span class="p">(</span><span class="n">modl</span><span class="p">)</span>
+
+      <span class="k">if</span> <span class="ow">not</span> <span class="n">pkgname</span> <span class="ow">in</span> <span class="n">sys</span><span class="p">.</span><span class="n">modules</span><span class="p">:</span>
+        <span class="n">sys</span><span class="p">.</span><span class="n">modules</span><span class="p">[</span><span class="n">pkgname</span><span class="p">]</span> <span class="o">=</span> <span class="n">modl</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="n">sys</span><span class="p">.</span><span class="n">modules</span><span class="p">[</span><span class="n">pkgname</span><span class="p">].</span><span class="n">__path__</span> <span class="o">+=</span> <span class="n">spec</span><span class="p">.</span><span class="n">submodule_search_locations</span>
+
+
+<span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'sys.modules[</span><span class="si">{</span><span class="n">pkgname</span><span class="si">}</span><span class="s">] = </span><span class="si">{</span><span class="n">sys</span><span class="p">.</span><span class="n">modules</span><span class="p">[</span><span class="n">pkgname</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'sys.modules[</span><span class="si">{</span><span class="n">pkgname</span><span class="si">}</span><span class="s">].__path__ = </span><span class="si">{</span><span class="n">sys</span><span class="p">.</span><span class="n">modules</span><span class="p">[</span><span class="n">pkgname</span><span class="p">].</span><span class="n">__path__</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+
+<span class="n">subpkgname</span> <span class="o">=</span> <span class="s">'core_models'</span>
+<span class="n">subpkgfullname</span> <span class="o">=</span> <span class="n">pkgname</span> <span class="o">+</span> <span class="s">"."</span> <span class="o">+</span> <span class="n">subpkgname</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'Pre-Import is key </span><span class="si">{</span><span class="n">subpkgfullname</span><span class="si">}</span><span class="s"> in sys.modules: </span><span class="si">{</span><span class="n">subpkgfullname</span> <span class="ow">in</span> <span class="n">sys</span><span class="p">.</span><span class="n">modules</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">pth</span> <span class="ow">in</span> <span class="n">sys</span><span class="p">.</span><span class="n">modules</span><span class="p">[</span><span class="n">pkgname</span><span class="p">].</span><span class="n">__path__</span><span class="p">:</span>
+  <span class="n">finder</span> <span class="o">=</span> <span class="n">importlib</span><span class="p">.</span><span class="n">machinery</span><span class="p">.</span><span class="nc">FileFinder</span><span class="p">(</span><span class="n">pth</span><span class="p">)</span>
+  <span class="n">spec</span> <span class="o">=</span> <span class="n">finder</span><span class="p">.</span><span class="nf">find_spec</span><span class="p">(</span><span class="n">subpkgfullname</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">spec</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+      <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'Adding spec </span><span class="si">{</span><span class="n">spec</span><span class="si">}</span><span class="s"> and exec module'</span><span class="p">)</span>
+      <span class="n">modl</span> <span class="o">=</span> <span class="n">importlib</span><span class="p">.</span><span class="n">util</span><span class="p">.</span><span class="nf">module_from_spec</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+
+      <span class="k">assert</span> <span class="n">spec</span><span class="p">.</span><span class="n">loader</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">,</span> <span class="s">"loader can't be None"</span>
+      <span class="n">loader</span> <span class="o">=</span> <span class="n">importlib</span><span class="p">.</span><span class="n">util</span><span class="p">.</span><span class="nc">LazyLoader</span><span class="p">(</span><span class="n">spec</span><span class="p">.</span><span class="n">loader</span><span class="p">)</span>
+      <span class="n">spec</span><span class="p">.</span><span class="n">loader</span> <span class="o">=</span> <span class="n">loader</span>
+      <span class="n">spec</span><span class="p">.</span><span class="n">loader</span><span class="p">.</span><span class="nf">exec_module</span><span class="p">(</span><span class="n">modl</span><span class="p">)</span>
+
+      <span class="k">if</span> <span class="ow">not</span> <span class="n">subpkgfullname</span> <span class="ow">in</span> <span class="n">sys</span><span class="p">.</span><span class="n">modules</span><span class="p">:</span>
+        <span class="n">sys</span><span class="p">.</span><span class="n">modules</span><span class="p">[</span><span class="n">subpkgfullname</span><span class="p">]</span> <span class="o">=</span> <span class="n">modl</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="n">sys</span><span class="p">.</span><span class="n">modules</span><span class="p">[</span><span class="n">subpkgfullname</span><span class="p">].</span><span class="n">__path__</span> <span class="o">+=</span> <span class="n">spec</span><span class="p">.</span><span class="n">submodule_search_locations</span>
+
+<span class="c1"># importlib.import_module doesn't deal with multiple locations
+# submodl = importlib.import_module(subpkgfullname)
+</span>
+<span class="c1"># print(submodl)
+# print(f"dir(submodl of {submodl.__name__})={dir(submodl)}")
+</span>
+<span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'PostImport sys.modules[</span><span class="si">{</span><span class="n">subpkgfullname</span><span class="si">}</span><span class="s">].__path__ = </span><span class="si">{</span><span class="n">sys</span><span class="p">.</span><span class="n">modules</span><span class="p">[</span><span class="n">subpkgfullname</span><span class="p">].</span><span class="n">__path__</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+
+<span class="c1"># now import what we need
+# import clio.ait_models.unets
+# import clio.core_models.unets
+</span><span class="kn">import</span> <span class="n">clio.export.aitemplate_export</span>
+</code></pre></div></div>
+
+<p>2) Recommended solution:
+In order to let python be aware of the situation (identical package name with different file paths), use <code class="language-plaintext highlighter-rouge">pkguitl.extend_path</code> in the first imported module <strong>init</strong>.py to configure the python import behavior.</p>
+
+<p>Put the following code in the <strong>init</strong>.py of the package folder that will be the first to load under the same parent package name:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">pkgutil</span> <span class="kn">import</span> <span class="n">extend_path</span>
+<span class="c1"># Extend path to include all module paths with an identical parent package name
+</span><span class="n">__path__</span> <span class="o">=</span> <span class="nf">extend_path</span><span class="p">(</span><span class="n">__path__</span><span class="p">,</span> <span class="n">__name__</span><span class="p">)</span>
+</code></pre></div></div>
+<p>For example, we put the above code in the following files:</p>
+<ol>
+  <li>cliocore/ait_models/unets/src/clio/<strong>init</strong>.py</li>
+  <li>cliocore/core_models/autoencoders/src/clio/core_models/<strong>init</strong>.py</li>
+</ol>
+
+<p>Then the <strong>path</strong> for the loaded module will be the list of all the modules under the same name.</p>
+
+<h4 id="asyncrunner">AsyncRunner</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span>
+<span class="kn">import</span> <span class="n">threading</span>
+<span class="kn">from</span> <span class="n">collections.abc</span> <span class="kn">import</span> <span class="n">Coroutine</span>
+<span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+
+<span class="kn">import</span> <span class="n">gevent</span>
+
+<span class="k">class</span> <span class="nc">AsyncRunner</span><span class="p">:</span>
+    <span class="n">loop</span><span class="p">:</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">AbstractEventLoop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">new_event_loop</span><span class="p">()</span>
+    <span class="n">lock</span><span class="p">:</span> <span class="n">threading</span><span class="p">.</span><span class="n">Lock</span> <span class="o">=</span> <span class="n">threading</span><span class="p">.</span><span class="nc">Lock</span><span class="p">()</span>
+    <span class="c1"># Dedicated thread to handle even loop.
+</span>    <span class="n">thread</span><span class="p">:</span> <span class="n">threading</span><span class="p">.</span><span class="n">Thread</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">start_event_loop</span><span class="p">(</span><span class="n">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">cls</span><span class="p">.</span><span class="n">lock</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">cls</span><span class="p">.</span><span class="n">thread</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">cls</span><span class="p">.</span><span class="n">thread</span> <span class="o">=</span> <span class="n">threading</span><span class="p">.</span><span class="nc">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">cls</span><span class="p">.</span><span class="n">loop</span><span class="p">.</span><span class="n">run_forever</span><span class="p">,</span> <span class="n">daemon</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                <span class="n">cls</span><span class="p">.</span><span class="n">thread</span><span class="p">.</span><span class="nf">start</span><span class="p">()</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">stop_event_loop</span><span class="p">(</span><span class="n">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">cls</span><span class="p">.</span><span class="n">lock</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">cls</span><span class="p">.</span><span class="n">thread</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">cls</span><span class="p">.</span><span class="n">loop</span><span class="p">.</span><span class="nf">call_soon_threadsafe</span><span class="p">(</span><span class="n">cls</span><span class="p">.</span><span class="n">loop</span><span class="p">.</span><span class="n">stop</span><span class="p">)</span>
+                <span class="n">cls</span><span class="p">.</span><span class="n">thread</span><span class="p">.</span><span class="nf">join</span><span class="p">()</span>
+                <span class="n">cls</span><span class="p">.</span><span class="n">thread</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">coro</span><span class="p">:</span> <span class="n">Coroutine</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">cls</span><span class="p">.</span><span class="n">thread</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
+        
+        <span class="n">fu</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="nf">run_coroutine_threadsafe</span><span class="p">(</span><span class="n">coro</span><span class="p">,</span> <span class="n">cls</span><span class="p">.</span><span class="n">loop</span><span class="p">)</span>
+
+        <span class="n">ev</span> <span class="o">=</span> <span class="n">gevent</span><span class="p">.</span><span class="n">event</span><span class="p">.</span><span class="nc">Event</span><span class="p">()</span>
+        <span class="n">fu</span><span class="p">.</span><span class="nf">add_done_callback</span><span class="p">(</span><span class="k">lambda</span> <span class="n">_</span><span class="p">:</span> <span class="n">ev</span><span class="p">.</span><span class="nf">set</span><span class="p">())</span>
+        <span class="n">ev</span><span class="p">.</span><span class="nf">wait</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">fu</span><span class="p">.</span><span class="nf">result</span><span class="p">()</span>
+</code></pre></div></div>
+
 <h4 id="misc">MISC</h4>
 
 <p>Ruff extension for VSCode as a quick linter:</p>
@@ -504,6 +637,7 @@ ruff rule S101
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">os</span><span class="p">,</span> <span class="n">sys</span>
 <span class="nf">print</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">[</span><span class="s">'LD_LIBRARY_PATH'</span><span class="p">])</span>
 </code></pre></div></div>
+
 <h4 id="references">References</h4>
 <ul>
 	<li><a href="https://peps.python.org/pep-0318/" rel="external nofollow noopener" target="_blank">PEP 318 – Decorators for Functions and Methods</a></li>
@@ -569,7 +703,7 @@ ruff rule S101
     <!-- Footer -->    
     <footer class="fixed-bottom">
       <div class="container mt-0">
-        © Copyright 2023 Haiting  Lin. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. Photos from <a href="https://unsplash.com" target="_blank" rel="external nofollow noopener">Unsplash</a>.
+        © Copyright 2024 Haiting  Lin. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. Photos from <a href="https://unsplash.com" target="_blank" rel="external nofollow noopener">Unsplash</a>.
 
       </div>
     </footer>

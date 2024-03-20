@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-11-21T17:31:13-08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">blank</title><subtitle>A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2024-03-20T14:58:09-07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">blank</title><subtitle>A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
 </subtitle><entry><title type="html">Terminal debugging</title><link href="http://localhost:4000/blog/2023/terminal-debug/" rel="alternate" type="text/html" title="Terminal debugging" /><published>2023-08-25T00:00:00-07:00</published><updated>2023-08-25T00:00:00-07:00</updated><id>http://localhost:4000/blog/2023/terminal-debug</id><content type="html" xml:base="http://localhost:4000/blog/2023/terminal-debug/"><![CDATA[<h2 id="terminal-debugging-tool-gdb">Terminal debugging tool gdb</h2>
 
 <p>Tool <a href="https://www.sourceware.org/gdb/">gdb</a>: The GNU Project Debugger. This is the <a href="https://sourceware.org/gdb/current/onlinedocs/gdb"> user manual</a>.</p>
@@ -797,33 +797,34 @@ conda <span class="nb">env </span>update <span class="nt">--file</span> environm
 
 <h5 id="install-package">Install package</h5>
 
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">#</span><span class="w"> </span>Install a PyPl indexed package optionally with version v.v
-<span class="gp">pip install &lt;packagename&gt;</span><span class="o">[==</span>v.v]
-<span class="go">
-</span><span class="gp">#</span><span class="w"> </span><span class="nb">test install </span>with dry-run
-<span class="gp">pip install --dry-run &lt;packagename&gt;</span><span class="w">
-</span><span class="go">
-</span><span class="gp">#</span><span class="w"> </span>Upgrade an installed package
-<span class="gp">pip install --upgrade &lt;packagename&gt;</span><span class="w">
-</span><span class="go">
-</span><span class="gp">#</span><span class="w"> </span>Uninstall a package
-<span class="gp">pip uninstall &lt;packagename&gt;</span><span class="w">
-</span><span class="go">
-</span><span class="gp">#</span><span class="w"> </span>Install a package from a repository other than PyPI, such as Github
-<span class="gp">pip install -e git+&lt;https://github.com/myrepo.git#</span><span class="nv">egg</span><span class="o">=</span>packagename&gt;
-<span class="go">
-</span><span class="gp">#</span><span class="w"> </span>Install a package from specific index url
-<span class="gp">pip install &lt;packagename&gt;</span><span class="w"> </span><span class="nt">--index-url</span> https://some.index.url
-<span class="go">
-</span><span class="gp">#</span><span class="w"> </span>Install a package with extra index url
-<span class="gp">pip install &lt;packagename&gt;</span><span class="w"> </span><span class="nt">--extra-index-url</span> https://some.extra.index.url
-<span class="go">
-</span><span class="gp">#</span><span class="w"> </span>Install package from <span class="nb">local</span> .whl file
-<span class="go">pip install /path/to/some/package.whl
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Install a PyPl indexed package optionally with version v.v</span>
+pip <span class="nb">install</span> &lt;packagename&gt;[<span class="o">==</span>v.v]
 
-</span><span class="gp">pip install --find-links /path/to/the/wheel/file/ &lt;package-name&gt;</span><span class="w">
-</span><span class="go">
-pip wheel [--no-deps] -w /path/to/the/wheel/files/</span></code></pre></figure>
+<span class="c"># test install with dry-run</span>
+pip <span class="nb">install</span> <span class="nt">--dry-run</span> &lt;packagename&gt;
+
+<span class="c"># Upgrade an installed package</span>
+pip <span class="nb">install</span> <span class="nt">--upgrade</span> &lt;packagename&gt;
+
+<span class="c"># Uninstall a package</span>
+pip uninstall &lt;packagename&gt;
+
+<span class="c"># Install a package from a repository other than PyPI, such as Github</span>
+pip <span class="nb">install</span> <span class="nt">-e</span> git+&lt;https://github.com/myrepo.git#egg<span class="o">=</span>packagename&gt;
+
+<span class="c"># Install a package from specific index url</span>
+pip <span class="nb">install</span> &lt;packagename&gt; <span class="nt">--index-url</span> https://some.index.url
+
+<span class="c"># Install a package with extra index url</span>
+pip <span class="nb">install</span> &lt;packagename&gt; <span class="nt">--extra-index-url</span> https://some.extra.index.url
+
+<span class="c"># Install package from local .whl file</span>
+pip <span class="nb">install</span> /path/to/some/package.whl
+
+pip <span class="nb">install</span> <span class="nt">--find-links</span> /path/to/the/wheel/file/ &lt;package-name&gt;
+
+pip wheel <span class="o">[</span><span class="nt">--no-deps</span><span class="o">]</span> <span class="nt">-w</span> /path/to/the/wheel/files/
+</code></pre></div></div>
 
 <h5 id="build-your-own-whl-file">Build your own .whl file</h5>
 
@@ -1029,6 +1030,37 @@ docker <span class="nb">rm</span> <span class="nt">-f</span> <span class="si">$(
 
 <span class="c"># inspect docker container settings</span>
 docker inspect &lt;container-name&gt;
+</code></pre></div></div>
+
+<h5 id="docker-space-clean-up">Docker space clean up</h5>
+<p>Docker saves its data in <code class="language-plaintext highlighter-rouge">/var/lib/docker</code>. The space usage grows quickly.
+<a href="https://forums.docker.com/t/some-way-to-clean-up-identify-contents-of-var-lib-docker-overlay/30604/21"> Some ways to identify and clean up the unused content</a>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Enable sudo user to access the protected folder.</span>
+<span class="nb">sudo </span>su -
+
+<span class="c"># Check the space usage (Not actual disk usage.)</span>
+<span class="c"># -c option to compute the total.</span>
+<span class="nb">du</span> <span class="nt">-csh</span> /var/lib/docker/overlay2
+
+<span class="nb">cd</span> /var/lib
+<span class="c"># Due to merge folders are mounted using overlay driver, du output is not actual disk allocation size.</span>
+<span class="c"># Only check the file sizes in the docker/overlay2/*/diff will give more accurate space usage:</span>
+find ./docker/overlay2 <span class="nt">-maxdepth</span> 3 <span class="nt">-type</span> d <span class="nt">-regex</span> <span class="s1">'\.\/docker\/overlay2\/[^ ]*/diff'</span> <span class="nt">-exec</span> <span class="nb">du</span> <span class="nt">-csh</span> <span class="o">{}</span> +
+<span class="c"># or</span>
+find ./docker/overlay2 <span class="nt">-maxdepth</span> 3 <span class="nt">-type</span> d <span class="nt">-regex</span> <span class="s1">'\.\/docker\/overlay2\/[^ ]*/diff'</span> <span class="nt">-print0</span> | xargs <span class="nt">-r0</span> <span class="nb">sudo du</span> <span class="nt">-csh</span>
+<span class="c"># Note this doesn't work: du -ch ./docker/overlay2/*/diff</span>
+<span class="c"># du: cannot access './docker/overlay2/*/diff': No such file or directory</span>
+
+<span class="c"># Clean up volume (Not effective on my case)</span>
+docker volume <span class="nb">rm</span> <span class="si">$(</span>docker volume <span class="nb">ls</span> <span class="nt">-qf</span> <span class="nv">dangling</span><span class="o">=</span><span class="nb">true</span><span class="si">)</span>
+
+<span class="c"># Prune volumes:</span>
+<span class="c"># Caution: this will remove all docker images or containers that are not actively in use.</span>
+docker system prune <span class="nt">--all</span> <span class="nt">--volumes</span> <span class="nt">--force</span>
+
+<span class="c"># Check the volumn space</span>
+<span class="nb">df</span> <span class="nt">-h</span>
 </code></pre></div></div>
 
 <h5 id="additional-execution-on-a-running-docker">Additional execution on a running Docker</h5>

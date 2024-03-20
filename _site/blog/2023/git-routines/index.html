@@ -148,6 +148,7 @@
 git status
 git diff
 git diff &lt;filename&gt;
+git diff &lt;filename&gt; <span class="o">&gt;</span> foo.diff <span class="c"># output git diff to file foo.diff with coloring.</span>
 git add <span class="nt">--all</span> <span class="c"># Stage all files</span>
 git add &lt;filename&gt;	<span class="c"># Stage a file, ready to commit</span>
 git reset <span class="c"># Unstage all files</span>
@@ -157,6 +158,47 @@ git restore &lt;filename&gt; <span class="c"># Discard changes of the file</span
 
 git commit <span class="nt">-m</span> <span class="s2">"Post update"</span> 
 git push <span class="nt">-u</span> origin &lt;your-branch&gt; 
+
+<span class="c"># run once - change origin</span>
+git remote set-url origin git@github.com:Adobe-Firefly/colligo.git
+<span class="c"># run once, optional: keep the old corp url as backup</span>
+git remote add legacy-corp git@git.corp.adobe.com:colligo/colligo.git
+
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Switch to a remote branch</span>
+git fetch origin
+git branch <span class="nt">-v</span> <span class="nt">-a</span>
+
+<span class="c"># with -c to create a new local branch</span>
+git switch <span class="nt">-c</span> halin-remove-gb-cuda origin/halin-remove-gb-cuda 
+</code></pre></div></div>
+
+<p>Github compare url example:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://github.com/&lt;repo-dir&gt;/compare/&lt;branch-name&gt;?expand<span class="o">=</span>1
+</code></pre></div></div>
+
+<p>You have divergent branches (remote vs local) and need to specify how to reconcile them.
+You can do so by running one of the following commands sometime before
+hint: your next pull:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config pull.rebase <span class="nb">false</span>  <span class="c"># merge (the default strategy)</span>
+git config pull.rebase <span class="nb">true</span>   <span class="c"># rebase</span>
+git config pull.ff only       <span class="c"># fast-forward only</span>
+</code></pre></div></div>
+
+<p><a href="https://stackoverflow.com/questions/40987847/unable-to-find-current-origin-master-revision-in-submodule-path" rel="external nofollow noopener" target="_blank">Pull with Submodule</a>
+May need to manually clean up the local .git/modules records (‘rm -rf </p>
+<dir>') before running the submodule update to have a clean clone: 
+Remove the folder of the submodule itself and its folder record inside the .git/modules`.</dir>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git pull <span class="nt">--recurse-submodules</span>
+git submodule foreach <span class="nt">--recursive</span> git pull
+git submodule update <span class="nt">--remote</span> <span class="c"># will only update the branch registered in the .gitmodule</span>
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git submodule <span class="nb">sync</span> <span class="c"># sync to the remote</span>
+git submodule update <span class="nt">--remote</span> <span class="nt">--init</span> <span class="c"># first initialize the submodule recorded in .gitmodule</span>
+git submodule update <span class="nt">--remote</span> <span class="nt">--rebase</span>
 </code></pre></div></div>
 
 <p>Discard local changes and force to pull the remote branch:</p>
@@ -167,6 +209,12 @@ git reset <span class="nt">--hard</span> FETCH_HEAD
 <span class="c"># removes files which are not tracked by git</span>
 <span class="c"># the -df flags tell it to remove directories (-d) and actually do the removal (-f)</span>
 git clean <span class="nt">-df</span>
+</code></pre></div></div>
+
+<p>Revert the current repo to a previous commit (this applies to submodule too):
+(Note: <code class="language-plaintext highlighter-rouge">git pull</code> is nothing more than <code class="language-plaintext highlighter-rouge">git fetch</code> followed by <code class="language-plaintext highlighter-rouge">git merge</code>)</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git fetch origin &lt;branch&gt;
+git checkout &lt;commit-id&gt;
 </code></pre></div></div>
 
 <p><a href="#">Git Tools - Branch</a></p>
@@ -284,6 +332,7 @@ git commit <span class="nt">-m</span> <span class="s2">"msg"</span>
 <p>Better undoing mistakes before commit:</p>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git stash
 git checkout <span class="nt">--</span> &lt;filename&gt; <span class="c"># Discard file changes permanently</span>
+git checkout &lt;branch-name&gt; <span class="nt">--</span> &lt;filename&gt; <span class="c"># Checkout file from other branch</span>
 git reset <span class="nt">--hard</span> <span class="c"># Discard all changes permanently</span>
 </code></pre></div></div>
 
@@ -315,7 +364,7 @@ git reset <span class="nt">--hard</span> HEAD <span class="c"># reset to the lat
 </code></pre></div></div>
 
 <p>Undoing changes in a shared repo:</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git revert &lt;commit-id&gt; <span class="c"># A new commit that reverts the changes of commit-id.</span>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git revert <span class="o">[</span><span class="nt">--no-commit</span><span class="o">]</span> &lt;commit-id&gt; <span class="c"># A new commit that reverts the changes of commit-id.</span>
 </code></pre></div></div>
 
 <p><a href="https://git-scm.com/book/en/v2/Git-Tools-Submodules" rel="external nofollow noopener" target="_blank">Git Tools - Submodules</a></p>
@@ -343,6 +392,7 @@ git submodule add &lt;git_url_to_the_submodule&gt; &lt;submodule_folder_name&gt;
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git show <span class="o">[</span><span class="nt">--outline</span> <span class="nt">-s</span><span class="o">]</span>
 git reflog 
 git log <span class="nt">-1</span> <span class="o">[</span><span class="nt">--outline</span><span class="o">]</span> <span class="c"># show the last commit info</span>
+git log <span class="nt">--full-history</span> <span class="nt">--</span> file_name <span class="c"># show all logs related to a file</span>
 git status
 </code></pre></div></div>
 
@@ -364,8 +414,45 @@ git stash show <span class="nt">-p</span> stash@<span class="o">{</span>1<span c
 git stash show <span class="nt">-p</span> 1 <span class="c"># simplified version of the above comment</span>
 </code></pre></div></div>
 
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># You have divergent branches and need to specify how to reconcile them.</span>
+<span class="c"># You can do so by running one of the following commands sometime before</span>
+<span class="c"># your next pull:</span>
+ 
+git config pull.rebase <span class="nb">false</span>  <span class="c"># merge (the default strategy)</span>
+git config pull.rebase <span class="nb">true</span>   <span class="c"># rebase</span>
+git config pull.ff only       <span class="c"># fast-forward only</span>
+
+<span class="c"># You can replace "git config" with "git config --global" to set a default</span>
+<span class="c"># preference for all repositories. You can also pass --rebase, --no-rebase,</span>
+<span class="c"># or --ff-only on the command line to override the configured default per</span>
+<span class="c"># invocation.</span>
+</code></pre></div></div>
+
 <p><a href="#">Git Tools - working tree</a>
 TODO…</p>
+
+<p><a href="https://dillionmegida.com/p/delete-outdated-branches/" rel="external nofollow noopener" target="_blank">Prune git option</a>
+Pruning only deletes the references in refs/remotes/ that do not point to an active branch on the remote. It works like this so that you do not delete your local changes.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># recommended command
+git fetch --prune
+
+# To set the global config on fetch: perform prune when fetch
+git config --global fetch.prune true
+
+</code></pre></div></div>
+
+<p>However, if you want to delete merged branches automatically, here are some commands you can use.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout master # or "main" if that's what you use
+# List all the branches that has been merged:
+git branch --merged 
+
+# Skip certain branches
+git branch --merged | egrep -v "master|dev|main|staging|[any-other-branch-you-want-to-skip]"
+
+# Auto deletion:
+git branch --merged | egrep -v "master|dev|main|staging" | xargs git branch -d
+</code></pre></div></div>
 
 <p><a href="https://docs.github.com/en/get-started/getting-started-with-git/configuring-git-to-handle-line-endings?platform=linux" rel="external nofollow noopener" target="_blank">Git Tools - Eol configuration</a></p>
 
@@ -453,7 +540,7 @@ git config <span class="nt">--get</span> core.autocrlf <span class="c"># Check t
     <!-- Footer -->    
     <footer class="fixed-bottom">
       <div class="container mt-0">
-        © Copyright 2023 Haiting  Lin. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. Photos from <a href="https://unsplash.com" target="_blank" rel="external nofollow noopener">Unsplash</a>.
+        © Copyright 2024 Haiting  Lin. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. Photos from <a href="https://unsplash.com" target="_blank" rel="external nofollow noopener">Unsplash</a>.
 
       </div>
     </footer>

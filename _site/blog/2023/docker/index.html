@@ -201,6 +201,37 @@ docker <span class="nb">rm</span> <span class="nt">-f</span> <span class="si">$(
 docker inspect &lt;container-name&gt;
 </code></pre></div></div>
 
+<h5 id="docker-space-clean-up">Docker space clean up</h5>
+<p>Docker saves its data in <code class="language-plaintext highlighter-rouge">/var/lib/docker</code>. The space usage grows quickly.
+<a href="https://forums.docker.com/t/some-way-to-clean-up-identify-contents-of-var-lib-docker-overlay/30604/21" rel="external nofollow noopener" target="_blank"> Some ways to identify and clean up the unused content</a>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Enable sudo user to access the protected folder.</span>
+<span class="nb">sudo </span>su -
+
+<span class="c"># Check the space usage (Not actual disk usage.)</span>
+<span class="c"># -c option to compute the total.</span>
+<span class="nb">du</span> <span class="nt">-csh</span> /var/lib/docker/overlay2
+
+<span class="nb">cd</span> /var/lib
+<span class="c"># Due to merge folders are mounted using overlay driver, du output is not actual disk allocation size.</span>
+<span class="c"># Only check the file sizes in the docker/overlay2/*/diff will give more accurate space usage:</span>
+find ./docker/overlay2 <span class="nt">-maxdepth</span> 3 <span class="nt">-type</span> d <span class="nt">-regex</span> <span class="s1">'\.\/docker\/overlay2\/[^ ]*/diff'</span> <span class="nt">-exec</span> <span class="nb">du</span> <span class="nt">-csh</span> <span class="o">{}</span> +
+<span class="c"># or</span>
+find ./docker/overlay2 <span class="nt">-maxdepth</span> 3 <span class="nt">-type</span> d <span class="nt">-regex</span> <span class="s1">'\.\/docker\/overlay2\/[^ ]*/diff'</span> <span class="nt">-print0</span> | xargs <span class="nt">-r0</span> <span class="nb">sudo du</span> <span class="nt">-csh</span>
+<span class="c"># Note this doesn't work: du -ch ./docker/overlay2/*/diff</span>
+<span class="c"># du: cannot access './docker/overlay2/*/diff': No such file or directory</span>
+
+<span class="c"># Clean up volume (Not effective on my case)</span>
+docker volume <span class="nb">rm</span> <span class="si">$(</span>docker volume <span class="nb">ls</span> <span class="nt">-qf</span> <span class="nv">dangling</span><span class="o">=</span><span class="nb">true</span><span class="si">)</span>
+
+<span class="c"># Prune volumes:</span>
+<span class="c"># Caution: this will remove all docker images or containers that are not actively in use.</span>
+docker system prune <span class="nt">--all</span> <span class="nt">--volumes</span> <span class="nt">--force</span>
+
+<span class="c"># Check the volumn space</span>
+<span class="nb">df</span> <span class="nt">-h</span>
+</code></pre></div></div>
+
 <h5 id="additional-execution-on-a-running-docker">Additional execution on a running Docker</h5>
 <p>Run <a href="https://docs.docker.com/engine/reference/commandline/exec/" rel="external nofollow noopener" target="_blank">docker exec</a> into a running container:</p>
 
@@ -273,7 +304,7 @@ docker <span class="nb">exec</span> <span class="nt">-it</span> mycontainer sh
     <!-- Footer -->    
     <footer class="fixed-bottom">
       <div class="container mt-0">
-        © Copyright 2023 Haiting  Lin. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. Photos from <a href="https://unsplash.com" target="_blank" rel="external nofollow noopener">Unsplash</a>.
+        © Copyright 2024 Haiting  Lin. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. Photos from <a href="https://unsplash.com" target="_blank" rel="external nofollow noopener">Unsplash</a>.
 
       </div>
     </footer>

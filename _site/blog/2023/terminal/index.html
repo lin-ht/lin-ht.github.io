@@ -144,8 +144,7 @@
       <h4 id="useful-commands">Useful commands</h4>
 
 <p><a href="https://linuxize.com/post/chmod-recursive/" rel="external nofollow noopener" target="_blank">Change permisson</a>:</p>
-
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># Make the script files executable</span>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Make the script files executable</span>
 <span class="nb">chmod </span>a+x scripts/<span class="k">*</span>.sh
 
 <span class="c"># recursively option -R or --recursive</span>
@@ -158,7 +157,8 @@ find /path/to/directory <span class="nt">-type</span> f <span class="nt">-exec</
 
 <span class="c"># Use the xargs command to pass multiple entries at once</span>
 <span class="nb">sudo </span>find /path/to/directory <span class="nt">-type</span> d <span class="nt">-print0</span> | xargs <span class="nt">-0</span> <span class="nb">sudo chmod </span>755
-<span class="nb">sudo </span>find /path/to/directory <span class="nt">-type</span> f <span class="nt">-print0</span> | xargs <span class="nt">-0</span> <span class="nb">sudo chmod </span>644</code></pre></figure>
+<span class="nb">sudo </span>find /path/to/directory <span class="nt">-type</span> f <span class="nt">-print0</span> | xargs <span class="nt">-0</span> <span class="nb">sudo chmod </span>644
+</code></pre></div></div>
 
 <p><code class="language-plaintext highlighter-rouge">chmod 755 {}</code> specifies the command that will be executed by find for each directory</p>
 
@@ -171,16 +171,27 @@ find /path/to/directory <span class="nt">-type</span> f <span class="nt">-exec</
 <p><code class="language-plaintext highlighter-rouge">\;</code> the semicolon is escaped, otherwise it would be interpreted by the shell instead of find</p>
 
 <p><a href="https://www.howtogeek.com/444596/how-to-change-the-default-shell-to-bash-in-macos-catalina/" rel="external nofollow noopener" target="_blank">Change default shell on macOS</a>:</p>
-
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">cat</span> /etc/shells <span class="c"># List the included shells on the system</span>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat</span> /etc/shells <span class="c"># List the included shells on the system</span>
 chsh <span class="nt">-s</span> /bin/bash <span class="c"># Change default terminal to bash</span>
-chsh <span class="nt">-s</span> /bin/zsh <span class="c"># Change default terminal to zsh</span></code></pre></figure>
+chsh <span class="nt">-s</span> /bin/zsh <span class="c"># Change default terminal to zsh</span>
+</code></pre></div></div>
 
 <p><a href="https://linuxize.com/post/how-get-size-of-file-directory-linux/" rel="external nofollow noopener" target="_blank">Query the size (disk usage) of a directory</a>:</p>
-
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">du</span> <span class="nt">-sh</span> <span class="o">[</span><span class="nt">--apparent-size</span><span class="o">]</span> &lt;<span class="nb">dir</span><span class="o">&gt;</span> <span class="c"># the total (-s) size of the directory in (-h) human readable format</span>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">du</span> <span class="nt">-sh</span> <span class="o">[</span><span class="nt">--apparent-size</span><span class="o">]</span> &lt;<span class="nb">dir</span><span class="o">&gt;</span> <span class="c"># the total (-s) size of the directory in (-h) human readable format</span>
 <span class="nb">du</span> <span class="nt">-h</span> <span class="nt">--max-depth</span><span class="o">=</span>1 &lt;<span class="nb">dir</span><span class="o">&gt;</span> <span class="c"># disk usage of the first-level subdirectories</span>
-<span class="nb">sudo du</span> <span class="nt">-h</span> &lt;<span class="nb">dir</span><span class="o">&gt;</span> | <span class="nb">sort</span> <span class="nt">-rh</span> | <span class="nb">head</span> <span class="nt">-5</span> <span class="c"># print the 5 largest directories within the dir directory</span></code></pre></figure>
+<span class="nb">sudo du</span> <span class="nt">-h</span> &lt;<span class="nb">dir</span><span class="o">&gt;</span> | <span class="nb">sort</span> <span class="nt">-rh</span> | <span class="nb">head</span> <span class="nt">-5</span> <span class="c"># print the 5 largest directories within the dir directory</span>
+
+
+<span class="c"># Exclude a certain directory</span>
+<span class="nb">du</span> <span class="nt">--exclude</span><span class="o">=</span>./relative/path/to/target/dir
+
+<span class="c">#To exclude certain files, use `du --exclude "WILDCARD" &lt;dir&gt;`</span>
+<span class="nb">du</span> <span class="nt">--exclude</span> <span class="s2">"*.txt"</span> <span class="k">*</span> <span class="c"># Excludes all .txt files from calculation</span>
+<span class="c"># This can be done using exclude-from option too:</span>
+<span class="nb">ls</span> <span class="k">*</span>.txt <span class="o">&gt;</span>EXCLUDE.txt
+<span class="nb">ls</span> <span class="k">*</span>.odt <span class="o">&gt;&gt;</span>EXCLUDE.txt
+<span class="nb">du</span> <span class="nt">--exclude-from</span> EXCLUDE.txt
+</code></pre></div></div>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">df</span> <span class="nt">-h</span>
 </code></pre></div></div>
@@ -203,8 +214,7 @@ chsh <span class="nt">-s</span> /bin/zsh <span class="c"># Change default termin
 </code></pre></div></div>
 
 <p><a href="#">Pattern search</a>:</p>
-
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">grep</span> <span class="nt">-rnw</span> <span class="s1">'/path/to/somewhere/'</span> <span class="nt">-e</span> <span class="s2">"pattern"</span>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">grep</span> <span class="nt">-rnw</span> <span class="s1">'/path/to/somewhere/'</span> <span class="nt">-e</span> <span class="s2">"pattern"</span>
 <span class="nb">grep</span> <span class="nt">--include</span><span class="o">=</span><span class="se">\*</span>.<span class="o">{</span>c,h<span class="o">}</span> <span class="nt">-rnw</span> <span class="s1">'/path/to/somewhere/'</span> <span class="nt">-e</span> <span class="s2">"pattern"</span>
 <span class="nb">grep</span> <span class="nt">--exclude</span><span class="o">=</span><span class="se">\*</span>.o <span class="nt">-rnw</span> <span class="s1">'/path/to/somewhere/'</span> <span class="nt">-e</span> <span class="s2">"pattern"</span>
 <span class="nb">grep</span> <span class="nt">--exclude-dir</span><span class="o">={</span>dir1,dir2,<span class="k">*</span>.dst<span class="o">}</span> <span class="nt">-rnw</span> <span class="s1">'/path/to/search/'</span> <span class="nt">-e</span> <span class="s2">"pattern"</span>
@@ -217,7 +227,8 @@ chsh <span class="nt">-s</span> /bin/zsh <span class="c"># Change default termin
     </span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$i</span><span class="s2">"</span>
 <span class="k">done</span>
 <span class="c"># return only the first result</span>
-<span class="nb">grep</span> <span class="nt">-n</span> <span class="s1">'/path/to/somefile'</span> <span class="nt">-e</span> <span class="s2">"pattern"</span> | <span class="nb">head</span> <span class="nt">-1</span></code></pre></figure>
+<span class="nb">grep</span> <span class="nt">-n</span> <span class="s1">'/path/to/somefile'</span> <span class="nt">-e</span> <span class="s2">"pattern"</span> | <span class="nb">head</span> <span class="nt">-1</span>
+</code></pre></div></div>
 
 <table>
   <thead>
@@ -303,15 +314,15 @@ find /your/directory <span class="nt">-iname</span> &lt;name_pattern&gt; <span c
 
 <h5 id="data-management">Data management</h5>
 <p>Copy the content of folder:</p>
-
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># "-a" reserves file attributes, "-r" for recursive copy</span>
-<span class="nb">cp</span> <span class="nt">-ar</span> /source/. /dest/</code></pre></figure>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># "-a" reserves file attributes, "-r" for recursive copy</span>
+<span class="nb">cp</span> <span class="nt">-ar</span> /source/. /dest/
+</code></pre></div></div>
 
 <h5 id="network-related">Network related</h5>
 <p><a href="https://stackoverflow.com/questions/12397175/how-do-i-close-an-open-port-from-the-terminal-on-the-mac" rel="external nofollow noopener" target="_blank">Close an open port</a>
 <a href="https://www.cyberciti.biz/faq/unix-linux-check-if-port-is-in-use-command/" rel="external nofollow noopener" target="_blank">How to check if port is in use on Linux or Unix</a></p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># List the user processes of the port</span>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># List the user processes of the port</span>
 <span class="nb">sudo </span>lsof <span class="nt">-i</span> <span class="nt">-P</span> <span class="nt">-n</span> | <span class="nb">grep </span>LISTEN
 <span class="nb">sudo </span>lsof <span class="nt">-i</span> :&lt;port-number&gt;
 
@@ -319,12 +330,13 @@ find /your/directory <span class="nt">-iname</span> &lt;name_pattern&gt; <span c
 <span class="nb">sudo </span>ss <span class="nt">-tulpn</span> | <span class="nb">grep </span>LISTEN
 <span class="nb">sudo </span>nmap <span class="nt">-sTU</span> <span class="nt">-O</span> IP-address-Here
 <span class="c"># Kill the process that occopying the port with its PID</span>
-<span class="nb">sudo kill</span> <span class="nt">-9</span> &lt;PID-occupying-the-port&gt;</code></pre></figure>
+<span class="nb">sudo kill</span> <span class="nt">-9</span> &lt;PID-occupying-the-port&gt;
+</code></pre></div></div>
 
 <p>Curl does not follow HTTP redirections by default, you need to tell curl to do so using the <code class="language-plaintext highlighter-rouge">-L/--location</code> option:</p>
-
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># Download file using curl</span>
-curl <span class="nt">-L</span> http://some.url <span class="nt">--output</span> some.file</code></pre></figure>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Download file using curl</span>
+curl <span class="nt">-L</span> http://some.url <span class="nt">--output</span> some.file
+</code></pre></div></div>
 
 <h4 id="command-cheatsheet">Command cheatsheet</h4>
 <h5 id="shortcuts">SHORTCUTS</h5>
@@ -858,7 +870,7 @@ curl <span class="nt">-L</span> http://some.url <span class="nt">--output</span>
     <!-- Footer -->    
     <footer class="fixed-bottom">
       <div class="container mt-0">
-        © Copyright 2023 Haiting  Lin. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. Photos from <a href="https://unsplash.com" target="_blank" rel="external nofollow noopener">Unsplash</a>.
+        © Copyright 2024 Haiting  Lin. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. Photos from <a href="https://unsplash.com" target="_blank" rel="external nofollow noopener">Unsplash</a>.
 
       </div>
     </footer>

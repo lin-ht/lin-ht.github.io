@@ -240,6 +240,21 @@ git branch <span class="nt">-a</span> <span class="c"># List local and remote br
 git checkout my-branch-name
 </code></pre></div></div>
 
+<p>Trouble shooting of pushing updates onto origin (<a href="https://stackoverflow.com/questions/14762034/push-to-github-without-a-password-using-ssh-key" rel="external nofollow noopener" target="_blank">reference</a>):</p>
+
+<p>If it is asking you for a username and password, your origin remote is pointing at the HTTPS URL rather than the SSH URL. Change it to ssh.</p>
+
+<p>For example, a GitHub project like Git will have an HTTPS URL and an SSH one:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># https</span>
+https://github.com/&lt;Username&gt;/&lt;Project&gt;.git
+<span class="c"># ssh</span>
+git@github.com:&lt;Username&gt;/&lt;Project&gt;.git
+</code></pre></div></div>
+
+<p>You can change the url from HTTPS to SSH by:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git remote set-url origin git@github.com:&lt;Username&gt;/&lt;Project&gt;.git
+</code></pre></div></div>
+
 <h4 id="references">References</h4>
 <ul>
     <li><a href="https://docs.github.com/en/get-started/quickstart/fork-a-repo" rel="external nofollow noopener" target="_blank">Fork a repo.</a></li>
@@ -297,7 +312,7 @@ git checkout my-branch-name
     <!-- Footer -->    
     <footer class="fixed-bottom">
       <div class="container mt-0">
-        © Copyright 2023 Haiting  Lin. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. Photos from <a href="https://unsplash.com" target="_blank" rel="external nofollow noopener">Unsplash</a>.
+        © Copyright 2024 Haiting  Lin. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. Photos from <a href="https://unsplash.com" target="_blank" rel="external nofollow noopener">Unsplash</a>.
 
       </div>
     </footer>

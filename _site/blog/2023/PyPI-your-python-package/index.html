@@ -145,33 +145,34 @@
 
 <h5 id="install-package">Install package</h5>
 
-<figure class="highlight"><pre><code class="language-terminal" data-lang="terminal"><span class="gp">#</span><span class="w"> </span>Install a PyPl indexed package optionally with version v.v
-<span class="gp">pip install &lt;packagename&gt;</span><span class="o">[==</span>v.v]
-<span class="go">
-</span><span class="gp">#</span><span class="w"> </span><span class="nb">test install </span>with dry-run
-<span class="gp">pip install --dry-run &lt;packagename&gt;</span><span class="w">
-</span><span class="go">
-</span><span class="gp">#</span><span class="w"> </span>Upgrade an installed package
-<span class="gp">pip install --upgrade &lt;packagename&gt;</span><span class="w">
-</span><span class="go">
-</span><span class="gp">#</span><span class="w"> </span>Uninstall a package
-<span class="gp">pip uninstall &lt;packagename&gt;</span><span class="w">
-</span><span class="go">
-</span><span class="gp">#</span><span class="w"> </span>Install a package from a repository other than PyPI, such as Github
-<span class="gp">pip install -e git+&lt;https://github.com/myrepo.git#</span><span class="nv">egg</span><span class="o">=</span>packagename&gt;
-<span class="go">
-</span><span class="gp">#</span><span class="w"> </span>Install a package from specific index url
-<span class="gp">pip install &lt;packagename&gt;</span><span class="w"> </span><span class="nt">--index-url</span> https://some.index.url
-<span class="go">
-</span><span class="gp">#</span><span class="w"> </span>Install a package with extra index url
-<span class="gp">pip install &lt;packagename&gt;</span><span class="w"> </span><span class="nt">--extra-index-url</span> https://some.extra.index.url
-<span class="go">
-</span><span class="gp">#</span><span class="w"> </span>Install package from <span class="nb">local</span> .whl file
-<span class="go">pip install /path/to/some/package.whl
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Install a PyPl indexed package optionally with version v.v</span>
+pip <span class="nb">install</span> &lt;packagename&gt;[<span class="o">==</span>v.v]
 
-</span><span class="gp">pip install --find-links /path/to/the/wheel/file/ &lt;package-name&gt;</span><span class="w">
-</span><span class="go">
-pip wheel [--no-deps] -w /path/to/the/wheel/files/</span></code></pre></figure>
+<span class="c"># test install with dry-run</span>
+pip <span class="nb">install</span> <span class="nt">--dry-run</span> &lt;packagename&gt;
+
+<span class="c"># Upgrade an installed package</span>
+pip <span class="nb">install</span> <span class="nt">--upgrade</span> &lt;packagename&gt;
+
+<span class="c"># Uninstall a package</span>
+pip uninstall &lt;packagename&gt;
+
+<span class="c"># Install a package from a repository other than PyPI, such as Github</span>
+pip <span class="nb">install</span> <span class="nt">-e</span> git+&lt;https://github.com/myrepo.git#egg<span class="o">=</span>packagename&gt;
+
+<span class="c"># Install a package from specific index url</span>
+pip <span class="nb">install</span> &lt;packagename&gt; <span class="nt">--index-url</span> https://some.index.url
+
+<span class="c"># Install a package with extra index url</span>
+pip <span class="nb">install</span> &lt;packagename&gt; <span class="nt">--extra-index-url</span> https://some.extra.index.url
+
+<span class="c"># Install package from local .whl file</span>
+pip <span class="nb">install</span> /path/to/some/package.whl
+
+pip <span class="nb">install</span> <span class="nt">--find-links</span> /path/to/the/wheel/file/ &lt;package-name&gt;
+
+pip wheel <span class="o">[</span><span class="nt">--no-deps</span><span class="o">]</span> <span class="nt">-w</span> /path/to/the/wheel/files/
+</code></pre></div></div>
 
 <h5 id="build-your-own-whl-file">Build your own .whl file</h5>
 
@@ -338,7 +339,7 @@ twine upload dist/<span class="k">*</span> <span class="o">[</span><span class="
     <!-- Footer -->    
     <footer class="fixed-bottom">
       <div class="container mt-0">
-        © Copyright 2023 Haiting  Lin. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. Photos from <a href="https://unsplash.com" target="_blank" rel="external nofollow noopener">Unsplash</a>.
+        © Copyright 2024 Haiting  Lin. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. Photos from <a href="https://unsplash.com" target="_blank" rel="external nofollow noopener">Unsplash</a>.
 
       </div>
     </footer>
