@@ -379,5 +379,51 @@ An example of the `.gitattributes` file content:
 *.jpg binary
 ```
 
+### Multiple github accounts with SSH authentication
+1. Generate the keys as needed, use personal account as an example:
+Reference: <a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Adding your SSH key to the ssh-agent</a>
+```bash
+ssh-keygen -t ed25519 -C "personal-account@gmail.com"
+# save the generated key as ~/.ssh/id_ed25519_personal
+
+# May need to start the ssh-agent in the background
+eval "$(ssh-agent -s)"
+# Add key to the ssh-agent
+ssh-add [--apple-use-keychain] ~/.ssh/id_ed25519_personal
+```
+2. Add the ssh key to your github account:
+Reference: <a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account">Adding a new SSH key to your GitHub account</a>
+```bash
+# Copy the public key to the clipboard
+pbcopy < ~/.ssh/id_ed25519_personal.pub
+```
+Paste the key content to the github ssh key text box in the setting.
+
+3. Add multiple items in the ~/.ssh/config like the following:
+```
+# Personal GitHub account
+Host github.com-personal
+	HostName github.com
+	User git
+	IdentityFile ~/.ssh/id_ed25519_personal
+
+# Work GitHub account
+Host github.com
+	HostName github.com
+	User git
+	IdentityFile ~/.ssh/id_ed25519
+```
+
+4. Fix the remote config for your personal repo:
+```bash
+cd personal-repo-directory
+git remote set-url origin git@github.com-personal:username/personal-repo.git
+```
+
+5. Verify the git config:
+```bash
+git config --list --show-origin
+```
+
 Reference:
 <a href="https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration">Customizing your git configuration</a>
