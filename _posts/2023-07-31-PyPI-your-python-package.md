@@ -126,6 +126,33 @@ setup(
  )
 ```
 
+###### Test package installation
+Check the content of the whl file:
+```bash
+unzip -l dist/*.whl
+
+
+# Test it with a conda env
+echo | conda create --name cvcuda-py38 python=3.8
+conda activate cvcuda-py38
+
+# Different ways of installing wheel:
+
+# use file name with install:
+# pip install [--install-option="--prefix=$PREFIX_PATH"] cvcuda-0.3.1-cp38-cp38-linux_x86_64.whl
+
+# pip install dist/*.whl
+
+# use package name with install:
+pip install --find-links ~/temp/cvcuda_wheel/dist/ cvcuda_import
+
+# wheel can also be installed using pip wheel command:
+pip wheel [--no-deps] -w ~/temp/cvcuda_wheel/dist/
+
+# Remove the testing env
+conda deactivate
+conda remove --name cvcuda-py38 --all
+```
 
 ###### Upload your package to PyPI
 
