@@ -35,6 +35,9 @@ git remote add legacy-corp git@git.corp.adobe.com:colligo/colligo.git
 ```bash
 # Switch to a remote branch
 git fetch origin
+# Or more specifically fetch the particular remote branch
+# If without `:<remote_branch_name>`, the fetch will go to default FETCH_HEAD
+git fetch origin <remote_branch_name>:<remote_branch_name>
 git branch -v -a
 
 # with -c to create a new local branch
@@ -423,6 +426,14 @@ git remote set-url origin git@github.com-personal:username/personal-repo.git
 5. Verify the git config:
 ```bash
 git config --list --show-origin
+```
+
+6. Update user name and email if needed:
+Add `--global` if you want to make it a global change.
+```bash
+git config [--global] user.name <your-name>
+git config [--global] user.email <your-email>
+
 ```
 
 Reference:

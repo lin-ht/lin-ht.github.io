@@ -44,13 +44,13 @@ python3 -m pip --version
 4. Using requirements.txt for package specification
 Check <a href="https://pip.pypa.io/en/latest/reference/requirements-file-format/#requirements-file-format">requirements file format</a>.
 ```txt
-# requirement.txt
+# requirements.txt
 numpy
 ```
 
 5. Pip install depencies
 ```bash
-python -m pip install -r requirement.txt
+python -m pip install -r requirements.txt
 ```
 #### References
 <ul>
