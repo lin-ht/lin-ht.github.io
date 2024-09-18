@@ -511,6 +511,32 @@ class AsyncRunner:
 ```
 
 
+#### Python debugging
+
+##### Debugging tool pdb
+<a href="https://docs.python.org/3/library/pdb.html">Pdb</a> cheatsheet:
+```bash
+s(tep)
+n(ext)
+c(ontinue)
+r(eturn)
+unt(il) <line>
+```
+
+##### Runtime Error
+Pay attention to Out of Memory (OOM) errors.
+```bash
+E0917 22:17:31.965000 139710060349248 torch/distributed/elastic/multiprocessing/api.py:833] failed (exitcode: -9) local_rank: 0 (pid: 328818) of binary: /home/colligo/.colligo/conda/envs/filix/bin/python3.10
+```
+
+Investigation:
+```bash
+# Check the kernel run message
+sudo dmesg -T | egrep -i 'killed process'
+# Sample output:
+# [Tue Sep 17 22:15:33 2024] Memory cgroup out of memory: Killed process 999679 (pt_main_thread) total-vm:287438972kB, anon-rss:201347568kB, file-rss:131612kB, shmem-rss:59180kB, UID:1000 pgtables:399228kB oom_score_adj:900
+```
+
 #### MISC
 
 Ruff extension for VSCode as a quick linter:
@@ -530,6 +556,14 @@ Print Env var `LD_LIBRARY_PATH` in python:
 ```python
 import os, sys
 print(os.environ['LD_LIBRARY_PATH'])
+```
+
+Find the file path of a class:
+```Python
+import inspect
+
+inspect.getmodule(my_class)
+#<module 'module_name' from '/path/to/my/module.py'>
 ```
 
 

@@ -10,11 +10,19 @@ categories: note-posts
 
 ##### Command cheatsheet
 ```bash
+# Add ssh credential first
+eval `ssh-agent -s`
+ssh-add ~/.ssh/id_ed25519
+ssh-add -l
+
 git clone --recurse-submodules -j8 git@github.com:example/target-repo.git
 git status
 git diff
 git diff <filename>
 git diff <filename> > foo.diff # output git diff to file foo.diff with coloring.
+git diff --ignore-all-space 
+git diff -w #alternate to --ignore-all-space
+git diff --ignore-blank-lines
 git add --all # Stage all files
 git add <filename>	# Stage a file, ready to commit
 git reset # Unstage all files
@@ -47,6 +55,8 @@ git switch -c halin-remove-gb-cuda origin/halin-remove-gb-cuda
 Github compare url example:
 ```bash
 https://github.com/<repo-dir>/compare/<branch-name>?expand=1
+# Compare between a commit and a branch.
+https://github.com/Adobe-Firefly/colligo/compare/<commit-id>...<branch-name>
 ```
 
 You have divergent branches (remote vs local) and need to specify how to reconcile them.
@@ -326,7 +336,7 @@ TODO...
 <a href="https://dillionmegida.com/p/delete-outdated-branches/">Prune git option</a>
 Pruning only deletes the references in refs/remotes/ that do not point to an active branch on the remote. It works like this so that you do not delete your local changes.
 
-```
+```bash
 # recommended command
 git fetch --prune
 
@@ -336,7 +346,7 @@ git config --global fetch.prune true
 ```
 
 However, if you want to delete merged branches automatically, here are some commands you can use.
-```
+```bash
 git checkout master # or "main" if that's what you use
 # List all the branches that has been merged:
 git branch --merged 
@@ -435,6 +445,13 @@ git config [--global] user.name <your-name>
 git config [--global] user.email <your-email>
 
 ```
+
+### MISC
+Resolve bad permission:
+```bash
+chmod 400 ~/.ssh/id_rsa
+```
+
 
 Reference:
 <a href="https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration">Customizing your git configuration</a>

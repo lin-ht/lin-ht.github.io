@@ -52,6 +52,29 @@ numpy
 ```bash
 python -m pip install -r requirements.txt
 ```
+
+##### Install and Uninstall
+Packages installed by `python setup.py install`.
+[<a href="https://stackoverflow.com/questions/1550226/python-setup-py-uninstall">stackoverflow reference</a>] Note: Avoid using `python setup.py install` use `pip install .`
+To uninstall, you need to remove all installed files manually, and also undo any other stuff that installation did manually.
+To record a list of installed files, you can use:
+```bash
+python setup.py install --record files.txt
+```
+Once you want to uninstall you can use xargs to do the removal:
+```bash
+xargs rm -rf < files.txt
+```
+
+##### Trouble Shooting
+1. ModuleNotFound Error
+If you run "pip -V" in the cli it will display where pip will install.
+
+If you run 'import sysconfig; print(sysconfig.get_paths()["purelib"])' it will show where python looks for packages.
+
+If you know which interpreter you want to use, you can ensure an install will be going to the right place by running "python3 -m pip install mymodule".
+
+
 #### References
 <ul>
 	<li><a href="https://www.fuzzylabs.ai/blog-post/managing-python-dependencies">Managing Python Dependencies</a></li>
