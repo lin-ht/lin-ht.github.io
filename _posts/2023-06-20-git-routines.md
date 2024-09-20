@@ -34,9 +34,9 @@ git commit -m "Post update"
 git push -u origin <your-branch> 
 
 # run once - change origin
-git remote set-url origin git@github.com:Adobe-Firefly/colligo.git
+git remote set-url origin git@github.com:<git-repo-path>.git
 # run once, optional: keep the old corp url as backup
-git remote add legacy-corp git@git.corp.adobe.com:colligo/colligo.git
+git remote add legacy-corp git@git.corp.xxx.com:<git-repo-path>.git
 
 ```
 
@@ -56,7 +56,7 @@ Github compare url example:
 ```bash
 https://github.com/<repo-dir>/compare/<branch-name>?expand=1
 # Compare between a commit and a branch.
-https://github.com/Adobe-Firefly/colligo/compare/<commit-id>...<branch-name>
+https://github.com/<repo-dir>/compare/<commit-id>...<branch-name>
 ```
 
 You have divergent branches (remote vs local) and need to specify how to reconcile them.

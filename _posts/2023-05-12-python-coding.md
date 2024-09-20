@@ -526,7 +526,7 @@ unt(il) <line>
 ##### Runtime Error
 Pay attention to Out of Memory (OOM) errors.
 ```bash
-E0917 22:17:31.965000 139710060349248 torch/distributed/elastic/multiprocessing/api.py:833] failed (exitcode: -9) local_rank: 0 (pid: 328818) of binary: /home/colligo/.colligo/conda/envs/filix/bin/python3.10
+E0917 22:17:31.965000 139710060349248 torch/distributed/elastic/multiprocessing/api.py:833] failed (exitcode: -9) local_rank: 0 (pid: 328818) of binary: /home/user/linht/conda/envs/myenv/bin/python3.10
 ```
 
 Investigation:

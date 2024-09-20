@@ -98,6 +98,8 @@ Out Guards:
 
 <a href="https://perfetto.dev/docs/quickstart/trace-analysis"> Quickstart: SQL-based analysis and trace-based metrics</a>.
 
+### TensorBoard
+<a href="https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html">PyTorch Profiler With TensorBoard</a>
 
 ## Reference
 <a href="https://github.com/NVIDIA/TensorRT-LLM">TensorRT-LLM github.</a>
