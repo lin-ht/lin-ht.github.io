@@ -1,0 +1,672 @@
+<!DOCTYPE html> <html> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <title>TensorRT example | Haiting Lin</title> <meta name="author" content="Haiting Lin"> <meta name="description" content="practice"> <meta name="keywords" content="haiting, Adobe"> <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-DF7Zhf293AJxJNTmh5zhoYYIMs2oXitRfBjY+9L//AY=" crossorigin="anonymous"> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/css/mdb.min.css" integrity="sha256-jpjYvU3G3N6nrrBwXJoVEYI/0zw8htfFnhT9ljN3JJw=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.21.3/dist/bootstrap-table.min.css"> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous"> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.1/css/academicons.min.css" integrity="sha256-i1+4qU2G2860dGGIOJscdC30s9beBXjFfzjWLjBRsBg=" crossorigin="anonymous"> <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700%7CRoboto+Slab:100,300,400,500,700%7CMaterial+Icons"> <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jwarby/jekyll-pygments-themes@master/github.css" media="" id="highlight_theme_light"> <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;"> <link rel="stylesheet" href="/assets/css/main.css"> <link rel="canonical" href="https://lin-ht.github.io/blog/2024/TensorRT-example/"> <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jwarby/jekyll-pygments-themes@master/native.css" media="none" id="highlight_theme_dark"> <script src="/assets/js/theme.js"></script> <script src="/assets/js/dark_mode.js"></script> <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> <script type="text/javascript">window.MathJax={tex:{tags:"ams"}};</script> <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js"></script> <script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script> <script src="/assets/js/distillpub/template.v2.js"></script> <script src="/assets/js/distillpub/transforms.v2.js"></script> <script src="/assets/js/distillpub/overrides.js"></script> </head> <body> <d-front-matter> <script async type="text/json">{
+      "title": "TensorRT example",
+      "description": "practice",
+      "published": "September 10, 2024",
+      "authors": [
+        
+      ],
+      "katex": {
+        "delimiters": [
+          {
+            "left": "$",
+            "right": "$",
+            "display": false
+          },
+          {
+            "left": "$$",
+            "right": "$$",
+            "display": true
+          }
+        ]
+      }
+    }</script> </d-front-matter> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top"> <div class="container"> <a class="navbar-brand title font-weight-lighter" href="/"><span class="font-weight-bold">Haiting </span>Lin</a> <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse text-right" id="navbarNav"> <ul class="navbar-nav ml-auto flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/">about</a> </li> <li class="nav-item "> <a class="nav-link" href="/publications/">Publications</a> </li> <li class="nav-item "> <a class="nav-link" href="/projects/">Projects</a> </li> <li class="nav-item "> <a class="nav-link" href="/cv/">cv</a> </li> <li class="nav-item active"> <a class="nav-link" href="/blog/">blog<span class="sr-only">(current)</span></a> </li> <li class="toggle-container"> <button id="light-toggle" title="Change theme"> <i class="fas fa-moon"></i> <i class="fas fa-sun"></i> </button> </li> </ul> </div> </div> </nav> <progress id="progress" value="0"> <div class="progress-container"> <span class="progress-bar"></span> </div> </progress> </header> <div class="post distill"> <d-title> <h1>TensorRT example</h1> <p>practice</p> </d-title> <d-byline></d-byline> <d-article> <d-contents> <nav class="l-text figcaption"> <h3>Contents</h3> <div><a href="#tensorrt-examples">TensorRT examples</a></div> <div><a href="#reference">Reference</a></div> </nav> </d-contents> <h2 id="tensorrt-examples">TensorRT examples</h2> <p>Examples of exporting torch model to TensorRT.</p> <h3 id="dynamic-shapes">Dynamic shapes</h3> <p>Prepare running env:</p> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip <span class="nb">install </span>cuda-python
+pip <span class="nb">install </span><span class="nv">tensorrt</span><span class="o">==</span>10.3.0
+</code></pre></div></div> <p>Example of TensorRT conversion with inputs and outputs of dynamic shapes.</p> <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">os</span>
+<span class="kn">import</span> <span class="n">torch</span>
+
+<span class="kn">from</span> <span class="n">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="n">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+
+<span class="kn">from</span> <span class="n">functools</span> <span class="kn">import</span> <span class="nb">reduce</span>
+<span class="kn">import</span> <span class="n">onnx</span>
+<span class="kn">import</span> <span class="n">onnxruntime</span>
+<span class="kn">import</span> <span class="n">tensorrt</span> <span class="k">as</span> <span class="n">trt</span>
+<span class="kn">from</span> <span class="n">cuda</span> <span class="kn">import</span> <span class="n">cudart</span>
+
+
+<span class="k">def</span> <span class="nf">compute_rms_norm</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dim</span><span class="p">,</span> <span class="n">eps</span><span class="p">):</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="nf">reduce</span><span class="p">(</span><span class="n">torch</span><span class="p">.</span><span class="n">promote_types</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">))</span>
+    <span class="n">mean_sq</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="nf">to</span><span class="p">(</span><span class="n">dtype</span><span class="p">).</span><span class="nf">square</span><span class="p">().</span><span class="nf">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="n">dim</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="nf">return </span><span class="p">(</span><span class="n">mean_sq</span> <span class="o">+</span> <span class="n">eps</span><span class="p">).</span><span class="nf">rsqrt</span><span class="p">().</span><span class="nf">to</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">dtype</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">TopK</span><span class="p">(</span><span class="n">torch</span><span class="p">.</span><span class="n">nn</span><span class="p">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-5</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="nf">super</span><span class="p">().</span><span class="nf">__init__</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">k</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">dim</span> <span class="o">=</span> <span class="n">dim</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">eps</span> <span class="o">=</span> <span class="n">eps</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="nf">compute_rms_norm</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">eps</span><span class="p">)</span>
+        <span class="n">values</span><span class="p">,</span> <span class="n">indices</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">topk</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">k</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">dim</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span><span class="p">,</span> <span class="n">indices</span>
+
+
+<span class="k">class</span> <span class="nc">SlicedLinearModel</span><span class="p">(</span><span class="n">torch</span><span class="p">.</span><span class="n">nn</span><span class="p">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">input_size</span><span class="p">,</span> <span class="n">output_size</span><span class="p">,</span> <span class="n">topk</span><span class="p">,</span> <span class="n">dim</span><span class="p">):</span>
+        <span class="nf">super</span><span class="p">(</span><span class="n">SlicedLinearModel</span><span class="p">,</span> <span class="n">self</span><span class="p">).</span><span class="nf">__init__</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">linear</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">nn</span><span class="p">.</span><span class="nc">Linear</span><span class="p">(</span><span class="n">input_size</span><span class="p">,</span> <span class="n">output_size</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">topk</span> <span class="o">=</span> <span class="nc">TopK</span><span class="p">(</span><span class="n">topk</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">dim</span> <span class="o">=</span> <span class="n">dim</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">linear</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">v</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">topk</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">index_select</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">dim</span><span class="p">,</span> <span class="n">k</span><span class="p">.</span><span class="nf">flatten</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">k</span>
+
+
+<span class="k">def</span> <span class="nf">load_model</span><span class="p">(</span><span class="n">input_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">output_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">topk</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="nc">SlicedLinearModel</span><span class="p">(</span><span class="n">input_size</span><span class="p">,</span> <span class="n">output_size</span><span class="p">,</span> <span class="n">topk</span><span class="o">=</span><span class="n">topk</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">torch</span><span class="p">.</span><span class="n">nn</span><span class="p">.</span><span class="n">init</span><span class="p">.</span><span class="nf">xavier_uniform_</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">linear</span><span class="p">.</span><span class="n">weight</span><span class="p">)</span>
+    <span class="n">torch</span><span class="p">.</span><span class="n">nn</span><span class="p">.</span><span class="n">init</span><span class="p">.</span><span class="nf">zeros_</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">linear</span><span class="p">.</span><span class="n">bias</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span>
+
+
+<span class="k">def</span> <span class="nf">compile_onnx_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">input_x</span><span class="p">,</span> <span class="n">onnx_path</span><span class="o">=</span><span class="s">"slicing_test_dynamic.onnx"</span><span class="p">,</span> <span class="n">force_export</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="n">example_input</span> <span class="o">=</span> <span class="p">(</span><span class="n">input_x</span><span class="p">)</span>
+    <span class="n">input_names</span> <span class="o">=</span> <span class="p">[</span><span class="s">"input_x"</span><span class="p">]</span>
+    <span class="n">output_names</span> <span class="o">=</span> <span class="p">[</span><span class="s">"pred_x"</span><span class="p">,</span> <span class="s">"pred_v"</span><span class="p">,</span> <span class="s">"pred_k"</span><span class="p">]</span>
+
+    <span class="n">dynamic_axes</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">"input_x"</span> <span class="p">:</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="s">"sequence_length"</span><span class="p">},</span>
+        <span class="s">"pred_x"</span> <span class="p">:</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="s">"sequence_length"</span><span class="p">},</span>
+        <span class="s">"pred_v"</span> <span class="p">:</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="s">"sequence_length"</span><span class="p">},</span>
+        <span class="s">"pred_k"</span> <span class="p">:</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="s">"sequence_length"</span><span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">force_export</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">exists</span><span class="p">(</span><span class="n">onnx_path</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="p">.</span><span class="nf">no_grad</span><span class="p">():</span>
+            <span class="n">torch</span><span class="p">.</span><span class="n">onnx</span><span class="p">.</span><span class="nf">export</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">example_input</span><span class="p">,</span> <span class="n">onnx_path</span><span class="p">,</span> <span class="n">input_names</span><span class="o">=</span><span class="n">input_names</span><span class="p">,</span> <span class="n">output_names</span><span class="o">=</span><span class="n">output_names</span><span class="p">,</span> <span class="n">dynamic_axes</span><span class="o">=</span><span class="n">dynamic_axes</span><span class="p">,</span> <span class="n">export_params</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">do_constant_folding</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">opset_version</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+
+            <span class="k">with</span> <span class="n">torch</span><span class="p">.</span><span class="nf">no_grad</span><span class="p">():</span>
+                <span class="n">pred_x</span><span class="p">,</span> <span class="n">pred_v</span><span class="p">,</span> <span class="n">pred_k</span> <span class="o">=</span> <span class="nf">model</span><span class="p">(</span><span class="n">input_x</span><span class="p">)</span>
+
+                <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Calibration input_x[</span><span class="si">{</span><span class="n">input_x</span><span class="p">.</span><span class="n">shape</span><span class="si">}</span><span class="s">]:</span><span class="se">\n</span><span class="si">{</span><span class="n">input_x</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+                <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Calibration pred_x[</span><span class="si">{</span><span class="n">pred_x</span><span class="p">.</span><span class="n">shape</span><span class="si">}</span><span class="s">]:</span><span class="se">\n</span><span class="si">{</span><span class="n">pred_x</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+                <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Calibration pred_v[</span><span class="si">{</span><span class="n">pred_v</span><span class="p">.</span><span class="n">shape</span><span class="si">}</span><span class="s">]:</span><span class="se">\n</span><span class="si">{</span><span class="n">pred_v</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+                <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Calibration pred_k[</span><span class="si">{</span><span class="n">pred_k</span><span class="p">.</span><span class="n">shape</span><span class="si">}</span><span class="s">]:</span><span class="se">\n</span><span class="si">{</span><span class="n">pred_k</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"ONNX model already exists at </span><span class="si">{</span><span class="n">onnx_path</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+
+
+<span class="n">TRT_LOGGER</span> <span class="o">=</span> <span class="n">trt</span><span class="p">.</span><span class="nc">Logger</span><span class="p">(</span><span class="n">trt</span><span class="p">.</span><span class="n">Logger</span><span class="p">.</span><span class="n">WARNING</span><span class="p">)</span>
+<span class="n">TRT_DTYPE_TO_TORCH</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">trt</span><span class="p">.</span><span class="n">float32</span><span class="p">:</span> <span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">,</span>
+    <span class="n">trt</span><span class="p">.</span><span class="n">float16</span><span class="p">:</span> <span class="n">torch</span><span class="p">.</span><span class="n">float16</span><span class="p">,</span>
+    <span class="n">trt</span><span class="p">.</span><span class="n">int32</span><span class="p">:</span> <span class="n">torch</span><span class="p">.</span><span class="n">int32</span><span class="p">,</span>
+    <span class="n">trt</span><span class="p">.</span><span class="n">int64</span><span class="p">:</span> <span class="n">torch</span><span class="p">.</span><span class="n">int64</span><span class="p">,</span>
+    <span class="n">trt</span><span class="p">.</span><span class="n">int8</span><span class="p">:</span> <span class="n">torch</span><span class="p">.</span><span class="n">int8</span><span class="p">,</span>
+    <span class="n">trt</span><span class="p">.</span><span class="nb">bool</span><span class="p">:</span> <span class="n">torch</span><span class="p">.</span><span class="nb">bool</span><span class="p">,</span>
+    <span class="n">trt</span><span class="p">.</span><span class="n">bfloat16</span><span class="p">:</span> <span class="n">torch</span><span class="p">.</span><span class="n">bfloat16</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">compile_trt_model</span><span class="p">(</span><span class="n">input_shape</span><span class="p">,</span> <span class="n">output_shapes</span><span class="p">,</span> <span class="n">onnx_path</span><span class="p">,</span> <span class="n">trt_path</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="c1"># Convert onnx model to tensorrt
+</span>    <span class="n">batch_size</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">,</span> <span class="n">input_size</span> <span class="o">=</span> <span class="n">input_shape</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">topk</span><span class="p">,</span> <span class="n">output_size</span> <span class="o">=</span> <span class="n">output_shapes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Load the ONNX model
+</span>    <span class="n">onnx_model</span> <span class="o">=</span> <span class="n">onnx</span><span class="p">.</span><span class="nf">load</span><span class="p">(</span><span class="n">onnx_path</span><span class="p">)</span>
+
+    <span class="c1"># Create a TensorRT builder and network
+</span>    <span class="n">builder</span> <span class="o">=</span> <span class="n">trt</span><span class="p">.</span><span class="nc">Builder</span><span class="p">(</span><span class="n">TRT_LOGGER</span><span class="p">)</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">builder</span><span class="p">.</span><span class="nf">create_builder_config</span><span class="p">()</span>
+    <span class="c1"># Set cache
+</span>    <span class="n">cache</span> <span class="o">=</span> <span class="n">config</span><span class="p">.</span><span class="nf">create_timing_cache</span><span class="p">(</span><span class="sa">b</span><span class="s">""</span><span class="p">)</span>
+    <span class="n">config</span><span class="p">.</span><span class="nf">set_timing_cache</span><span class="p">(</span><span class="n">cache</span><span class="p">,</span> <span class="n">ignore_mismatch</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">config</span><span class="p">.</span><span class="nf">set_flag</span><span class="p">(</span><span class="n">trt</span><span class="p">.</span><span class="n">BuilderFlag</span><span class="p">.</span><span class="n">FP16</span><span class="p">)</span> <span class="c1"># BF16
+</span>    <span class="c1"># config.set_flag(trt.BuilderFlag.STRICT_TYPES)
+</span>    <span class="n">config</span><span class="p">.</span><span class="n">profiling_verbosity</span> <span class="o">=</span> <span class="n">trt</span><span class="p">.</span><span class="n">ProfilingVerbosity</span><span class="p">.</span><span class="n">DETAILED</span>
+    <span class="n">config</span><span class="p">.</span><span class="n">runtime_platform</span> <span class="o">=</span> <span class="n">trt</span><span class="p">.</span><span class="n">RuntimePlatform</span><span class="p">.</span><span class="n">SAME_AS_BUILD</span>
+    <span class="c1"># config.set_flag(trt.BuilderFlag.ExportLayerInfo)
+</span>
+    <span class="c1"># https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#build_engine_python
+</span>    <span class="c1"># max_workspace = (1 &lt;&lt; 30)
+</span>    <span class="c1"># config.set_memory_pool_limit(trt.MemoryPoolType.WORKSPACE, max_workspace)
+</span>
+    <span class="c1"># Set profile
+</span>    <span class="c1"># https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#work_dynamic_shapes
+</span>    <span class="n">opt_profile</span> <span class="o">=</span> <span class="n">builder</span><span class="p">.</span><span class="nf">create_optimization_profile</span><span class="p">()</span>
+    <span class="n">opt_profile</span><span class="p">.</span><span class="nf">set_shape</span><span class="p">(</span><span class="s">"input_x"</span><span class="p">,</span> <span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">input_size</span><span class="p">),</span> <span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">topk</span><span class="p">,</span> <span class="n">input_size</span><span class="p">),</span> <span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="n">input_size</span><span class="p">))</span>
+    <span class="c1"># opt_profile.set_shape("pred_x", (batch_size, topk, output_size), (batch_size, topk, output_size), (batch_size, topk, output_size))
+</span>    <span class="n">opt_profile</span><span class="p">.</span><span class="nf">set_shape</span><span class="p">(</span><span class="s">"pred_v"</span><span class="p">,</span> <span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">topk</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="c1"># opt_profile.set_shape("pred_k", (batch_size, topk, 1), (batch_size, topk, 1), (batch_size, topk, 1))
+</span>    <span class="c1"># preprocessorConfig = builder.create_network_config()
+</span>    <span class="c1"># preprocessorConfig.add_optimization_profile(profile)
+</span>    <span class="n">config</span><span class="p">.</span><span class="nf">add_optimization_profile</span><span class="p">(</span><span class="n">opt_profile</span><span class="p">)</span>
+
+    <span class="c1"># https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#version-compat
+</span>    <span class="c1"># https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#explicit-implicit-batch
+</span>    <span class="n">flag</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="nf">int</span><span class="p">(</span><span class="n">trt</span><span class="p">.</span><span class="n">NetworkDefinitionCreationFlag</span><span class="p">.</span><span class="n">EXPLICIT_BATCH</span><span class="p">)</span>
+    <span class="n">network</span> <span class="o">=</span> <span class="n">builder</span><span class="p">.</span><span class="nf">create_network</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+
+    <span class="c1"># Create an ONNX parser and parse the ONNX model into the TensorRT network
+</span>    <span class="n">parser</span> <span class="o">=</span> <span class="n">trt</span><span class="p">.</span><span class="nc">OnnxParser</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">TRT_LOGGER</span><span class="p">)</span>
+    <span class="c1"># Parse the ONNX model from file
+</span>    <span class="c1"># with open(onnx_path, "rb") as f:
+</span>    <span class="c1">#     if not parser.parse(f.read()):
+</span>    <span class="c1">#         print(f"ERROR: Failed to parse the ONNX file {onnx_path}")
+</span>    <span class="c1">#         for error in range(parser.num_errors):
+</span>    <span class="c1">#             print(parser.get_error(error))
+</span>    <span class="n">onnx_model_str</span> <span class="o">=</span> <span class="n">onnx_model</span><span class="p">.</span><span class="nc">SerializeToString</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">parser</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="n">onnx_model_str</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"ERROR: Failed to parse the ONNX file </span><span class="si">{</span><span class="n">onnx_model_str</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">error</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">parser</span><span class="p">.</span><span class="n">num_errors</span><span class="p">):</span>
+            <span class="nf">print</span><span class="p">(</span><span class="n">parser</span><span class="p">.</span><span class="nf">get_error</span><span class="p">(</span><span class="n">error</span><span class="p">))</span>
+
+    <span class="c1"># exort_layer_info = "slicing_test_layer_info.json"
+</span>    <span class="c1"># https://github.com/NVIDIA/TensorRT/issues/2247
+</span>    <span class="c1"># https://docs.nvidia.com/deeplearning/tensorrt/api/python_api/infer/Core/EngineInspector.html
+</span>    <span class="c1"># https://docs.nvidia.com/deeplearning/tensorrt/api/python_api/infer/Core/Engine.html#tensorrt.ICudaEngine.create_engine_inspector
+</span>    <span class="c1"># https://docs.nvidia.com/deeplearning/tensorrt/api/python_api/infer/Core/BuilderConfig.html#tensorrt.ProfilingVerbosity
+</span>    <span class="c1"># https://docs.nvidia.com/deeplearning/tensorrt/api/python_api/infer/Core/ExecutionContext.html#tensorrt.IExecutionContext.report_to_profiler
+</span>
+    <span class="c1"># Build the TensorRT engine
+</span>    <span class="n">engine_bytes</span> <span class="o">=</span> <span class="n">builder</span><span class="p">.</span><span class="nf">build_serialized_network</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">engine_bytes</span><span class="p">:</span>
+        <span class="c1"># Save the TensorRT engine to a file
+</span>        <span class="n">trt_path</span> <span class="o">=</span> <span class="n">onnx_path</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span><span class="o">+</span> <span class="s">"trt"</span> <span class="k">if</span> <span class="n">trt_path</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">trt_path</span>
+        <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="n">trt_path</span><span class="p">,</span> <span class="s">"wb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="p">.</span><span class="nf">write</span><span class="p">(</span><span class="n">engine_bytes</span><span class="p">)</span>
+
+        <span class="nf">print</span><span class="p">(</span><span class="s">"TensorRT engine saved successfully!"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"ERROR: Failed to build the TensorRT engine!"</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">input_size</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">output_size</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">topk</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="nf">load_model</span><span class="p">(</span><span class="n">input_size</span><span class="p">,</span> <span class="n">output_size</span><span class="p">,</span> <span class="n">topk</span><span class="p">)</span>
+
+    <span class="c1"># Avoid accuracy issues with float16 betweeen CPU and GPU, use float32 to test onnx
+</span>    <span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">bfloat16</span> <span class="c1"># torch.bfloat16 # torch.float32 # torch.float16
+</span>    <span class="n">device</span> <span class="o">=</span> <span class="s">"cuda"</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="nf">to</span><span class="p">(</span><span class="n">dtype</span><span class="p">).</span><span class="nf">to</span><span class="p">(</span><span class="n">device</span><span class="p">).</span><span class="nf">eval</span><span class="p">()</span>
+
+    <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">seq_length</span> <span class="o">=</span> <span class="mi">20</span>
+    <span class="n">input_x</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">rand</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">,</span> <span class="n">input_size</span><span class="p">).</span><span class="nf">to</span><span class="p">(</span><span class="n">dtype</span><span class="p">).</span><span class="nf">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">output_shapes</span> <span class="o">=</span> <span class="p">[</span><span class="n">torch</span><span class="p">.</span><span class="nc">Size</span><span class="p">([</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">topk</span><span class="p">,</span> <span class="n">input_size</span><span class="p">]),</span> <span class="n">torch</span><span class="p">.</span><span class="nc">Size</span><span class="p">([</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">torch</span><span class="p">.</span><span class="nc">Size</span><span class="p">([</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">topk</span><span class="p">,</span> <span class="mi">1</span><span class="p">])]</span>
+
+    <span class="n">onnx_path</span><span class="o">=</span><span class="s">"slicing_test_dynamic.onnx"</span>
+    <span class="nf">compile_onnx_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">input_x</span><span class="p">,</span> <span class="n">onnx_path</span><span class="o">=</span><span class="n">onnx_path</span><span class="p">,</span> <span class="n">force_export</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">trt_path</span> <span class="o">=</span> <span class="n">onnx_path</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span><span class="o">+</span> <span class="s">"trt"</span>
+    <span class="nf">compile_trt_model</span><span class="p">(</span><span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">,</span> <span class="n">input_size</span><span class="p">),</span> <span class="n">output_shapes</span><span class="o">=</span><span class="n">output_shapes</span><span class="p">,</span> <span class="n">onnx_path</span><span class="o">=</span><span class="n">onnx_path</span><span class="p">,</span> <span class="n">trt_path</span><span class="o">=</span><span class="n">trt_path</span><span class="p">)</span>
+
+    <span class="c1"># Onnx doesn't work with torch.bfloat16
+</span>    <span class="k">if</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">:</span>
+        <span class="nf">verify_onnx_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">,</span> <span class="n">input_size</span><span class="p">),</span> <span class="n">onnx_path</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+
+    <span class="nf">verify_trt_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">,</span> <span class="n">input_size</span><span class="p">),</span> <span class="n">topk</span><span class="p">,</span> <span class="n">trt_path</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">dynamic_shape</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="nf">print</span><span class="p">(</span><span class="s">"All checks pass!"</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">verify_onnx_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">input_shape</span><span class="p">,</span> <span class="n">onnx_path</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s">"cuda"</span><span class="p">):</span>
+    <span class="c1"># Verify the ONNX model and TensorRT engine
+</span>    <span class="c1"># Load the ONNX model
+</span>    <span class="n">onnx_model</span> <span class="o">=</span> <span class="n">onnx</span><span class="p">.</span><span class="nf">load</span><span class="p">(</span><span class="n">onnx_path</span><span class="p">)</span>
+    <span class="c1"># Create an inference session with the ONNX model
+</span>    <span class="n">session</span> <span class="o">=</span> <span class="n">onnxruntime</span><span class="p">.</span><span class="nc">InferenceSession</span><span class="p">(</span><span class="n">onnx_model</span><span class="p">.</span><span class="nc">SerializeToString</span><span class="p">())</span>
+
+    <span class="n">batch_size</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">,</span> <span class="n">input_size</span> <span class="o">=</span> <span class="n">input_shape</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+        <span class="n">seq_length</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">randint</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">51</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,)).</span><span class="nf">item</span><span class="p">()</span>
+        <span class="n">input_x</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">rand</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">,</span> <span class="n">input_size</span><span class="p">).</span><span class="nf">to</span><span class="p">(</span><span class="n">dtype</span><span class="p">).</span><span class="nf">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="p">.</span><span class="nf">no_grad</span><span class="p">():</span>
+            <span class="n">pred_x</span><span class="p">,</span> <span class="n">pred_v</span><span class="p">,</span> <span class="n">pred_k</span> <span class="o">=</span> <span class="nf">model</span><span class="p">(</span><span class="n">input_x</span><span class="p">)</span>
+
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"input_x[</span><span class="si">{</span><span class="n">input_x</span><span class="p">.</span><span class="n">shape</span><span class="si">}</span><span class="s">]:</span><span class="se">\n</span><span class="si">{</span><span class="n">input_x</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"pred_x[</span><span class="si">{</span><span class="n">pred_x</span><span class="p">.</span><span class="n">shape</span><span class="si">}</span><span class="s">]:</span><span class="se">\n</span><span class="si">{</span><span class="n">pred_x</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"pred_v[</span><span class="si">{</span><span class="n">pred_v</span><span class="p">.</span><span class="n">shape</span><span class="si">}</span><span class="s">]:</span><span class="se">\n</span><span class="si">{</span><span class="n">pred_v</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"pred_k[</span><span class="si">{</span><span class="n">pred_k</span><span class="p">.</span><span class="n">shape</span><span class="si">}</span><span class="s">]:</span><span class="se">\n</span><span class="si">{</span><span class="n">pred_k</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+
+        <span class="c1"># Prepare the input data
+</span>        <span class="n">input_data</span> <span class="o">=</span> <span class="p">{</span><span class="s">"input_x"</span><span class="p">:</span> <span class="n">input_x</span><span class="p">.</span><span class="nf">cpu</span><span class="p">().</span><span class="nf">numpy</span><span class="p">()}</span>
+
+        <span class="c1"># Run the model
+</span>        <span class="n">output</span> <span class="o">=</span> <span class="n">session</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">input_data</span><span class="p">)</span>
+
+        <span class="c1"># Get the output tensor
+</span>        <span class="n">onnx_pred_x</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">from_numpy</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]).</span><span class="nf">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">onnx_pred_v</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">from_numpy</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="mi">1</span><span class="p">]).</span><span class="nf">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">onnx_pred_k</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">from_numpy</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="mi">2</span><span class="p">]).</span><span class="nf">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"onnx run pred_x[</span><span class="si">{</span><span class="n">onnx_pred_x</span><span class="p">.</span><span class="n">shape</span><span class="si">}</span><span class="s">]:</span><span class="se">\n</span><span class="si">{</span><span class="n">onnx_pred_x</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"onnx run pred_v[</span><span class="si">{</span><span class="n">onnx_pred_v</span><span class="p">.</span><span class="n">shape</span><span class="si">}</span><span class="s">]:</span><span class="se">\n</span><span class="si">{</span><span class="n">onnx_pred_v</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"onnx run pred_k[</span><span class="si">{</span><span class="n">onnx_pred_k</span><span class="p">.</span><span class="n">shape</span><span class="si">}</span><span class="s">]:</span><span class="se">\n</span><span class="si">{</span><span class="n">onnx_pred_k</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+
+        <span class="c1"># Verify if pred_x is equal to onnx_pred_x
+</span>        <span class="k">assert</span> <span class="n">torch</span><span class="p">.</span><span class="nf">allclose</span><span class="p">(</span><span class="n">pred_x</span><span class="p">,</span> <span class="n">onnx_pred_x</span><span class="p">.</span><span class="nf">to</span><span class="p">(</span><span class="n">device</span><span class="p">),</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">),</span> <span class="s">"pred_x and onnx_pred_x are not equal"</span>
+        <span class="k">assert</span> <span class="n">torch</span><span class="p">.</span><span class="nf">allclose</span><span class="p">(</span><span class="n">pred_v</span><span class="p">,</span> <span class="n">onnx_pred_v</span><span class="p">.</span><span class="nf">to</span><span class="p">(</span><span class="n">device</span><span class="p">),</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">),</span> <span class="s">"pred_v and onnx_pred_v are not equal"</span>
+        <span class="k">assert</span> <span class="n">torch</span><span class="p">.</span><span class="nf">allclose</span><span class="p">(</span><span class="n">pred_k</span><span class="p">,</span> <span class="n">onnx_pred_k</span><span class="p">.</span><span class="nf">to</span><span class="p">(</span><span class="n">device</span><span class="p">),</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">),</span> <span class="s">"pred_k and onnx_pred_k are not equal"</span>
+
+    <span class="nf">print</span><span class="p">(</span><span class="s">"Onnx model checks pass!"</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">verify_trt_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">input_shape</span><span class="p">,</span> <span class="n">topk</span><span class="p">,</span> <span class="n">trt_path</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s">"cuda"</span><span class="p">,</span> <span class="n">dynamic_shape</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="c1"># Verify TensorRT engine
+</span>    <span class="c1"># Load the TRT model
+</span>
+    <span class="n">profile_idx</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">dynamic_shape</span> <span class="k">else</span> <span class="bp">None</span>
+    <span class="n">runtime</span> <span class="o">=</span> <span class="n">trt</span><span class="p">.</span><span class="nc">Runtime</span><span class="p">(</span><span class="n">TRT_LOGGER</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="n">trt_path</span><span class="p">,</span> <span class="s">"rb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">runtime</span><span class="p">.</span><span class="nf">deserialize_cuda_engine</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="nf">read</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">engine</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s">"Failed to reload TRT cuda engine from </span><span class="si">{</span><span class="n">trt_path</span><span class="si">}</span><span class="s">."</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Finished loading TRT engine from </span><span class="si">{</span><span class="n">trt_path</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+
+    <span class="n">trt_stream</span> <span class="o">=</span> <span class="n">cudart</span><span class="p">.</span><span class="nf">cudaStreamCreate</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">trt_context</span> <span class="o">=</span> <span class="n">engine</span><span class="p">.</span><span class="nf">create_execution_context</span><span class="p">()</span>
+    <span class="n">trt_inputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">trt_outputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># Allocate buffers for inputs and outputs
+</span>    <span class="n">default_max_dim_size</span> <span class="o">=</span> <span class="mi">50</span>
+    <span class="k">with</span> <span class="n">torch</span><span class="p">.</span><span class="n">cuda</span><span class="p">.</span><span class="nf">device</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="s">"cuda:0"</span><span class="p">):</span>
+        <span class="c1"># current_device = torch.cuda.current_device()
+</span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">engine</span><span class="p">.</span><span class="n">num_io_tensors</span><span class="p">):</span>
+            <span class="n">tensor_name</span> <span class="o">=</span> <span class="n">engine</span><span class="p">.</span><span class="nf">get_tensor_name</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+            <span class="n">trt_shape</span> <span class="o">=</span> <span class="n">engine</span><span class="p">.</span><span class="nf">get_tensor_shape</span><span class="p">(</span><span class="n">tensor_name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">torch</span><span class="p">.</span><span class="nf">any</span><span class="p">(</span><span class="n">torch</span><span class="p">.</span><span class="nf">tensor</span><span class="p">(</span><span class="n">trt_shape</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="c1"># Must define all dynamic shapes in the profile
+</span>                <span class="n">trt_shape_profile</span> <span class="o">=</span> <span class="n">engine</span><span class="p">.</span><span class="nf">get_tensor_profile_shape</span><span class="p">(</span><span class="n">tensor_name</span><span class="p">,</span> <span class="n">profile_idx</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">replace_negative_dims</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">trt_shape_profile</span><span class="p">)</span> <span class="o">==</span> <span class="nf">len</span><span class="p">(</span><span class="n">trt_shape</span><span class="p">):</span>
+                        <span class="n">trt_shape</span> <span class="o">=</span> <span class="n">trt_shape_profile</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">replace_negative_dims</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">replace_negative_dims</span> <span class="o">=</span> <span class="bp">True</span>
+
+                <span class="k">if</span> <span class="n">replace_negative_dims</span><span class="p">:</span>
+                    <span class="c1"># breakpoint()
+</span>                    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Profile shape </span><span class="si">{</span><span class="n">trt_shape_profile</span><span class="si">}</span><span class="s"> does not match the engine shape </span><span class="si">{</span><span class="n">trt_shape</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+                    <span class="n">trt_shape</span> <span class="o">=</span> <span class="nf">tuple</span><span class="p">([</span><span class="n">default_max_dim_size</span> <span class="k">if</span> <span class="n">dim</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="k">else</span> <span class="n">dim</span> <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="n">trt_shape</span><span class="p">])</span>
+                    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Warnning: Using default max shape </span><span class="si">{</span><span class="n">trt_shape</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+
+            <span class="n">trt_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">empty</span><span class="p">(</span><span class="nf">tuple</span><span class="p">(</span><span class="n">trt_shape</span><span class="p">),</span>
+                                    <span class="n">dtype</span><span class="o">=</span><span class="n">TRT_DTYPE_TO_TORCH</span><span class="p">[</span><span class="n">engine</span><span class="p">.</span><span class="nf">get_tensor_dtype</span><span class="p">(</span><span class="n">tensor_name</span><span class="p">)],</span>
+                                    <span class="n">device</span><span class="o">=</span><span class="s">"cuda:0"</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">engine</span><span class="p">.</span><span class="nf">get_tensor_mode</span><span class="p">(</span><span class="n">tensor_name</span><span class="p">)</span> <span class="o">==</span> <span class="n">trt</span><span class="p">.</span><span class="n">TensorIOMode</span><span class="p">.</span><span class="n">INPUT</span><span class="p">:</span>
+                <span class="n">trt_inputs</span><span class="p">[</span><span class="n">tensor_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">trt_tensor</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">trt_outputs</span><span class="p">[</span><span class="n">tensor_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">trt_tensor</span>
+            <span class="n">trt_context</span><span class="p">.</span><span class="nf">set_tensor_address</span><span class="p">(</span><span class="n">tensor_name</span><span class="p">,</span> <span class="n">trt_tensor</span><span class="p">.</span><span class="nf">data_ptr</span><span class="p">())</span>
+
+    <span class="n">batch_size</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">,</span> <span class="n">input_size</span> <span class="o">=</span> <span class="n">input_shape</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+            <span class="n">seq_length</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">randint</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">51</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,)).</span><span class="nf">item</span><span class="p">()</span>
+            <span class="n">input_x</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">rand</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">,</span> <span class="n">input_size</span><span class="p">).</span><span class="nf">to</span><span class="p">(</span><span class="n">dtype</span><span class="p">).</span><span class="nf">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">output_shapes</span> <span class="o">=</span> <span class="p">[</span><span class="n">torch</span><span class="p">.</span><span class="nc">Size</span><span class="p">([</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">topk</span><span class="p">,</span> <span class="n">input_size</span><span class="p">]),</span> <span class="n">torch</span><span class="p">.</span><span class="nc">Size</span><span class="p">([</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">torch</span><span class="p">.</span><span class="nc">Size</span><span class="p">([</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">topk</span><span class="p">,</span> <span class="mi">1</span><span class="p">])]</span>
+
+            <span class="k">with</span> <span class="n">torch</span><span class="p">.</span><span class="nf">no_grad</span><span class="p">():</span>
+                <span class="n">pred_x</span><span class="p">,</span> <span class="n">pred_v</span><span class="p">,</span> <span class="n">pred_k</span> <span class="o">=</span> <span class="nf">model</span><span class="p">(</span><span class="n">input_x</span><span class="p">)</span>
+
+            <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"input_x[</span><span class="si">{</span><span class="n">input_x</span><span class="p">.</span><span class="n">shape</span><span class="si">}</span><span class="s">]:</span><span class="se">\n</span><span class="si">{</span><span class="n">input_x</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+            <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"pred_x[</span><span class="si">{</span><span class="n">pred_x</span><span class="p">.</span><span class="n">shape</span><span class="si">}</span><span class="s">]:</span><span class="se">\n</span><span class="si">{</span><span class="n">pred_x</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+            <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"pred_v[</span><span class="si">{</span><span class="n">pred_v</span><span class="p">.</span><span class="n">shape</span><span class="si">}</span><span class="s">]:</span><span class="se">\n</span><span class="si">{</span><span class="n">pred_v</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+            <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"pred_k[</span><span class="si">{</span><span class="n">pred_k</span><span class="p">.</span><span class="n">shape</span><span class="si">}</span><span class="s">]:</span><span class="se">\n</span><span class="si">{</span><span class="n">pred_k</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+
+            <span class="c1"># Run TRT model
+</span>            <span class="n">input_data</span> <span class="o">=</span> <span class="p">{</span><span class="s">"input_x"</span><span class="p">:</span> <span class="n">input_x</span><span class="p">}</span>
+            <span class="k">with</span> <span class="n">torch</span><span class="p">.</span><span class="n">cuda</span><span class="p">.</span><span class="nf">device</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="s">"cuda:0"</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">input_data</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+                    <span class="n">trt_inputs</span><span class="p">[</span><span class="n">key</span><span class="p">][:,</span> <span class="p">:</span><span class="nf">int</span><span class="p">(</span><span class="n">value</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="p">:].</span><span class="nf">copy_</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                    <span class="n">trt_context</span><span class="p">.</span><span class="nf">set_input_shape</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nf">tuple</span><span class="p">(</span><span class="n">value</span><span class="p">.</span><span class="n">shape</span><span class="p">))</span>
+                <span class="n">trt_context</span><span class="p">.</span><span class="nf">execute_async_v3</span><span class="p">(</span><span class="n">trt_stream</span><span class="p">)</span>
+
+            <span class="n">trt_pred_x_</span><span class="p">,</span> <span class="n">trt_pred_v_</span><span class="p">,</span> <span class="n">trt_pred_k_</span> <span class="o">=</span> <span class="n">trt_outputs</span><span class="p">[</span><span class="s">"pred_x"</span><span class="p">],</span> <span class="n">trt_outputs</span><span class="p">[</span><span class="s">"pred_v"</span><span class="p">],</span> <span class="n">trt_outputs</span><span class="p">[</span><span class="s">"pred_k"</span><span class="p">]</span>
+
+            <span class="c1"># Flatten the tensors
+</span>            <span class="n">trt_pred_x</span> <span class="o">=</span> <span class="n">trt_pred_x_</span><span class="p">.</span><span class="nf">flatten</span><span class="p">()[:</span><span class="n">output_shapes</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nf">numel</span><span class="p">()].</span><span class="nf">view</span><span class="p">(</span><span class="n">output_shapes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">trt_pred_v</span> <span class="o">=</span> <span class="n">trt_pred_v_</span><span class="p">.</span><span class="nf">flatten</span><span class="p">()[:</span><span class="n">output_shapes</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nf">numel</span><span class="p">()].</span><span class="nf">view</span><span class="p">(</span><span class="n">output_shapes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">trt_pred_k</span> <span class="o">=</span> <span class="n">trt_pred_k_</span><span class="p">.</span><span class="nf">flatten</span><span class="p">()[:</span><span class="n">output_shapes</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="nf">numel</span><span class="p">()].</span><span class="nf">view</span><span class="p">(</span><span class="n">output_shapes</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+            <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"trt run pred_x[</span><span class="si">{</span><span class="n">trt_pred_x</span><span class="p">.</span><span class="n">shape</span><span class="si">}</span><span class="s">]:</span><span class="se">\n</span><span class="si">{</span><span class="n">trt_pred_x</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+            <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"trt run pred_v[</span><span class="si">{</span><span class="n">trt_pred_v</span><span class="p">.</span><span class="n">shape</span><span class="si">}</span><span class="s">]:</span><span class="se">\n</span><span class="si">{</span><span class="n">trt_pred_v</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+            <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"trt run pred_k[</span><span class="si">{</span><span class="n">trt_pred_k</span><span class="p">.</span><span class="n">shape</span><span class="si">}</span><span class="s">]:</span><span class="se">\n</span><span class="si">{</span><span class="n">trt_pred_k</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+
+            <span class="c1"># Verify if pred_x is equal to onnx_pred_x
+</span>            <span class="c1"># Use default atol=1e-5 and rtol=1.6e-2 for bfloat16
+</span>            <span class="c1"># Due to accuracy issue in pred_v, the topk order may not be the same,
+</span>            <span class="c1"># therefore, the following assertion sometimes does not pass.
+</span>            <span class="n">torch</span><span class="p">.</span><span class="n">testing</span><span class="p">.</span><span class="nf">assert_close</span><span class="p">(</span><span class="n">pred_x</span><span class="p">,</span> <span class="n">trt_pred_x</span><span class="p">.</span><span class="nf">to</span><span class="p">(</span><span class="n">device</span><span class="p">)),</span> <span class="s">"pred_x and onnx_pred_x are not equal"</span>
+            <span class="n">torch</span><span class="p">.</span><span class="n">testing</span><span class="p">.</span><span class="nf">assert_close</span><span class="p">(</span><span class="n">pred_v</span><span class="p">,</span> <span class="n">trt_pred_v</span><span class="p">.</span><span class="nf">to</span><span class="p">(</span><span class="n">device</span><span class="p">)),</span> <span class="s">"pred_v and onnx_pred_v are not equal"</span>
+            <span class="n">torch</span><span class="p">.</span><span class="n">testing</span><span class="p">.</span><span class="nf">assert_close</span><span class="p">(</span><span class="n">pred_k</span><span class="p">,</span> <span class="n">trt_pred_k</span><span class="p">.</span><span class="nf">to</span><span class="p">(</span><span class="n">device</span><span class="p">)),</span> <span class="s">"pred_k and onnx_pred_k are not equal"</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="c1"># Deallocate buffers
+</span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">engine</span><span class="p">.</span><span class="n">num_io_tensors</span><span class="p">):</span>
+            <span class="n">binding</span> <span class="o">=</span> <span class="n">engine</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">binding</span> <span class="ow">in</span> <span class="n">trt_inputs</span><span class="p">.</span><span class="nf">keys</span><span class="p">():</span>
+                <span class="k">del</span> <span class="n">trt_inputs</span><span class="p">[</span><span class="n">binding</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">del</span> <span class="n">trt_outputs</span><span class="p">[</span><span class="n">binding</span><span class="p">]</span>
+            <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Deleted </span><span class="si">{</span><span class="n">binding</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
+    <span class="nf">main</span><span class="p">()</span>
+</code></pre></div></div> <h3 id="multiple-inputs">Multiple inputs</h3> <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">os</span>
+<span class="kn">import</span> <span class="n">torch</span>
+
+<span class="kn">import</span> <span class="n">onnx</span>
+<span class="kn">import</span> <span class="n">onnxruntime</span>
+<span class="kn">import</span> <span class="n">tensorrt</span> <span class="k">as</span> <span class="n">trt</span>
+<span class="kn">from</span> <span class="n">cuda</span> <span class="kn">import</span> <span class="n">cudart</span>
+
+<span class="c1"># Reference:
+# https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#conditional-examples
+</span>
+<span class="nd">@torch.jit.script</span>
+<span class="k">def</span> <span class="nf">sum_k_mods</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="n">torch</span><span class="p">.</span><span class="n">IntTensor</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="n">torch</span><span class="p">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="p">.</span><span class="n">Tensor</span><span class="p">:</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="nb">float</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">items</span><span class="p">.</span><span class="n">device</span><span class="p">)</span>
+    <span class="c1"># Must use tensor operations when involves input tensor.
+</span>    <span class="n">m</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">remainder</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">m</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="n">c</span>
+    <span class="k">return</span> <span class="n">s</span>
+
+<span class="c1"># Error with the version below:
+# Param k is considered as a constant and removed from the input list.
+# @torch.jit.script
+# def sum_k_mods(items: torch.IntTensor, k: torch.Tensor) -&gt; torch.Tensor:
+#     k = k.item()
+#     s = torch.zeros(1, dtype=torch.float, device=items.device)
+#     for c in items:
+#         if c % k == 0:
+#             s += c
+#     return s
+</span>
+<span class="k">class</span> <span class="nc">ExampleModel</span><span class="p">(</span><span class="n">torch</span><span class="p">.</span><span class="n">nn</span><span class="p">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="nf">super</span><span class="p">().</span><span class="nf">__init__</span><span class="p">()</span>
+
+    <span class="c1"># Only use tensor inputs
+</span>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">items</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nf">sum_k_mods</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">load_model</span><span class="p">():</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="nc">ExampleModel</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">model</span>
+
+
+<span class="k">def</span> <span class="nf">generate_input</span><span class="p">(</span><span class="n">batch_size</span><span class="p">):</span>
+    <span class="n">input_x</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="p">(</span><span class="n">batch_size</span><span class="p">,))</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,))</span>
+    <span class="k">return</span> <span class="n">input_x</span><span class="p">,</span> <span class="n">k</span>
+
+
+<span class="k">def</span> <span class="nf">compile_onnx_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">onnx_path</span><span class="p">,</span> <span class="n">force_export</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="n">example_input</span> <span class="o">=</span> <span class="nf">tuple</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+    <span class="n">input_names</span> <span class="o">=</span> <span class="p">[</span><span class="s">"input_x"</span><span class="p">,</span> <span class="s">"k"</span><span class="p">]</span>
+    <span class="n">output_names</span> <span class="o">=</span> <span class="p">[</span><span class="s">"pred_x"</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">force_export</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">exists</span><span class="p">(</span><span class="n">onnx_path</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="p">.</span><span class="nf">no_grad</span><span class="p">():</span>
+            <span class="n">torch</span><span class="p">.</span><span class="n">onnx</span><span class="p">.</span><span class="nf">export</span><span class="p">(</span>
+                <span class="n">model</span><span class="p">,</span>
+                <span class="n">example_input</span><span class="p">,</span>
+                <span class="n">onnx_path</span><span class="p">,</span>
+                <span class="n">input_names</span><span class="o">=</span><span class="n">input_names</span><span class="p">,</span>
+                <span class="n">output_names</span><span class="o">=</span><span class="n">output_names</span><span class="p">,</span>
+                <span class="n">export_params</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                <span class="n">do_constant_folding</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                <span class="n">opset_version</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+
+            <span class="c1"># Check the onnx model
+</span>            <span class="n">pred_x</span> <span class="o">=</span> <span class="nf">model</span><span class="p">(</span><span class="o">*</span><span class="n">example_input</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">input_names</span><span class="p">):</span>
+                <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Calibration </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s">[</span><span class="si">{</span><span class="n">inputs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">shape</span><span class="si">}</span><span class="s">]:</span><span class="se">\n</span><span class="si">{</span><span class="n">inputs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+
+            <span class="c1"># Convert to tuple
+</span>            <span class="n">outputs</span> <span class="o">=</span> <span class="nf">tuple</span><span class="p">(</span><span class="n">pred_x</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">output_names</span><span class="p">):</span>
+                <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Calibration </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s">[</span><span class="si">{</span><span class="n">outputs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">shape</span><span class="si">}</span><span class="s">]:</span><span class="se">\n</span><span class="si">{</span><span class="n">outputs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"ONNX model is compiled and saved to </span><span class="si">{</span><span class="n">onnx_path</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"ONNX model already exists at </span><span class="si">{</span><span class="n">onnx_path</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+
+
+<span class="n">TRT_LOGGER</span> <span class="o">=</span> <span class="n">trt</span><span class="p">.</span><span class="nc">Logger</span><span class="p">(</span><span class="n">trt</span><span class="p">.</span><span class="n">Logger</span><span class="p">.</span><span class="n">WARNING</span><span class="p">)</span>
+<span class="n">EXPLICIT_BATCH</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="nb">int</span><span class="p">)(</span><span class="n">trt</span><span class="p">.</span><span class="n">NetworkDefinitionCreationFlag</span><span class="p">.</span><span class="n">EXPLICIT_BATCH</span><span class="p">)</span>
+<span class="n">TRT_DTYPE_TO_TORCH</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">trt</span><span class="p">.</span><span class="n">float32</span><span class="p">:</span> <span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">,</span>
+    <span class="n">trt</span><span class="p">.</span><span class="n">float16</span><span class="p">:</span> <span class="n">torch</span><span class="p">.</span><span class="n">float16</span><span class="p">,</span>
+    <span class="n">trt</span><span class="p">.</span><span class="n">int32</span><span class="p">:</span> <span class="n">torch</span><span class="p">.</span><span class="n">int32</span><span class="p">,</span>
+    <span class="n">trt</span><span class="p">.</span><span class="n">int64</span><span class="p">:</span> <span class="n">torch</span><span class="p">.</span><span class="n">int64</span><span class="p">,</span>
+    <span class="n">trt</span><span class="p">.</span><span class="n">int8</span><span class="p">:</span> <span class="n">torch</span><span class="p">.</span><span class="n">int8</span><span class="p">,</span>
+    <span class="n">trt</span><span class="p">.</span><span class="nb">bool</span><span class="p">:</span> <span class="n">torch</span><span class="p">.</span><span class="nb">bool</span><span class="p">,</span>
+    <span class="n">trt</span><span class="p">.</span><span class="n">bfloat16</span><span class="p">:</span> <span class="n">torch</span><span class="p">.</span><span class="n">bfloat16</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">compile_trt_model</span><span class="p">(</span><span class="n">onnx_path</span><span class="p">,</span> <span class="n">trt_path</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="c1"># Convert onnx model to tensorrt
+</span>
+    <span class="c1"># Load the ONNX model
+</span>    <span class="n">onnx_model</span> <span class="o">=</span> <span class="n">onnx</span><span class="p">.</span><span class="nf">load</span><span class="p">(</span><span class="n">onnx_path</span><span class="p">)</span>
+
+    <span class="c1"># Create a TensorRT builder and network
+</span>    <span class="n">builder</span> <span class="o">=</span> <span class="n">trt</span><span class="p">.</span><span class="nc">Builder</span><span class="p">(</span><span class="n">TRT_LOGGER</span><span class="p">)</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">builder</span><span class="p">.</span><span class="nf">create_builder_config</span><span class="p">()</span>
+    <span class="c1"># Set cache
+</span>    <span class="n">cache</span> <span class="o">=</span> <span class="n">config</span><span class="p">.</span><span class="nf">create_timing_cache</span><span class="p">(</span><span class="sa">b</span><span class="s">""</span><span class="p">)</span>
+    <span class="n">config</span><span class="p">.</span><span class="nf">set_timing_cache</span><span class="p">(</span><span class="n">cache</span><span class="p">,</span> <span class="n">ignore_mismatch</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">config</span><span class="p">.</span><span class="nf">set_flag</span><span class="p">(</span><span class="n">trt</span><span class="p">.</span><span class="n">BuilderFlag</span><span class="p">.</span><span class="n">FP16</span><span class="p">)</span> <span class="c1"># BF16
+</span>    <span class="c1"># config.set_flag(trt.BuilderFlag.STRICT_TYPES)
+</span>    <span class="n">config</span><span class="p">.</span><span class="n">profiling_verbosity</span> <span class="o">=</span> <span class="n">trt</span><span class="p">.</span><span class="n">ProfilingVerbosity</span><span class="p">.</span><span class="n">DETAILED</span>
+    <span class="n">config</span><span class="p">.</span><span class="n">runtime_platform</span> <span class="o">=</span> <span class="n">trt</span><span class="p">.</span><span class="n">RuntimePlatform</span><span class="p">.</span><span class="n">SAME_AS_BUILD</span>
+    <span class="c1"># config.set_flag(trt.BuilderFlag.ExportLayerInfo)
+</span>
+    <span class="c1"># https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#build_engine_python
+</span>    <span class="c1"># max_workspace = (1 &lt;&lt; 30)
+</span>    <span class="c1"># config.set_memory_pool_limit(trt.MemoryPoolType.WORKSPACE, max_workspace)
+</span>
+    <span class="n">network</span> <span class="o">=</span> <span class="n">builder</span><span class="p">.</span><span class="nf">create_network</span><span class="p">(</span><span class="n">EXPLICIT_BATCH</span><span class="p">)</span>
+
+    <span class="c1"># Create an ONNX parser and parse the ONNX model into the TensorRT network
+</span>    <span class="n">parser</span> <span class="o">=</span> <span class="n">trt</span><span class="p">.</span><span class="nc">OnnxParser</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">TRT_LOGGER</span><span class="p">)</span>
+    <span class="c1"># Parse the ONNX model from file
+</span>    <span class="c1"># with open(onnx_path, "rb") as f:
+</span>    <span class="c1">#     if not parser.parse(f.read()):
+</span>    <span class="c1">#         print(f"ERROR: Failed to parse the ONNX file {onnx_path}")
+</span>    <span class="c1">#         for error in range(parser.num_errors):
+</span>    <span class="c1">#             print(parser.get_error(error))
+</span>    <span class="n">onnx_model_str</span> <span class="o">=</span> <span class="n">onnx_model</span><span class="p">.</span><span class="nc">SerializeToString</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">parser</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="n">onnx_model_str</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"ERROR: Failed to parse the ONNX file </span><span class="si">{</span><span class="n">onnx_model_str</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">error</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">parser</span><span class="p">.</span><span class="n">num_errors</span><span class="p">):</span>
+            <span class="nf">print</span><span class="p">(</span><span class="n">parser</span><span class="p">.</span><span class="nf">get_error</span><span class="p">(</span><span class="n">error</span><span class="p">))</span>
+
+    <span class="c1"># Build the TensorRT engine
+</span>    <span class="n">engine_bytes</span> <span class="o">=</span> <span class="n">builder</span><span class="p">.</span><span class="nf">build_serialized_network</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">engine_bytes</span><span class="p">:</span>
+        <span class="c1"># Save the TensorRT engine to a file
+</span>        <span class="n">trt_path</span> <span class="o">=</span> <span class="n">onnx_path</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span><span class="o">+</span> <span class="s">"trt"</span> <span class="k">if</span> <span class="n">trt_path</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">trt_path</span>
+        <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="n">trt_path</span><span class="p">,</span> <span class="s">"wb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="p">.</span><span class="nf">write</span><span class="p">(</span><span class="n">engine_bytes</span><span class="p">)</span>
+
+        <span class="nf">print</span><span class="p">(</span><span class="s">"TensorRT engine saved successfully!"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"ERROR: Failed to build the TensorRT engine!"</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">verify_onnx_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">onnx_path</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s">"cuda"</span><span class="p">):</span>
+    <span class="c1"># Verify the ONNX model and TensorRT engine
+</span>    <span class="c1"># Load the ONNX model
+</span>    <span class="n">onnx_model</span> <span class="o">=</span> <span class="n">onnx</span><span class="p">.</span><span class="nf">load</span><span class="p">(</span><span class="n">onnx_path</span><span class="p">)</span>
+    <span class="c1"># Create an inference session with the ONNX model
+</span>    <span class="n">session</span> <span class="o">=</span> <span class="n">onnxruntime</span><span class="p">.</span><span class="nc">InferenceSession</span><span class="p">(</span><span class="n">onnx_model</span><span class="p">.</span><span class="nc">SerializeToString</span><span class="p">())</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+        <span class="n">input_x</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="nf">generate_input</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)</span>
+        <span class="n">inputs</span> <span class="o">=</span> <span class="p">(</span><span class="n">input_x</span><span class="p">.</span><span class="nf">to</span><span class="p">(</span><span class="n">dtype</span><span class="p">).</span><span class="nf">to</span><span class="p">(</span><span class="n">device</span><span class="p">),</span> <span class="n">k</span><span class="p">.</span><span class="nf">to</span><span class="p">(</span><span class="n">dtype</span><span class="p">).</span><span class="nf">to</span><span class="p">(</span><span class="n">device</span><span class="p">))</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="p">.</span><span class="nf">no_grad</span><span class="p">():</span>
+            <span class="n">pred_x</span> <span class="o">=</span> <span class="nf">model</span><span class="p">(</span><span class="o">*</span><span class="n">inputs</span><span class="p">)</span>
+
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"input_x[</span><span class="si">{</span><span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">shape</span><span class="si">}</span><span class="s">]:</span><span class="se">\n</span><span class="si">{</span><span class="n">inputs</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"pred_x[</span><span class="si">{</span><span class="n">pred_x</span><span class="p">.</span><span class="n">shape</span><span class="si">}</span><span class="s">]:</span><span class="se">\n</span><span class="si">{</span><span class="n">pred_x</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+
+        <span class="c1"># Prepare the input data
+</span>        <span class="n">input_data</span> <span class="o">=</span> <span class="p">{</span><span class="s">"input_x"</span><span class="p">:</span> <span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nf">cpu</span><span class="p">().</span><span class="nf">numpy</span><span class="p">(),</span> <span class="s">"k"</span><span class="p">:</span> <span class="n">inputs</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nf">cpu</span><span class="p">().</span><span class="nf">numpy</span><span class="p">()}</span>
+        <span class="c1"># Run the model
+</span>        <span class="n">output</span> <span class="o">=</span> <span class="n">session</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">input_data</span><span class="p">)</span>
+        <span class="c1"># Get the output tensor
+</span>        <span class="n">onnx_pred_x</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">from_numpy</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]).</span><span class="nf">to</span><span class="p">(</span><span class="n">pred_x</span><span class="p">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"onnx run pred_x[</span><span class="si">{</span><span class="n">onnx_pred_x</span><span class="p">.</span><span class="n">shape</span><span class="si">}</span><span class="s">]:</span><span class="se">\n</span><span class="si">{</span><span class="n">onnx_pred_x</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+
+        <span class="c1"># Verify if pred_x is equal to onnx_pred_x
+</span>        <span class="k">assert</span> <span class="n">torch</span><span class="p">.</span><span class="nf">allclose</span><span class="p">(</span><span class="n">pred_x</span><span class="p">,</span> <span class="n">onnx_pred_x</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">),</span> <span class="s">"pred_x and onnx_pred_x are not equal"</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"Onnx model checks pass!"</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">verify_trt_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">trt_path</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s">"cuda"</span><span class="p">,</span> <span class="n">dynamic_shape</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="c1"># Verify TensorRT engine
+</span>    <span class="c1"># Load the TRT model
+</span>
+    <span class="n">profile_idx</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">dynamic_shape</span> <span class="k">else</span> <span class="bp">None</span>
+    <span class="n">runtime</span> <span class="o">=</span> <span class="n">trt</span><span class="p">.</span><span class="nc">Runtime</span><span class="p">(</span><span class="n">TRT_LOGGER</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="n">trt_path</span><span class="p">,</span> <span class="s">"rb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">runtime</span><span class="p">.</span><span class="nf">deserialize_cuda_engine</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="nf">read</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">engine</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nc">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s">"Failed to reload TRT cuda engine from </span><span class="si">{</span><span class="n">trt_path</span><span class="si">}</span><span class="s">."</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Finished loading TRT engine from </span><span class="si">{</span><span class="n">trt_path</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+
+    <span class="n">trt_stream</span> <span class="o">=</span> <span class="n">cudart</span><span class="p">.</span><span class="nf">cudaStreamCreate</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">trt_context</span> <span class="o">=</span> <span class="n">engine</span><span class="p">.</span><span class="nf">create_execution_context</span><span class="p">()</span>
+    <span class="n">trt_inputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">trt_outputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># Allocate buffers for inputs and outputs
+</span>    <span class="n">default_max_dim_size</span> <span class="o">=</span> <span class="mi">50</span>
+    <span class="k">with</span> <span class="n">torch</span><span class="p">.</span><span class="n">cuda</span><span class="p">.</span><span class="nf">device</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="s">"cuda:0"</span><span class="p">):</span>
+        <span class="c1"># current_device = torch.cuda.current_device()
+</span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">engine</span><span class="p">.</span><span class="n">num_io_tensors</span><span class="p">):</span>
+            <span class="n">tensor_name</span> <span class="o">=</span> <span class="n">engine</span><span class="p">.</span><span class="nf">get_tensor_name</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+            <span class="n">trt_shape</span> <span class="o">=</span> <span class="n">engine</span><span class="p">.</span><span class="nf">get_tensor_shape</span><span class="p">(</span><span class="n">tensor_name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">torch</span><span class="p">.</span><span class="nf">any</span><span class="p">(</span><span class="n">torch</span><span class="p">.</span><span class="nf">tensor</span><span class="p">(</span><span class="n">trt_shape</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="c1"># Must define all dynamic shapes in the profile
+</span>                <span class="n">trt_shape_profile</span> <span class="o">=</span> <span class="n">engine</span><span class="p">.</span><span class="nf">get_tensor_profile_shape</span><span class="p">(</span><span class="n">tensor_name</span><span class="p">,</span> <span class="n">profile_idx</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">replace_negative_dims</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">trt_shape_profile</span><span class="p">)</span> <span class="o">==</span> <span class="nf">len</span><span class="p">(</span><span class="n">trt_shape</span><span class="p">):</span>
+                        <span class="n">trt_shape</span> <span class="o">=</span> <span class="n">trt_shape_profile</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">replace_negative_dims</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">replace_negative_dims</span> <span class="o">=</span> <span class="bp">True</span>
+
+                <span class="k">if</span> <span class="n">replace_negative_dims</span><span class="p">:</span>
+                    <span class="c1"># breakpoint()
+</span>                    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Profile shape </span><span class="si">{</span><span class="n">trt_shape_profile</span><span class="si">}</span><span class="s"> does not match the engine shape </span><span class="si">{</span><span class="n">trt_shape</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+                    <span class="n">trt_shape</span> <span class="o">=</span> <span class="nf">tuple</span><span class="p">([</span><span class="n">default_max_dim_size</span> <span class="k">if</span> <span class="n">dim</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="k">else</span> <span class="n">dim</span> <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="n">trt_shape</span><span class="p">])</span>
+                    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Warnning: Using default max shape </span><span class="si">{</span><span class="n">trt_shape</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+
+            <span class="n">trt_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">empty</span><span class="p">(</span><span class="nf">tuple</span><span class="p">(</span><span class="n">trt_shape</span><span class="p">),</span>
+                                    <span class="n">dtype</span><span class="o">=</span><span class="n">TRT_DTYPE_TO_TORCH</span><span class="p">[</span><span class="n">engine</span><span class="p">.</span><span class="nf">get_tensor_dtype</span><span class="p">(</span><span class="n">tensor_name</span><span class="p">)],</span>
+                                    <span class="n">device</span><span class="o">=</span><span class="s">"cuda:0"</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">engine</span><span class="p">.</span><span class="nf">get_tensor_mode</span><span class="p">(</span><span class="n">tensor_name</span><span class="p">)</span> <span class="o">==</span> <span class="n">trt</span><span class="p">.</span><span class="n">TensorIOMode</span><span class="p">.</span><span class="n">INPUT</span><span class="p">:</span>
+                <span class="n">trt_inputs</span><span class="p">[</span><span class="n">tensor_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">trt_tensor</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">trt_outputs</span><span class="p">[</span><span class="n">tensor_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">trt_tensor</span>
+            <span class="n">trt_context</span><span class="p">.</span><span class="nf">set_tensor_address</span><span class="p">(</span><span class="n">tensor_name</span><span class="p">,</span> <span class="n">trt_tensor</span><span class="p">.</span><span class="nf">data_ptr</span><span class="p">())</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+            <span class="n">input_x</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="nf">generate_input</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)</span>
+            <span class="n">inputs</span> <span class="o">=</span> <span class="p">(</span><span class="n">input_x</span><span class="p">.</span><span class="nf">to</span><span class="p">(</span><span class="n">dtype</span><span class="p">).</span><span class="nf">to</span><span class="p">(</span><span class="n">device</span><span class="p">),</span> <span class="n">k</span><span class="p">.</span><span class="nf">to</span><span class="p">(</span><span class="n">dtype</span><span class="p">).</span><span class="nf">to</span><span class="p">(</span><span class="n">device</span><span class="p">))</span>
+            <span class="n">output_shapes</span> <span class="o">=</span> <span class="p">[</span><span class="n">torch</span><span class="p">.</span><span class="nc">Size</span><span class="p">([</span><span class="mi">1</span><span class="p">])]</span>
+
+            <span class="k">with</span> <span class="n">torch</span><span class="p">.</span><span class="nf">no_grad</span><span class="p">():</span>
+                <span class="n">pred_x</span> <span class="o">=</span> <span class="nf">model</span><span class="p">(</span><span class="o">*</span><span class="n">inputs</span><span class="p">)</span>
+
+            <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"input_x[</span><span class="si">{</span><span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">shape</span><span class="si">}</span><span class="s">]:</span><span class="se">\n</span><span class="si">{</span><span class="n">inputs</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+            <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"pred_x[</span><span class="si">{</span><span class="n">pred_x</span><span class="p">.</span><span class="n">shape</span><span class="si">}</span><span class="s">]:</span><span class="se">\n</span><span class="si">{</span><span class="n">pred_x</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+
+            <span class="c1"># Run TRT model
+</span>            <span class="n">input_data</span> <span class="o">=</span> <span class="p">{</span><span class="s">"input_x"</span><span class="p">:</span> <span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">"k"</span><span class="p">:</span> <span class="n">inputs</span><span class="p">[</span><span class="mi">1</span><span class="p">]}</span>
+            <span class="k">with</span> <span class="n">torch</span><span class="p">.</span><span class="n">cuda</span><span class="p">.</span><span class="nf">device</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="s">"cuda:0"</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">input_data</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+                    <span class="c1"># Copy value to the input buffer
+</span>                    <span class="n">trt_inputs</span><span class="p">[</span><span class="n">key</span><span class="p">].</span><span class="nf">copy_</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                    <span class="n">trt_context</span><span class="p">.</span><span class="nf">set_input_shape</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nf">tuple</span><span class="p">(</span><span class="n">value</span><span class="p">.</span><span class="n">shape</span><span class="p">))</span>
+                <span class="n">trt_context</span><span class="p">.</span><span class="nf">execute_async_v3</span><span class="p">(</span><span class="n">trt_stream</span><span class="p">)</span>
+
+            <span class="n">trt_pred_x_</span> <span class="o">=</span> <span class="n">trt_outputs</span><span class="p">[</span><span class="s">"pred_x"</span><span class="p">]</span>
+            <span class="c1"># Flatten the tensors
+</span>            <span class="n">trt_pred_x</span> <span class="o">=</span> <span class="n">trt_pred_x_</span><span class="p">.</span><span class="nf">flatten</span><span class="p">()[:</span><span class="n">output_shapes</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nf">numel</span><span class="p">()].</span><span class="nf">view</span><span class="p">(</span><span class="n">output_shapes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"trt run pred_x[</span><span class="si">{</span><span class="n">trt_pred_x</span><span class="p">.</span><span class="n">shape</span><span class="si">}</span><span class="s">]:</span><span class="se">\n</span><span class="si">{</span><span class="n">trt_pred_x</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+
+            <span class="c1"># Verify if pred_x is equal to onnx_pred_x
+</span>            <span class="c1"># Use default atol=1e-5 and rtol=1.6e-2 for bfloat16
+</span>            <span class="c1"># Due to accuracy issue in pred_v, the topk order may not be the same,
+</span>            <span class="c1"># therefore, the following assertion sometimes does not pass.
+</span>            <span class="n">torch</span><span class="p">.</span><span class="n">testing</span><span class="p">.</span><span class="nf">assert_close</span><span class="p">(</span><span class="n">pred_x</span><span class="p">,</span> <span class="n">trt_pred_x</span><span class="p">.</span><span class="nf">to</span><span class="p">(</span><span class="n">pred_x</span><span class="p">.</span><span class="n">device</span><span class="p">)),</span> <span class="s">"pred_x and onnx_pred_x are not equal"</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="c1"># Deallocate buffers
+</span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">engine</span><span class="p">.</span><span class="n">num_io_tensors</span><span class="p">):</span>
+            <span class="n">binding</span> <span class="o">=</span> <span class="n">engine</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">binding</span> <span class="ow">in</span> <span class="n">trt_inputs</span><span class="p">.</span><span class="nf">keys</span><span class="p">():</span>
+                <span class="k">del</span> <span class="n">trt_inputs</span><span class="p">[</span><span class="n">binding</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">del</span> <span class="n">trt_outputs</span><span class="p">[</span><span class="n">binding</span><span class="p">]</span>
+            <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Deleted </span><span class="si">{</span><span class="n">binding</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="nf">load_model</span><span class="p">()</span>
+
+    <span class="c1"># Avoid accuracy issues with float16 betweeen CPU and GPU, use float32 to test onnx
+</span>    <span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">float32</span> <span class="c1"># torch.bfloat16 # torch.float32 # torch.float16
+</span>    <span class="n">device</span> <span class="o">=</span> <span class="s">"cuda"</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="nf">to</span><span class="p">(</span><span class="n">dtype</span><span class="p">).</span><span class="nf">to</span><span class="p">(</span><span class="n">device</span><span class="p">).</span><span class="nf">eval</span><span class="p">()</span>
+
+    <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="n">input_x</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="nf">generate_input</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)</span>
+    <span class="n">inputs</span> <span class="o">=</span> <span class="p">(</span><span class="n">input_x</span><span class="p">.</span><span class="nf">to</span><span class="p">(</span><span class="n">dtype</span><span class="p">).</span><span class="nf">to</span><span class="p">(</span><span class="n">device</span><span class="p">),</span> <span class="n">k</span><span class="p">.</span><span class="nf">to</span><span class="p">(</span><span class="n">dtype</span><span class="p">).</span><span class="nf">to</span><span class="p">(</span><span class="n">device</span><span class="p">))</span>
+
+    <span class="n">onnx_path</span><span class="o">=</span><span class="s">"condition_k_mods.onnx"</span>
+    <span class="nf">compile_onnx_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">onnx_path</span><span class="o">=</span><span class="n">onnx_path</span><span class="p">)</span>
+    <span class="n">trt_path</span> <span class="o">=</span> <span class="n">onnx_path</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span><span class="o">+</span> <span class="s">"trt"</span>
+    <span class="nf">compile_trt_model</span><span class="p">(</span><span class="n">onnx_path</span><span class="o">=</span><span class="n">onnx_path</span><span class="p">,</span> <span class="n">trt_path</span><span class="o">=</span><span class="n">trt_path</span><span class="p">)</span>
+
+    <span class="c1"># Onnx doesn't work with torch.bfloat16
+</span>    <span class="k">if</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">:</span>
+        <span class="nf">verify_onnx_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">onnx_path</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+
+    <span class="nf">verify_trt_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">trt_path</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">dynamic_shape</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="nf">print</span><span class="p">(</span><span class="s">"All checks pass!"</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
+    <span class="nf">main</span><span class="p">()</span>
+</code></pre></div></div> <h2 id="reference">Reference</h2> <p><a href="https://github.com/NVIDIA/TensorRT/blob/84dd6ed18c2ec7a2d8a199ec1a437d09284d86bd/demo/Diffusion/utilities.py#L303" rel="external nofollow noopener" target="_blank">TensorRT diffusion demo code.</a></p> <p><a href="https://github.com/microsoft/onnxruntime/blob/cc0de0d5262cd1a76532b79ddde4a7d799f840b4/onnxruntime/core/providers/tensorrt/tensorrt_execution_provider.h#L121" rel="external nofollow noopener" target="_blank">Flexible output allocation of dynamic shapes through subclassing the allocator.</a></p> <p><a href="https://github.com/NVIDIA/TensorRT-LLM" rel="external nofollow noopener" target="_blank">TensorRT-LLM github.</a></p> </d-article> <d-appendix> <d-footnote-list></d-footnote-list> <d-citation-list></d-citation-list> </d-appendix> <d-bibliography src="/assets/bibliography/"></d-bibliography> </div> <footer class="fixed-bottom"> <div class="container mt-0"> © Copyright 2024 Haiting Lin. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. Photos from <a href="https://unsplash.com" target="_blank" rel="external nofollow noopener">Unsplash</a>. </div> </footer> <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha256-fgLAgv7fyCGopR/gBNq2iW3ZKIdqIcyshnUULC4vex8=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/js/mdb.min.js" integrity="sha256-NdbiivsvWt7VYCt6hYNT3h/th9vSTL4EDWeGs5SN3DA=" crossorigin="anonymous"></script> <script type="text/javascript">function progressBarSetup(){"max"in document.createElement("progress")?(initializeProgressElement(),$(document).on("scroll",function(){progressBar.attr({value:getCurrentScrollPosition()})}),$(window).on("resize",initializeProgressElement)):(resizeProgressBar(),$(document).on("scroll",resizeProgressBar),$(window).on("resize",resizeProgressBar))}function getCurrentScrollPosition(){return $(window).scrollTop()}function initializeProgressElement(){let e=$("#navbar").outerHeight(!0);$("body").css({"padding-top":e}),$("progress-container").css({"padding-top":e}),progressBar.css({top:e}),progressBar.attr({max:getDistanceToScroll(),value:getCurrentScrollPosition()})}function getDistanceToScroll(){return $(document).height()-$(window).height()}function resizeProgressBar(){progressBar.css({width:getWidthPercentage()+"%"})}function getWidthPercentage(){return getCurrentScrollPosition()/getDistanceToScroll()*100}const progressBar=$("#progress");window.onload=function(){setTimeout(progressBarSetup,50)};</script> </body> </html>
