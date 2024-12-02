@@ -578,6 +578,19 @@ In order to let python be aware of the situation (identical package name with di
 
 <p>Then the <strong>path</strong> for the loaded module will be the list of all the modules under the same name.</p>
 
+<h4 id="object-initiate">Object Initiate</h4>
+<p>From class name string, you can use <code class="language-plaintext highlighter-rouge">getattr</code> (<code class="language-plaintext highlighter-rouge">getattr(module, class_name)</code>) to access the class. Example code:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">module</span> <span class="o">=</span> <span class="nf">__import__</span><span class="p">(</span><span class="n">module_name</span><span class="p">)</span>
+<span class="n">class_</span> <span class="o">=</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">class_name</span><span class="p">)</span>
+<span class="n">instance</span> <span class="o">=</span> <span class="nf">class_</span><span class="p">()</span>
+</code></pre></div></div>
+<p>Or use importlib</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">importlib</span>
+<span class="n">module</span> <span class="o">=</span> <span class="n">importlib</span><span class="p">.</span><span class="nf">import_module</span><span class="p">(</span><span class="n">module_name</span><span class="p">)</span>
+<span class="n">class_</span> <span class="o">=</span> <span class="nf">getattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">class_name</span><span class="p">)</span>
+<span class="n">instance</span> <span class="o">=</span> <span class="nf">class_</span><span class="p">()</span>
+</code></pre></div></div>
+
 <h4 id="asyncrunner">AsyncRunner</h4>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">asyncio</span>
 <span class="kn">import</span> <span class="n">threading</span>
@@ -620,6 +633,30 @@ In order to let python be aware of the situation (identical package name with di
         <span class="k">return</span> <span class="n">fu</span><span class="p">.</span><span class="nf">result</span><span class="p">()</span>
 </code></pre></div></div>
 
+<h4 id="python-debugging">Python debugging</h4>
+
+<h5 id="debugging-tool-pdb">Debugging tool pdb</h5>
+<p><a href="https://docs.python.org/3/library/pdb.html" rel="external nofollow noopener" target="_blank">Pdb</a> cheatsheet:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>s<span class="o">(</span>tep<span class="o">)</span>
+n<span class="o">(</span>ext<span class="o">)</span>
+c<span class="o">(</span>ontinue<span class="o">)</span>
+r<span class="o">(</span>eturn<span class="o">)</span>
+unt<span class="o">(</span>il<span class="o">)</span> &lt;line&gt;
+b<span class="o">(</span>reak<span class="o">)</span> &lt;file_path&gt;:&lt;line&gt;
+</code></pre></div></div>
+
+<h5 id="runtime-error">Runtime Error</h5>
+<p>Pay attention to Out of Memory (OOM) errors.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>E0917 22:17:31.965000 139710060349248 torch/distributed/elastic/multiprocessing/api.py:833] failed <span class="o">(</span>exitcode: <span class="nt">-9</span><span class="o">)</span> local_rank: 0 <span class="o">(</span>pid: 328818<span class="o">)</span> of binary: /home/user/linht/conda/envs/myenv/bin/python3.10
+</code></pre></div></div>
+
+<p>Investigation:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Check the kernel run message</span>
+<span class="nb">sudo </span>dmesg <span class="nt">-T</span> | egrep <span class="nt">-i</span> <span class="s1">'killed process'</span>
+<span class="c"># Sample output:</span>
+<span class="c"># [Tue Sep 17 22:15:33 2024] Memory cgroup out of memory: Killed process 999679 (pt_main_thread) total-vm:287438972kB, anon-rss:201347568kB, file-rss:131612kB, shmem-rss:59180kB, UID:1000 pgtables:399228kB oom_score_adj:900</span>
+</code></pre></div></div>
+
 <h4 id="misc">MISC</h4>
 
 <p>Ruff extension for VSCode as a quick linter:</p>
@@ -637,6 +674,13 @@ ruff rule S101
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">os</span><span class="p">,</span> <span class="n">sys</span>
 <span class="nf">print</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">[</span><span class="s">'LD_LIBRARY_PATH'</span><span class="p">])</span>
 </code></pre></div></div>
+
+<p>Find the file path of a class:</p>
+<pre><code class="language-Python">import inspect
+
+inspect.getmodule(my_class)
+#&lt;module 'module_name' from '/path/to/my/module.py'&gt;
+</code></pre>
 
 <h4 id="references">References</h4>
 <ul>
@@ -674,25 +718,25 @@ ruff rule S101
   
 
   <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2024/Training-management/">Training and Inference performance</a>
+  </li>
+
+  
+
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2024/Training-profiling/">Training and Inference performance</a>
+  </li>
+
+  
+
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2024/TensorRT-example/">TensorRT example</a>
+  </li>
+
+  
+
+  <li class="my-2">
     <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/terminal-debug/">Terminal debugging</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/pytorch-coding/">Pytorch coding</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/cuda-coding/">Cuda coding</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/cvcuda-installation/">CVCuda installation</a>
   </li>
 
 </div>

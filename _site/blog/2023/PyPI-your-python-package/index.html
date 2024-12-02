@@ -253,6 +253,33 @@ cvcuda_lib/
  <span class="p">)</span>
 </code></pre></div></div>
 
+<h6 id="test-package-installation">Test package installation</h6>
+<p>Check the content of the whl file:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>unzip <span class="nt">-l</span> dist/<span class="k">*</span>.whl
+
+
+<span class="c"># Test it with a conda env</span>
+<span class="nb">echo</span> | conda create <span class="nt">--name</span> cvcuda-py38 <span class="nv">python</span><span class="o">=</span>3.8
+conda activate cvcuda-py38
+
+<span class="c"># Different ways of installing wheel:</span>
+
+<span class="c"># use file name with install:</span>
+<span class="c"># pip install [--install-option="--prefix=$PREFIX_PATH"] cvcuda-0.3.1-cp38-cp38-linux_x86_64.whl</span>
+
+<span class="c"># pip install dist/*.whl</span>
+
+<span class="c"># use package name with install:</span>
+pip <span class="nb">install</span> <span class="nt">--find-links</span> ~/temp/cvcuda_wheel/dist/ cvcuda_import
+
+<span class="c"># wheel can also be installed using pip wheel command:</span>
+pip wheel <span class="o">[</span><span class="nt">--no-deps</span><span class="o">]</span> <span class="nt">-w</span> ~/temp/cvcuda_wheel/dist/
+
+<span class="c"># Remove the testing env</span>
+conda deactivate
+conda remove <span class="nt">--name</span> cvcuda-py38 <span class="nt">--all</span>
+</code></pre></div></div>
+
 <h6 id="upload-your-package-to-pypi">Upload your package to PyPI</h6>
 
 <p><b>1.</b> Wheel naming is automatically generated from the wheel building</p>
@@ -310,25 +337,25 @@ twine upload dist/<span class="k">*</span> <span class="o">[</span><span class="
   
 
   <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2024/Training-management/">Training and Inference performance</a>
+  </li>
+
+  
+
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2024/Training-profiling/">Training and Inference performance</a>
+  </li>
+
+  
+
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2024/TensorRT-example/">TensorRT example</a>
+  </li>
+
+  
+
+  <li class="my-2">
     <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/terminal-debug/">Terminal debugging</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/pytorch-coding/">Pytorch coding</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/cuda-coding/">Cuda coding</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/cvcuda-installation/">CVCuda installation</a>
   </li>
 
 </div>

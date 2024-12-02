@@ -213,6 +213,9 @@ chsh <span class="nt">-s</span> /bin/zsh <span class="c"># Change default termin
 <span class="nb">tar</span> <span class="nt">-xf</span> archive.tar.gz <span class="nt">--wildcards</span> <span class="s1">'*.jpg'</span>
 </code></pre></div></div>
 
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>unzip <span class="nt">-u</span> imagenet-object-localization-challenge.zip | <span class="nb">awk</span> <span class="s1">'BEGIN {ORS=" "} {if(NR%1000==0)print "."}'</span>
+</code></pre></div></div>
+
 <p><a href="#">Pattern search</a>:</p>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">grep</span> <span class="nt">-rnw</span> <span class="s1">'/path/to/somewhere/'</span> <span class="nt">-e</span> <span class="s2">"pattern"</span>
 <span class="nb">grep</span> <span class="nt">--include</span><span class="o">=</span><span class="se">\*</span>.<span class="o">{</span>c,h<span class="o">}</span> <span class="nt">-rnw</span> <span class="s1">'/path/to/somewhere/'</span> <span class="nt">-e</span> <span class="s2">"pattern"</span>
@@ -323,11 +326,15 @@ find /your/directory <span class="nt">-iname</span> &lt;name_pattern&gt; <span c
 <a href="https://www.cyberciti.biz/faq/unix-linux-check-if-port-is-in-use-command/" rel="external nofollow noopener" target="_blank">How to check if port is in use on Linux or Unix</a></p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># List the user processes of the port</span>
+<span class="c"># Do both with and without sudo, some PID is only visible to one user.</span>
 <span class="nb">sudo </span>lsof <span class="nt">-i</span> <span class="nt">-P</span> <span class="nt">-n</span> | <span class="nb">grep </span>LISTEN
+lsof <span class="nt">-i</span> <span class="nt">-P</span> <span class="nt">-n</span> | <span class="nb">grep </span>LISTEN
 <span class="nb">sudo </span>lsof <span class="nt">-i</span> :&lt;port-number&gt;
+lsof <span class="nt">-i</span> :&lt;port-number&gt;
 
 <span class="nb">sudo </span>netstat <span class="nt">-tulpn</span> | <span class="nb">grep </span>LISTEN
 <span class="nb">sudo </span>ss <span class="nt">-tulpn</span> | <span class="nb">grep </span>LISTEN
+<span class="nb">sudo </span>ss <span class="nt">-tulpn</span> <span class="s1">'sport = :&lt;port-number&gt;'</span> | <span class="nb">grep </span>LISTEN
 <span class="nb">sudo </span>nmap <span class="nt">-sTU</span> <span class="nt">-O</span> IP-address-Here
 <span class="c"># Kill the process that occopying the port with its PID</span>
 <span class="nb">sudo kill</span> <span class="nt">-9</span> &lt;PID-occupying-the-port&gt;
@@ -841,25 +848,25 @@ curl <span class="nt">-L</span> http://some.url <span class="nt">--output</span>
   
 
   <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2024/Training-management/">Training and Inference performance</a>
+  </li>
+
+  
+
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2024/Training-profiling/">Training and Inference performance</a>
+  </li>
+
+  
+
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2024/TensorRT-example/">TensorRT example</a>
+  </li>
+
+  
+
+  <li class="my-2">
     <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/terminal-debug/">Terminal debugging</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/pytorch-coding/">Pytorch coding</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/cuda-coding/">Cuda coding</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/cvcuda-installation/">CVCuda installation</a>
   </li>
 
 </div>

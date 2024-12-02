@@ -144,11 +144,19 @@
       <h4 id="useful-git-commands">Useful git commands</h4>
 
 <h5 id="command-cheatsheet">Command cheatsheet</h5>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone <span class="nt">--recurse-submodules</span> <span class="nt">-j8</span> git@github.com:example/target-repo.git
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Add ssh credential first</span>
+<span class="nb">eval</span> <span class="sb">`</span>ssh-agent <span class="nt">-s</span><span class="sb">`</span>
+ssh-add ~/.ssh/id_ed25519
+ssh-add <span class="nt">-l</span>
+
+git clone <span class="nt">--recurse-submodules</span> <span class="nt">-j8</span> git@github.com:example/target-repo.git
 git status
 git diff
 git diff &lt;filename&gt;
 git diff &lt;filename&gt; <span class="o">&gt;</span> foo.diff <span class="c"># output git diff to file foo.diff with coloring.</span>
+git diff <span class="nt">--ignore-all-space</span> 
+git diff <span class="nt">-w</span> <span class="c">#alternate to --ignore-all-space</span>
+git diff <span class="nt">--ignore-blank-lines</span>
 git add <span class="nt">--all</span> <span class="c"># Stage all files</span>
 git add &lt;filename&gt;	<span class="c"># Stage a file, ready to commit</span>
 git reset <span class="c"># Unstage all files</span>
@@ -160,14 +168,17 @@ git commit <span class="nt">-m</span> <span class="s2">"Post update"</span>
 git push <span class="nt">-u</span> origin &lt;your-branch&gt; 
 
 <span class="c"># run once - change origin</span>
-git remote set-url origin git@github.com:Adobe-Firefly/colligo.git
+git remote set-url origin git@github.com:&lt;git-repo-path&gt;.git
 <span class="c"># run once, optional: keep the old corp url as backup</span>
-git remote add legacy-corp git@git.corp.adobe.com:colligo/colligo.git
+git remote add legacy-corp git@git.corp.xxx.com:&lt;git-repo-path&gt;.git
 
 </code></pre></div></div>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Switch to a remote branch</span>
 git fetch origin
+<span class="c"># Or more specifically fetch the particular remote branch</span>
+<span class="c"># If without `:&lt;remote_branch_name&gt;`, the fetch will go to default FETCH_HEAD</span>
+git fetch origin &lt;remote_branch_name&gt;:&lt;remote_branch_name&gt;
 git branch <span class="nt">-v</span> <span class="nt">-a</span>
 
 <span class="c"># with -c to create a new local branch</span>
@@ -176,6 +187,8 @@ git switch <span class="nt">-c</span> halin-remove-gb-cuda origin/halin-remove-g
 
 <p>Github compare url example:</p>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://github.com/&lt;repo-dir&gt;/compare/&lt;branch-name&gt;?expand<span class="o">=</span>1
+<span class="c"># Compare between a commit and a branch.</span>
+https://github.com/&lt;repo-dir&gt;/compare/&lt;commit-id&gt;...&lt;branch-name&gt;
 </code></pre></div></div>
 
 <p>You have divergent branches (remote vs local) and need to specify how to reconcile them.
@@ -214,7 +227,12 @@ git clean <span class="nt">-df</span>
 <p>Revert the current repo to a previous commit (this applies to submodule too):
 (Note: <code class="language-plaintext highlighter-rouge">git pull</code> is nothing more than <code class="language-plaintext highlighter-rouge">git fetch</code> followed by <code class="language-plaintext highlighter-rouge">git merge</code>)</p>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git fetch origin &lt;branch&gt;
+
 git checkout &lt;commit-id&gt;
+<span class="c"># Create a branch from commit-id</span>
+git branch branch_name &lt;commit-id&gt;
+<span class="c"># Create a branch from commit-id and checkout</span>
+git checkout <span class="nt">-b</span> branch_name &lt;commit-hash or HEAD~3&gt;
 </code></pre></div></div>
 
 <p><a href="#">Git Tools - Branch</a></p>
@@ -434,24 +452,24 @@ TODO…</p>
 <p><a href="https://dillionmegida.com/p/delete-outdated-branches/" rel="external nofollow noopener" target="_blank">Prune git option</a>
 Pruning only deletes the references in refs/remotes/ that do not point to an active branch on the remote. It works like this so that you do not delete your local changes.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># recommended command
-git fetch --prune
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># recommended command</span>
+git fetch <span class="nt">--prune</span>
 
-# To set the global config on fetch: perform prune when fetch
-git config --global fetch.prune true
+<span class="c"># To set the global config on fetch: perform prune when fetch</span>
+git config <span class="nt">--global</span> fetch.prune <span class="nb">true</span>
 
 </code></pre></div></div>
 
 <p>However, if you want to delete merged branches automatically, here are some commands you can use.</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout master # or "main" if that's what you use
-# List all the branches that has been merged:
-git branch --merged 
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout master <span class="c"># or "main" if that's what you use</span>
+<span class="c"># List all the branches that has been merged:</span>
+git branch <span class="nt">--merged</span> 
 
-# Skip certain branches
-git branch --merged | egrep -v "master|dev|main|staging|[any-other-branch-you-want-to-skip]"
+<span class="c"># Skip certain branches</span>
+git branch <span class="nt">--merged</span> | egrep <span class="nt">-v</span> <span class="s2">"master|dev|main|staging|[any-other-branch-you-want-to-skip]"</span>
 
-# Auto deletion:
-git branch --merged | egrep -v "master|dev|main|staging" | xargs git branch -d
+<span class="c"># Auto deletion:</span>
+git branch <span class="nt">--merged</span> | egrep <span class="nt">-v</span> <span class="s2">"master|dev|main|staging"</span> | xargs git branch <span class="nt">-d</span>
 </code></pre></div></div>
 
 <p><a href="https://docs.github.com/en/get-started/getting-started-with-git/configuring-git-to-handle-line-endings?platform=linux" rel="external nofollow noopener" target="_blank">Git Tools - Eol configuration</a></p>
@@ -485,6 +503,72 @@ git config <span class="nt">--get</span> core.autocrlf <span class="c"># Check t
 *.jpg binary
 </code></pre></div></div>
 
+<h3 id="multiple-github-accounts-with-ssh-authentication">Multiple github accounts with SSH authentication</h3>
+<ol>
+  <li>Generate the keys as needed, use personal account as an example:
+Reference: <a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent" rel="external nofollow noopener" target="_blank">Adding your SSH key to the ssh-agent</a>
+```bash
+ssh-keygen -t ed25519 -C “personal-account@gmail.com”
+    <h1 id="save-the-generated-key-as-sshid_ed25519_personal">save the generated key as ~/.ssh/id_ed25519_personal</h1>
+  </li>
+</ol>
+
+<h1 id="may-need-to-start-the-ssh-agent-in-the-background">May need to start the ssh-agent in the background</h1>
+<p>eval “$(ssh-agent -s)”</p>
+<h1 id="add-key-to-the-ssh-agent">Add key to the ssh-agent</h1>
+<p>ssh-add [–apple-use-keychain] ~/.ssh/id_ed25519_personal</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2. Add the ssh key to your github account:
+Reference: &lt;a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account"&gt;Adding a new SSH key to your GitHub account&lt;/a&gt;
+```bash
+# Copy the public key to the clipboard
+pbcopy &lt; ~/.ssh/id_ed25519_personal.pub
+</code></pre></div></div>
+<p>Paste the key content to the github ssh key text box in the setting.</p>
+
+<ol>
+  <li>Add multiple items in the ~/.ssh/config like the following:
+```
+    <h1 id="personal-github-account">Personal GitHub account</h1>
+    <p>Host github.com-personal
+ HostName github.com
+ User git
+ IdentityFile ~/.ssh/id_ed25519_personal</p>
+  </li>
+</ol>
+
+<h1 id="work-github-account">Work GitHub account</h1>
+<p>Host github.com
+	HostName github.com
+	User git
+	IdentityFile ~/.ssh/id_ed25519</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+4. Fix the remote config for your personal repo:
+```bash
+cd personal-repo-directory
+git remote set-url origin git@github.com-personal:username/personal-repo.git
+</code></pre></div></div>
+
+<ol>
+  <li>Verify the git config:
+    <div class="language-bash highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>git config <span class="nt">--list</span> <span class="nt">--show-origin</span>
+</code></pre></div>    </div>
+  </li>
+  <li>Update user name and email if needed:
+Add <code class="language-plaintext highlighter-rouge">--global</code> if you want to make it a global change.
+```bash
+git config [–global] user.name <your-name>
+git config [--global] user.email <your-email></your-email></your-name>
+</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+### MISC
+Resolve bad permission:
+```bash
+chmod 400 ~/.ssh/id_rsa
+</code></pre></div></div>
+
 <p>Reference:
 <a href="https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration" rel="external nofollow noopener" target="_blank">Customizing your git configuration</a></p>
 
@@ -511,25 +595,25 @@ git config <span class="nt">--get</span> core.autocrlf <span class="c"># Check t
   
 
   <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2024/Training-management/">Training and Inference performance</a>
+  </li>
+
+  
+
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2024/Training-profiling/">Training and Inference performance</a>
+  </li>
+
+  
+
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2024/TensorRT-example/">TensorRT example</a>
+  </li>
+
+  
+
+  <li class="my-2">
     <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/terminal-debug/">Terminal debugging</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/pytorch-coding/">Pytorch coding</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/cuda-coding/">Cuda coding</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/cvcuda-installation/">CVCuda installation</a>
   </li>
 
 </div>

@@ -141,6 +141,20 @@
     <div id="markdown-content">
       <h4 id="python-version-management-tool--conda">Python version management tool – conda</h4>
 
+<h5 id="create-a-conda-env">Create a conda env</h5>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>conda create <span class="nt">-n</span> myenv <span class="nv">python</span><span class="o">=</span>3.10
+conda activate myenv
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Activate env in the current shell:</span>
+<span class="nb">source</span> <span class="k">${</span><span class="nv">CONDA_PREFIX</span><span class="k">}</span>/bin/activate filix2
+<span class="c"># Or</span>
+<span class="nv">CONDA_DIR</span><span class="o">=</span><span class="si">$(</span><span class="nb">dirname</span> <span class="si">$(</span>which conda<span class="si">))</span>/..
+<span class="c"># eval "$($CONDA_DIR/bin shell.bash hook)"</span>
+<span class="c"># conda init</span>
+<span class="nb">source</span> <span class="k">${</span><span class="nv">CONDA_DIR</span><span class="k">}</span>/bin/activate filix2
+</code></pre></div></div>
+
 <h5 id="adding-a-python-package">Adding a python package</h5>
 <p>The default installation path should be <code class="language-plaintext highlighter-rouge">site-packages</code> of <code class="language-plaintext highlighter-rouge">python</code> folder. However, if you’d like to add a python package with customized installation path to the conda env: use command <a href="https://docs.conda.io/projects/conda-build/en/latest/resources/commands/conda-develop.html" rel="external nofollow noopener" target="_blank">conda-develop</a>.</p>
 
@@ -286,25 +300,25 @@ conda <span class="nb">env </span>update <span class="nt">--file</span> environm
   
 
   <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2024/Training-management/">Training and Inference performance</a>
+  </li>
+
+  
+
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2024/Training-profiling/">Training and Inference performance</a>
+  </li>
+
+  
+
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2024/TensorRT-example/">TensorRT example</a>
+  </li>
+
+  
+
+  <li class="my-2">
     <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/terminal-debug/">Terminal debugging</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/pytorch-coding/">Pytorch coding</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/cuda-coding/">Cuda coding</a>
-  </li>
-
-  
-
-  <li class="my-2">
-    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2023/cvcuda-installation/">CVCuda installation</a>
   </li>
 
 </div>
