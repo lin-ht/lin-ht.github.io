@@ -99,7 +99,12 @@ Revert the current repo to a previous commit (this applies to submodule too):
 (Note: `git pull` is nothing more than `git fetch` followed by `git merge`)
 ```bash
 git fetch origin <branch>
+
 git checkout <commit-id>
+# Create a branch from commit-id
+git branch branch_name <commit-id>
+# Create a branch from commit-id and checkout
+git checkout -b branch_name <commit-hash or HEAD~3>
 ```
 
 

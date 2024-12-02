@@ -8,6 +8,22 @@ categories: note-posts
 ---
 #### Python version management tool -- conda
 
+##### Create a conda env
+```bash
+conda create -n myenv python=3.10
+conda activate myenv
+```
+
+```bash
+# Activate env in the current shell:
+source ${CONDA_PREFIX}/bin/activate filix2
+# Or
+CONDA_DIR=$(dirname $(which conda))/..
+# eval "$($CONDA_DIR/bin shell.bash hook)"
+# conda init
+source ${CONDA_DIR}/bin/activate filix2
+```
+
 ##### Adding a python package
 The default installation path should be `site-packages` of `python` folder. However, if you'd like to add a python package with customized installation path to the conda env: use command <a href="https://docs.conda.io/projects/conda-build/en/latest/resources/commands/conda-develop.html">conda-develop</a>.
 

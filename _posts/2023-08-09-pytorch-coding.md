@@ -420,7 +420,7 @@ traced_script_module.save("traced_resnet_model.pt")
 ```
 
 
-### Loading Loading Your Script Module in C++
+### Loading Your Script Module in C++
 
 ```cpp
 #include <torch/script.h> // One-stop header.

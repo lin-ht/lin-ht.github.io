@@ -311,7 +311,6 @@ def format_name(name: str, title: Optional[str] = None) -> str:
 format_name("john doe", "Mr")
 ```
 
-
 #### Pytest
 The <a href="https://docs.pytest.org/en/7.3.x/index.html">pytest framework</a> makes it easy to write small, readable tests, and can scale to support complex functional testing for applications and libraries. Pytest is equiped with metabuild ability so that it can compile the test files as desired.
 
@@ -467,6 +466,21 @@ For example, we put the above code in the following files:
 Then the __path__ for the loaded module will be the list of all the modules under the same name.
 
 
+#### Object Initiate
+From class name string, you can use `getattr` (`getattr(module, class_name)`) to access the class. Example code:
+```python
+module = __import__(module_name)
+class_ = getattr(module, class_name)
+instance = class_()
+```
+Or use importlib
+```python
+import importlib
+module = importlib.import_module(module_name)
+class_ = getattr(module, class_name)
+instance = class_()
+```
+
 #### AsyncRunner
 ```python
 import asyncio
@@ -521,6 +535,7 @@ n(ext)
 c(ontinue)
 r(eturn)
 unt(il) <line>
+b(reak) <file_path>:<line>
 ```
 
 ##### Runtime Error

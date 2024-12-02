@@ -68,13 +68,35 @@ xargs rm -rf < files.txt
 
 ##### Trouble Shooting
 1. ModuleNotFound Error
-If you run "pip -V" in the cli it will display where pip will install.
+If you run "pip -V" or "pip list -v | grep -i <package-name>" in the cli it will display where pip will install.
 
 If you run 'import sysconfig; print(sysconfig.get_paths()["purelib"])' it will show where python looks for packages.
 
 If you know which interpreter you want to use, you can ensure an install will be going to the right place by running "python3 -m pip install mymodule".
 
+Sometime even the package is in the right path, python still can't find it. It might due to wrong version of the package. Try to reinstall a right version.
 
+```bash
+(filix2) xxx$ pip list -v | grep piat
+piat 2024.10.17 /home/colligo/miniforge3/envs/filix2/lib/python3.10/site-packages pip
+(filix2) xxx$ python
+Python 3.10.15 | packaged by conda-forge | (main, Oct 16 2024, 01:24:24) [GCC 13.3.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import piat
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+ModuleNotFoundError: No module named 'piat'
+>>> import sysconfig
+>>> print(sysconfig.get_paths()["purelib"])
+/home/colligo/miniforge3/envs/filix2/lib/python3.10/site-packages
+>>> 
+```
+
+2. Pip install version error
+Check the available versions of a project:
+```
+pip index versions <project-name>
+```
 #### References
 <ul>
 	<li><a href="https://www.fuzzylabs.ai/blog-post/managing-python-dependencies">Managing Python Dependencies</a></li>
