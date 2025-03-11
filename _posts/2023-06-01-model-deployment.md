@@ -55,3 +55,9 @@ is a notation based on generalized Einstein notation for computing on multi-dime
 ##### 1. NVIDIA NSight Systems
 <a href="https://developer.nvidia.com/nsight-systems">NVIDIA Nsight™ Systems</a> is a system-wide performance analysis tool designed to visualize an application’s algorithms, help you identify the largest opportunities to optimize, and tune to scale efficiently across any quantity or size of CPUs and GPUs, from large servers to our smallest system on a chip (SoC).
 
+
+#### GPU optimization
+##### 1. OpenAI Triton
+<a herf="https://fkong.tech/posts/2023-04-23-triton-cuda/">Demystify OpenAI Triton</a>
+
+

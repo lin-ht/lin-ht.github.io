@@ -397,9 +397,10 @@ An example of the `.gitattributes` file content:
 *.jpg binary
 ```
 
-### Multiple github accounts with SSH authentication
+##### Multiple github accounts with SSH authentication
 1. Generate the keys as needed, use personal account as an example:
 Reference: <a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Adding your SSH key to the ssh-agent</a>
+
 ```bash
 ssh-keygen -t ed25519 -C "personal-account@gmail.com"
 # save the generated key as ~/.ssh/id_ed25519_personal
@@ -411,6 +412,7 @@ ssh-add [--apple-use-keychain] ~/.ssh/id_ed25519_personal
 ```
 2. Add the ssh key to your github account:
 Reference: <a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account">Adding a new SSH key to your GitHub account</a>
+
 ```bash
 # Copy the public key to the clipboard
 pbcopy < ~/.ssh/id_ed25519_personal.pub
@@ -455,8 +457,29 @@ git config [--global] user.email <your-email>
 Resolve bad permission:
 ```bash
 chmod 400 ~/.ssh/id_rsa
+
+# Bad owner or permissions on ~/.ssh/config
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/*
 ```
 
+##### Reset remote git repo for a local repo
+```bash
+# Create an empty git repo online, get the url: git@github.com:<user_name>/<repo_name>
+# Config the local repo folder
+git config user.name <your-name>
+git config user.email <your-email>
+
+# Check current remote url and set it to the target one
+git remote -v
+git remote set-url origin git@github.com:<user_name>/<repo_name>
+
+# Sync the repos
+git config pull.rebase false
+git pull --allow-unrelated-histories
+git commit -m "init"
+git push --allow-unrelated-histories
+```
 
 Reference:
 <a href="https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration">Customizing your git configuration</a>

@@ -10,6 +10,7 @@ toc:
   - name: Checkpoints saving and loading
   - name: TorchScript tracing tutorial
   - name: Pytorch Extensions
+  - name: MISC
 ---
 
 ## Installation
@@ -39,6 +40,10 @@ PATH=$CUDA_HOME/bin${PATH:+:${PATH}}
 ```
 
 ```bash
+# Check ubuntu version
+cat /etc/lsb-release
+# "Ubuntu 22.04.4 LTS"
+
 nvcc --version
 # release 12.4, V12.4.131
 
@@ -47,17 +52,34 @@ ldconfig -p | grep -i cudnn
 
 # Install cuSparseLt
 # url: https://docs.nvidia.com/cuda/cusparselt/getting_started.html
-wget https://developer.download.nvidia.com/compute/cusparselt/0.6.2/local_installers/cusparselt-local-repo-ubuntu2004-0.6.2_1.0-1_amd64.deb
-sudo dpkg -i cusparselt-local-repo-ubuntu2004-0.6.2_1.0-1_amd64.deb
-sudo cp /var/cusparselt-local-repo-ubuntu2004-0.6.2/cusparselt-*-keyring.gpg /usr/share/keyrings/
+wget https://developer.download.nvidia.com/compute/cusparselt/0.6.3/local_installers/cusparselt-local-repo-ubuntu2204-0.6.3_1.0-1_amd64.deb
+sudo dpkg -i cusparselt-local-repo-ubuntu2204-0.6.3_1.0-1_amd64.deb
+sudo cp /var/cusparselt-local-repo-ubuntu2204-0.6.3/cusparselt-*-keyring.gpg /usr/share/keyrings/
 sudo apt-get update
 sudo apt-get -y install libcusparselt0 libcusparselt-dev
 
 ldconfig -p | grep -i cusparselt
+# libcusparseLt.so.0 (libc6,x86-64) => /lib/x86_64-linux-gnu/libcusparseLt.so.0
+# libcusparseLt.so (libc6,x86-64) => /lib/x86_64-linux-gnu/libcusparseLt.so
 ```
+
+Docker error handling:
+```
+sudo apt-get update
+E: Malformed entry 1 in list file /etc/apt/sources.list.d/hashicorp.list (Component)
+E: The list of sources could not be read.
+# deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com  main
+
+# Correct file content should be:
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+# which is "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com jammy main"
+# where $(lsb_release -cs) will return the codename of the current Linux distribution.
+```
+
 
 ```bash
 # Test cuSparseLt
+
 
 ```
 
@@ -617,5 +639,46 @@ If we put a breakpoint, we’ll see that vscode will stop us 2 times, one in eac
 If we need dynamic configurations, e.g. different args for each run, we can write a script to automatically update the launch.json as needed.
 
 ## Pytorch Extensions
+
+WIP
+
+## MISC
+
+### Memory tracing
+Viewer url: https://pytorch.org/memory_viz
+
+### Training process handling
+```bash
+kill -9 $PID
+nvidia-smi
+
+PID=575444
+# show details of the process (http://www.mkssoftware.com/docs/man1/ps.1.asp#Format_Specifications)
+ps -p $PID -o pid,vsz=MEMORY,user,group=GROUP,comm,args=ARGS
+ps -a -o pid,vsz=MEMORY,user,group=GROUP,comm,args=ARGS
+
+# ps -a: processes with terminal
+# ps -e: all processes, -f: standard details (PID, PPID, C, STIME, TTY, TIME, COMM)
+ps -af 
+# A "defunct" process has either completed its task or has been corrupted or killed, 
+# but its parent processes are still running or these parent process is monitoring its child process. 
+ps -ef | grep defunct
+
+# Kill all running experiment_manager.py:
+ps -ef | grep -v 'grep' | grep -e experiment_manager.py 
+ps -ef | grep -v 'grep' | grep -e experiment_manager.py  | awk '{print $2}' | xargs kill -9
+
+# Kill all shellIntegration-bash.sh and bootstrap-fork execpt the current one
+ps -ef | grep -v $(echo $$) | grep -e shellIntegration-bash.sh 
+ps -ef | grep -v $(echo $$) | grep -e shellIntegration-bash.sh | awk '{print $2}' | xargs kill -9
+```
+
+```bash
+# remove arrow lock files.
+ls -lt # order according to modification time
+
+stat -c '%W %n' * | sort -k1n
+rm *arrow.lock
+```
 
 <a href="https://pytorch.org/tutorials/advanced/cpp_extension.html">CUSTOM C++ AND CUDA EXTENSIONS</a>
